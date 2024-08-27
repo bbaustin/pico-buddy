@@ -12,14 +12,18 @@ const eggBaby = {
   ],
 };
 
-const { width, height, filledInTiles } = eggBaby;
-const babyMass = width * height;
+function drawPixels(character) {
+  const { width, height, filledInTiles } = character;
+  const babyMass = width * height;
 
-for (let i = 0; i < babyMass; i++) {
-  const pixel = document.createElement('div');
-  pixel.classList.add('p');
-  if (filledInTiles.includes(i)) {
-    pixel.classList.add('fill');
+  for (let i = 0; i < babyMass; i++) {
+    const pixel = document.createElement('div');
+    pixel.classList.add('p');
+    if (filledInTiles.includes(i)) {
+      pixel.classList.add('fill');
+    }
+    screen.appendChild(pixel);
   }
-  screen.appendChild(pixel);
 }
+
+drawPixels(eggBaby);
