@@ -3,12 +3,16 @@
   --g: #6f6f6f;
   --b: #0f0f0f;
   --f: 'Comic Sans MS', sans-serif;
+  --hi: #63d500;
+  --mi: #f6d91c;
+  --lo: #fa0f07;
 }
 
 main {
   display: flex;
-  padding: 25px;
+  padding: 25px 0;
   font-family: var(--f);
+  justify-content: space-around;
 }
 
 #out {
@@ -70,6 +74,14 @@ main {
   cursor: pointer;
 }
 
+.b:active {
+  background: purple;
+}
+
+/* .b:active {
+  filter: brightness(0.75) drop-shadow(none);
+} */
+
 .b p {
   background: pink;
   padding: 5px 10px 10px;
@@ -93,6 +105,31 @@ main {
   padding: 10px;
   line-height: 1.5;
   font-size: 18px;
+}
+
+#tb {
+  float: right;
+}
+
+#hm {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+#hm div {
+  height: 30px;
+  justify-self: stretch;
+  background: var(--hi);
+  border-right: 1px solid var(--b);
+}
+
+#hm div.mi {
+  background: var(--mi);
+}
+
+#hm div.lo {
+  background: var(--lo);
 }
 
 /* animation: bounce 1s steps(2) infinite; 

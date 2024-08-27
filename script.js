@@ -111,7 +111,7 @@ function receiveSomething() {
 const textBox = document.querySelector('#t');
 
 /* Collections */
-const BUD_EMOJIS = ['❤️', '😊', '😍', '💖', '👾'];
+const BUD_EMOJIS = ['❤️', '💖', '😊', '😍', '🤩', '👾'];
 const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
 const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
 const REASSURING_PHRASES = [
