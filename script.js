@@ -19,6 +19,14 @@ const eggBaby = {
   ],
 };
 
+const floatingEye = {
+  width: 16,
+  height: 16,
+  filledInTiles: [
+    5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42,
+  ],
+};
+
 function drawPixels(character) {
   const { width, height, filledInTiles } = character;
   const babyMass = width * height;
@@ -33,7 +41,7 @@ function drawPixels(character) {
   }
 }
 
-drawPixels(eggBaby);
+drawPixels(floatingEye);
 
 // class Bud {
 //   constructor(
@@ -42,15 +50,91 @@ drawPixels(eggBaby);
 //
 // }
 
+/*************************************
+  _____   _____ _ __ | |_ ___ 
+ / _ \ \ / / _ \ '_ \| __/ __|
+|  __/\ V /  __/ | | | |_\__ \
+ \___| \_/ \___|_| |_|\__|___/
+*************************************/
+const DELAY_BETWEEN_EVENTS = [3000, 5000, 9000];
+
+// TODO: These might wanna be methods . I wish I were using TS
+/**
+ *
+ * @param {'food' | 'water' | 'diaper'} something
+ */
+function askForSomething(something) {
+  // start timer. if quickly resolved, add to happiness
+  if (something === 'food') {
+  }
+  if (something === 'water') {
+  }
+  if (something === 'diaper') {
+  }
+  return;
+}
+
+/**
+ *
+ * @param {'food' | 'water' | 'diaper' | 'play'} something
+ */
+function receiveSomething() {
+  if (something === 'food') {
+  }
+  if (something === 'water') {
+  }
+  if (something === 'diaper') {
+  }
+  if (something === 'play') {
+  }
+}
+
 /****************************
 / / /\ \ \___  _ __ __| |___ 
 \ \/  \/ / _ \| '__/ _` / __|
  \  /\  / (_) | | | (_| \__ \
   \/  \/ \___/|_|  \__,_|___/
 ******************************/
+
+/* Dictionary */
 const textBox = document.querySelector('#t');
-const EXAMPLE = 'Here is a sample sentence.';
-const EXAMPLE2 = 'There right here is another sample sentence for you.';
+const BUD_EMOJIS = ['❤️', '😊', '😍', '💖', '👾'];
+const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
+const REASSURING_PHRASES = [
+  "It's totally chill!",
+  "Don't sweat it!",
+  'Take a chill pill!',
+  "Don't worry!",
+];
+const PICOBUDDY = `PicoBuddy ${getRandom(BUD_EMOJIS)}`;
+const EGGBABY = `EggBaby ${getRandom(EGG_EMOJIS)}`;
+const NOT_OMINOUS = "There's nothing ominous about that!";
+
+/* Script */
+const t1 = `Congratulations on your new ${PICOBUDDY}!`;
+const t2 = "Let's see what it looks like...";
+const t3 = `Oh! It's an ${EGGBABY}!`;
+const t4 = "It's an egg with a diaper! That's pretty cute!";
+const t5 =
+  "When it cries, you'll have to feed it, give it water, change its diaper, or play with it! Use the buttons below the screen!";
+const t6 = `Your ${PICOBUDDY} will reach full maturity in 13 days! ${NOT_OMINOUS} ${getRandom(
+  REASSURING_PHRASES
+)}`;
+
+/******************
+ /\ /\| |_(_) |___ 
+/ / \ \ __| | / __|
+\ \_/ / |_| | \__ \
+ \___/ \__|_|_|___/
+*******************/
+/**
+ * Utility function to create a delay.
+ * @param {number} ms - Delay in milliseconds.
+ * @returns {Promise} - A promise that resolves after the delay.
+ */
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 //////// TODO: You might not need this stuff? Cuz you might want arrows, so you don't have to guess how long it takes poeple to read
 /**
@@ -74,20 +158,9 @@ async function appendTextSequentially(sentences, delayMs) {
   }
 }
 
+function getRandom(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
 // Call the function with the sentences and delay
 appendTextSequentially([EXAMPLE, EXAMPLE2], 3000);
-
-/******************
- /\ /\| |_(_) |___ 
-/ / \ \ __| | / __|
-\ \_/ / |_| | \__ \
- \___/ \__|_|_|___/
-*******************/
-/**
- * Utility function to create a delay.
- * @param {number} ms - Delay in milliseconds.
- * @returns {Promise} - A promise that resolves after the delay.
- */
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
