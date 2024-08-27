@@ -27,11 +27,23 @@ const floatingEye = {
   ],
 };
 
+const triclops = {
+  width: 32,
+  height: 32,
+  filledInTiles: [],
+};
+
+const finalForm = {
+  width: 64,
+  height: 64,
+  filledInTiles: [],
+};
+
 function drawPixels(character) {
   const { width, height, filledInTiles } = character;
-  const babyMass = width * height;
+  const gridSize = width * height;
 
-  for (let i = 0; i < babyMass; i++) {
+  for (let i = 0; i < gridSize; i++) {
     const pixel = document.createElement('div');
     pixel.classList.add('p');
     if (filledInTiles.includes(i)) {
@@ -96,30 +108,65 @@ function receiveSomething() {
   \/  \/ \___/|_|  \__,_|___/
 ******************************/
 
-/* Dictionary */
 const textBox = document.querySelector('#t');
+
+/* Collections */
 const BUD_EMOJIS = ['❤️', '😊', '😍', '💖', '👾'];
 const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
+const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
 const REASSURING_PHRASES = [
   "It's totally chill!",
   "Don't sweat it!",
   'Take a chill pill!',
   "Don't worry!",
+  "Haha! It's all good!",
 ];
+
+/* Dictionary */
+// Names
 const PICOBUDDY = `PicoBuddy ${getRandom(BUD_EMOJIS)}`;
 const EGGBABY = `EggBaby ${getRandom(EGG_EMOJIS)}`;
+const EYEGUY = `EyeGuy ${getRandom(EYE_EMOJIS)}`;
+
+// Phrases
+const SEE = "Let's see what it looks like...";
 const NOT_OMINOUS = "There's nothing ominous about that!";
+const BUTTON_INSTRUCTIONS = 'Use the buttons below the screen!';
+const EVOLVING = "Oh! It's evolving!";
+const NOPE = 'It no longer has any use for this.';
+const TREATED = `You treated your ${PICOBUDDY} `;
+const TREATED_RESULT = `Your ${PICOBUDDY} sees this as a sign of `;
+const UNBECOMING = 'when The Great Unbecoming begins.';
 
 /* Script */
+// Day 1, 2, 3, 4
 const t1 = `Congratulations on your new ${PICOBUDDY}!`;
-const t2 = "Let's see what it looks like...";
+const t2 = SEE;
 const t3 = `Oh! It's an ${EGGBABY}!`;
 const t4 = "It's an egg with a diaper! That's pretty cute!";
-const t5 =
-  "When it cries, you'll have to feed it, give it water, change its diaper, or play with it! Use the buttons below the screen!";
+const t5 = `When it cries, you'll have to feed it, give it water, change its diaper, or play with it! ${BUTTON_INSTRUCTIONS}`;
 const t6 = `Your ${PICOBUDDY} will reach full maturity in 13 days! ${NOT_OMINOUS} ${getRandom(
   REASSURING_PHRASES
 )}`;
+
+// Day 5, 6, 7, 8
+const t7 = EVOLVING;
+const t8 = SEE;
+const t9 = `Oh! It's an ${EYEGUY}!`;
+const t10 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
+
+// Day 9, 10, 11, 12
+const t11 = EVOLVING;
+const t12 = SEE;
+const t13 = "Oh! It's an...";
+const t14 = 'Um...';
+const t15 = "It's got more eyes!";
+
+// Day 13
+const t16 = EVOLVING;
+const t17 = 'This is its final form!';
+const t18 = SEE;
+const t19 = "Oh! That's a lotta eyes!";
 
 /******************
  /\ /\| |_(_) |___ 
@@ -163,4 +210,4 @@ function getRandom(items) {
 }
 
 // Call the function with the sentences and delay
-appendTextSequentially([EXAMPLE, EXAMPLE2], 3000);
+appendTextSequentially([PICOBUDDY, EGGBABY], 3000);
