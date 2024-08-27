@@ -2,11 +2,13 @@
   --w: #dfdfdf;
   --g: #6f6f6f;
   --b: #0f0f0f;
+  --f: 'Comic Sans MS', sans-serif;
 }
 
 main {
   display: flex;
   padding: 25px;
+  font-family: var(--f);
 }
 
 #out {
@@ -68,13 +70,18 @@ main {
   cursor: pointer;
 }
 
-.b:hover::after {
-  content: '';
+.b p {
   background: pink;
-  padding: 10px;
-  position: relative;
-  top: 30px;
+  padding: 5px 10px 10px;
   font-size: 24px;
+  transform: translate(-40%, -5px);
+  display: none;
+  width: fit-content;
+  font-family: var(--f);
+}
+
+.b:hover p {
+  display: block;
 }
 
 /* animation: bounce 1s steps(2) infinite; 
