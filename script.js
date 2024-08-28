@@ -1,3 +1,94 @@
+/****************************
+/ / /\ \ \___  _ __ __| |___ 
+\ \/  \/ / _ \| '__/ _` / __|
+ \  /\  / (_) | | | (_| \__ \
+  \/  \/ \___/|_|  \__,_|___/
+******************************/
+
+const textBox = document.querySelector('#t');
+
+/* Dictionary */
+// Emojis
+const BUD_EMOJIS = ['❤️', '💖', '😊', '😍', '🤩', '👾'];
+const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
+const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
+
+// Names
+const PICOBUDDY = `PicoBuddy ${getRandom(BUD_EMOJIS)}`;
+const EGGBABY = `EggBaby ${getRandom(EGG_EMOJIS)}`;
+const EYEGUY = `EyeGuy ${getRandom(EYE_EMOJIS)}`;
+const UNBECOMING = 'The Great Unbecoming';
+
+// Game Phrases
+const BUTTON_INSTRUCTIONS = `Use the buttons beneath your ${PICOBUDDY}!`;
+
+// Script Phrases
+const SEE = "Let's see what it looks like...";
+const NOT_OMINOUS = 'This is totally normal and not ominous!';
+const EVOLVING = "Oh! It's evolving!";
+const NOPE = 'It no longer has any use for this.';
+
+// Script End phrases
+const TREATED = `You treated your ${PICOBUDDY} `;
+const TREATED_RESULT = `Your ${PICOBUDDY} sees this as a sign of `;
+const UNBECOMING_BEGINS = `when ${UNBECOMING} begins.`;
+
+const REASSURING_PHRASES = [
+  "Don't worry!",
+  "Don't sweat it!",
+  'Take a chill pill!',
+  "It's totally chill!",
+  "Haha! It's all good!",
+  "Anyway, it'll all be over soon!",
+  "It's supposed to happen this way!",
+];
+const NORMAL_HUNGRY_PHRASES = [
+  `Oh! Your ${PICOBUDDY} is hungry!`,
+  `You better give your ${PICOBUDDY} some food!`,
+];
+const DARK_HUNGRY_PHRASES = [
+  `Your ${PICOBUDDY} must feed!`,
+  `Your ${PICOBUDDY} must consume!`,
+];
+const TRICLOPS_PHRASES = [
+  "It doesn't want anything.",
+  'It waits.',
+  'It watches.',
+];
+
+/* Script */
+// Day 1, 2, 3, 4
+const t1 = `Congratulations on your new ${PICOBUDDY}!`;
+const t2 = SEE;
+const t3 = `Oh! It's an ${EGGBABY}!`;
+const t4 = "It's an egg with a diaper! That's pretty cute!";
+const t5 = `When it cries, you'll have to feed it, give it water, change its diaper, or play with it! ${BUTTON_INSTRUCTIONS}`;
+const t6 = `Your ${PICOBUDDY} will reach full maturity in 13 days! ${NOT_OMINOUS} ${getRandom(
+  REASSURING_PHRASES
+)}`;
+
+// Day 5, 6, 7, 8
+const t7 = EVOLVING;
+const t8 = SEE;
+const t9 = `Oh! It's an ${EYEGUY}!`;
+const t10 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
+
+// Day 9, 10, 11, 12
+const t11 = EVOLVING;
+const t12 = SEE;
+const t13 = "Oh! It's an...";
+const t14 = 'Um...';
+const t15 = "It's got more eyes!";
+
+// Day 13
+const t16 = EVOLVING;
+const t17 = 'This is its final form!';
+const t18 = SEE;
+const t19 = "Oh! That's a lotta eyes!";
+
+// End
+const t20 = `Hmm... I guess your ${PICOBUDDY} no longer requires your servitude!`;
+
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
@@ -68,29 +159,90 @@ drawPixels(floatingEye);
 |  __/\ V /  __/ | | | |_\__ \
  \___| \_/ \___|_| |_|\__|___/
 *************************************/
-const DELAY_BETWEEN_EVENTS = [3000, 5000, 9000];
+let DAY = 1;
+const DAY_EVENT_SCHEDULE = [
+  // egg baby
+  3, 3, 3,
+  // eye guy
+  2, 2, 2,
+  // triclops
+  4, 4, 4,
+  // final form
+  0,
+];
+
+// TODO: Every evolution, pop an event type.
+const eventTypes = ['food', 'water', 'diaper'];
+const activeEvents = []; // TODO: Might not need this
+const activeEventsHolder = document.querySelector('#ae');
+
+/** 'food', 'water', 'diaper' */
+let lastEvent = '';
+
+const DELAY_BETWEEN_EVENTS = [10000, 13000, 15000];
 
 // TODO: These might wanna be methods . I wish I were using TS
 /**
  *
- * @param {'food' | 'water' | 'diaper'} something
+ * @param {'food' | 'water' | 'diaper'} event type
  */
-function askForSomething(something) {
+// TODO: add these phrases in the dictionary for peace of mind, and just grab 'em here
+function askForSomething(eventType) {
   // start timer. if quickly resolved, add to happiness
-  if (something === 'food') {
+  let phrase = `Your ${PICOBUDDY} is `;
+  if (eventType === 'food') {
+    appendTextSequentially([`${phrase} hungry! ${BUTTON_INSTRUCTIONS}`]);
+    activeEvents.push('food');
+    createEventLi('feed');
   }
-  if (something === 'water') {
+  if (eventType === 'water') {
+    appendTextSequentially([`${phrase} thirsty! ${BUTTON_INSTRUCTIONS}`]);
+    activeEvents.push('water');
+    createEventLi('hydrate');
   }
-  if (something === 'diaper') {
+  if (eventType === 'diaper') {
+    appendTextSequentially([
+      `Your ${PICOBUDDY} has a dirty diaper! ${BUTTON_INSTRUCTIONS}`,
+    ]);
+    activeEvents.push('diaper');
+    createEventLi('clean');
   }
   return;
 }
 
 /**
  *
+ * @param {string} whatToDo - a verb coming from askForSomething, based on the picobuddy's demands
+ */
+function createEventLi(whatToDo) {
+  const listItem = document.createElement('li');
+  const timer = createTimer();
+  listItem.innerHTML = `${whatToDo}! - `;
+  listItem.append(timer);
+  activeEventsHolder.prepend(listItem);
+}
+
+function createTimer() {
+  const newTimer = document.createElement('span');
+  let sec = 13;
+  newTimer.innerHTML = sec;
+  let timing = setInterval(() => {
+    // probably want a data-id to stop timer when event is achieved
+    newTimer.innerHTML = sec;
+    sec--;
+    if (sec < 0) {
+      clearInterval(timing);
+      // do happiness meter thing
+    }
+  }, 1000);
+  return newTimer;
+}
+
+/**
+ *
  * @param {'food' | 'water' | 'diaper' | 'play'} something
  */
-function receiveSomething() {
+function receiveSomething(something) {
   if (something === 'food') {
   }
   if (something === 'water') {
@@ -101,72 +253,16 @@ function receiveSomething() {
   }
 }
 
-/****************************
-/ / /\ \ \___  _ __ __| |___ 
-\ \/  \/ / _ \| '__/ _` / __|
- \  /\  / (_) | | | (_| \__ \
-  \/  \/ \___/|_|  \__,_|___/
-******************************/
+function getRandomEvent() {
+  let newEvent;
+  do {
+    newEvent = getRandom(eventTypes);
+  } while (newEvent === lastEvent);
+  lastEvent = newEvent;
+  return askForSomething(newEvent);
+}
 
-const textBox = document.querySelector('#t');
-
-/* Collections */
-const BUD_EMOJIS = ['❤️', '💖', '😊', '😍', '🤩', '👾'];
-const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
-const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
-const REASSURING_PHRASES = [
-  "It's totally chill!",
-  "Don't sweat it!",
-  'Take a chill pill!',
-  "Don't worry!",
-  "Haha! It's all good!",
-];
-
-/* Dictionary */
-// Names
-const PICOBUDDY = `PicoBuddy ${getRandom(BUD_EMOJIS)}`;
-const EGGBABY = `EggBaby ${getRandom(EGG_EMOJIS)}`;
-const EYEGUY = `EyeGuy ${getRandom(EYE_EMOJIS)}`;
-
-// Phrases
-const SEE = "Let's see what it looks like...";
-const NOT_OMINOUS = "There's nothing ominous about that!";
-const BUTTON_INSTRUCTIONS = 'Use the buttons below the screen!';
-const EVOLVING = "Oh! It's evolving!";
-const NOPE = 'It no longer has any use for this.';
-const TREATED = `You treated your ${PICOBUDDY} `;
-const TREATED_RESULT = `Your ${PICOBUDDY} sees this as a sign of `;
-const UNBECOMING = 'when The Great Unbecoming begins.';
-
-/* Script */
-// Day 1, 2, 3, 4
-const t1 = `Congratulations on your new ${PICOBUDDY}!`;
-const t2 = SEE;
-const t3 = `Oh! It's an ${EGGBABY}!`;
-const t4 = "It's an egg with a diaper! That's pretty cute!";
-const t5 = `When it cries, you'll have to feed it, give it water, change its diaper, or play with it! ${BUTTON_INSTRUCTIONS}`;
-const t6 = `Your ${PICOBUDDY} will reach full maturity in 13 days! ${NOT_OMINOUS} ${getRandom(
-  REASSURING_PHRASES
-)}`;
-
-// Day 5, 6, 7, 8
-const t7 = EVOLVING;
-const t8 = SEE;
-const t9 = `Oh! It's an ${EYEGUY}!`;
-const t10 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
-
-// Day 9, 10, 11, 12
-const t11 = EVOLVING;
-const t12 = SEE;
-const t13 = "Oh! It's an...";
-const t14 = 'Um...';
-const t15 = "It's got more eyes!";
-
-// Day 13
-const t16 = EVOLVING;
-const t17 = 'This is its final form!';
-const t18 = SEE;
-const t19 = "Oh! That's a lotta eyes!";
+getRandomEvent();
 
 /******************
  /\ /\| |_(_) |___ 
