@@ -114,7 +114,12 @@ const floatingEye = {
   width: 16,
   height: 16,
   filledInTiles: [
-    5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42,
+    5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53,
+    58, 59, 60, 65, 66, 67, 68, 76, 77, 81, 84, 86, 87, 88, 89, 92, 93, 94, 96,
+    97, 99, 102, 103, 104, 105, 108, 110, 111, 112, 115, 118, 119, 121, 124,
+    127, 128, 129, 132, 134, 135, 136, 137, 140, 143, 145, 146, 147, 148, 156,
+    158, 159, 164, 165, 166, 171, 172, 173, 174, 182, 183, 184, 185, 186, 187,
+    188, 189, 194, 195, 196, 212, 213, 214, 215, 216, 217, 218, 219,
   ],
 };
 
@@ -174,7 +179,7 @@ const DAY_EVENT_SCHEDULE = [
 // TODO: Every evolution, pop an event type.
 const eventTypes = ['food', 'water', 'diaper'];
 const activeEvents = []; // TODO: Might not need this
-const activeEventsHolder = document.querySelector('#ae');
+const activeEventsHolder = document.querySelector('ol');
 
 /** 'food', 'water', 'diaper' */
 let lastEvent = '';
@@ -215,6 +220,9 @@ function askForSomething(eventType) {
  * @param {string} whatToDo - a verb coming from askForSomething, based on the picobuddy's demands
  */
 function createEventLi(whatToDo) {
+  if (activeEventsHolder.textContent.includes('None')) {
+    activeEventsHolder.textContent = '';
+  }
   const listItem = document.createElement('li');
   const timer = createTimer();
   listItem.innerHTML = `${whatToDo}! - `;
@@ -228,9 +236,9 @@ function createTimer() {
   newTimer.innerHTML = sec;
   let timing = setInterval(() => {
     // probably want a data-id to stop timer when event is achieved
-    newTimer.innerHTML = sec;
     sec--;
-    if (sec < 0) {
+    newTimer.innerHTML = sec;
+    if (sec <= 0) {
       clearInterval(timing);
       // do happiness meter thing
     }
