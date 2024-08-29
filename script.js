@@ -6,6 +6,7 @@
 ******************************/
 
 const textBox = document.querySelector('#t');
+const textBoxButton = document.querySelector('#tb');
 
 /* Dictionary */
 // Emojis
@@ -14,9 +15,9 @@ const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
 const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
 
 // Names
-const PICOBUDDY = `PicoBuddy ${getRandom(BUD_EMOJIS)}`;
-const EGGBABY = `EggBaby ${getRandom(EGG_EMOJIS)}`;
-const EYEGUY = `EyeGuy ${getRandom(EYE_EMOJIS)}`;
+const PICOBUDDY = `PicoBuddy${getRandom(BUD_EMOJIS)}`;
+const EGGBABY = `EggBaby${getRandom(EGG_EMOJIS)}`;
+const EYEGUY = `EyeGuy${getRandom(EYE_EMOJIS)}`;
 const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
@@ -24,7 +25,7 @@ const BUTTON_INSTRUCTIONS = `Use the buttons beneath your ${PICOBUDDY}!`;
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
-const NOT_OMINOUS = 'This is totally normal and not ominous!';
+const NOT_OMINOUS = 'I assure you, there is nothing ominous about this!';
 const EVOLVING = "Oh! It's evolving!";
 const NOPE = 'It no longer has any use for this.';
 
@@ -36,10 +37,7 @@ const UNBECOMING_BEGINS = `when ${UNBECOMING} begins.`;
 const REASSURING_PHRASES = [
   "Don't worry!",
   "Don't sweat it!",
-  'Take a chill pill!',
   "It's totally chill!",
-  "Haha! It's all good!",
-  "Anyway, it'll all be over soon!",
   "It's supposed to happen this way!",
 ];
 const NORMAL_HUNGRY_PHRASES = [
@@ -196,19 +194,19 @@ function askForSomething(eventType) {
   // start timer. if quickly resolved, add to happiness
   let phrase = `Your ${PICOBUDDY} is `;
   if (eventType === 'food') {
-    appendTextSequentially([`${phrase} hungry! ${BUTTON_INSTRUCTIONS}`]);
+    // renderEachLetter([`${phrase} hungry! ${BUTTON_INSTRUCTIONS}`]);
     activeEvents.push('food');
     createEventLi('feed');
   }
   if (eventType === 'water') {
-    appendTextSequentially([`${phrase} thirsty! ${BUTTON_INSTRUCTIONS}`]);
+    // renderEachLetter([`${phrase} thirsty! ${BUTTON_INSTRUCTIONS}`]);
     activeEvents.push('water');
     createEventLi('hydrate');
   }
   if (eventType === 'diaper') {
-    appendTextSequentially([
-      `Your ${PICOBUDDY} has a dirty diaper! ${BUTTON_INSTRUCTIONS}`,
-    ]);
+    // renderEachLetter([
+    //   `Your ${PICOBUDDY} has a dirty diaper! ${BUTTON_INSTRUCTIONS}`,
+    // ]);
     activeEvents.push('diaper');
     createEventLi('clean');
   }
@@ -308,31 +306,19 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-//////// TODO: You might not need this stuff? Cuz you might want arrows, so you don't have to guess how long it takes poeple to read
-/**
- * Appends text to the textBox with a delay.
- * @param {number} ms - Delay in milliseconds.
- * @param {string} text - The text to display.
- */
-async function appendText(ms, text) {
-  await delay(ms);
-  textBox.textContent = text;
-}
-
-/**
- * Sequentially appends an array of sentences to the textBox.
- * @param {Array<string>} sentences - Array of sentences to display.
- * @param {number} delayMs - Delay between each sentence.
- */
-async function appendTextSequentially(sentences, delayMs) {
-  for (const sentence of sentences) {
-    await appendText(delayMs, sentence);
+async function renderEachLetter(text) {
+  let temp = '';
+  textBoxButton.disabled = true; // Ensure the button starts as disabled
+  for (const character of text) {
+    temp += character;
+    textBox.textContent = temp;
+    await delay(20);
   }
+  textBoxButton.disabled = false;
 }
 
 function getRandom(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-// Call the function with the sentences and delay
-appendTextSequentially([PICOBUDDY, EGGBABY], 3000);
+renderEachLetter(t6);
