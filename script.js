@@ -216,7 +216,7 @@ function askForSomething(eventType) {
 }
 
 /**
- *
+ * Adds an li to go in the "list of demands". The first list item also removes the text "None"
  * @param {string} whatToDo - a verb coming from askForSomething, based on the picobuddy's demands
  */
 function createEventLi(whatToDo) {
@@ -230,6 +230,10 @@ function createEventLi(whatToDo) {
   activeEventsHolder.prepend(listItem);
 }
 
+/**
+ * Creates timer, which counts down from 13 seconds. To be added to the "list of demands" li
+ * @returns timer (HTMLSpanElement)
+ */
 function createTimer() {
   const newTimer = document.createElement('span');
   let sec = 13;
@@ -246,18 +250,35 @@ function createTimer() {
   return newTimer;
 }
 
+const buttons = document.getElementsByClassName('b');
+buttons[0].addEventListener('click', () => {
+  giveSomething('food');
+});
+buttons[1].addEventListener('click', () => {
+  giveSomething('water');
+});
+buttons[2].addEventListener('click', () => {
+  giveSomething('diaper');
+});
+buttons[3].addEventListener('click', () => {
+  giveSomething('play');
+});
 /**
  *
  * @param {'food' | 'water' | 'diaper' | 'play'} something
  */
-function receiveSomething(something) {
+function giveSomething(something) {
   if (something === 'food') {
+    console.log('gave food');
   }
   if (something === 'water') {
+    console.log('gave water');
   }
   if (something === 'diaper') {
+    console.log('cleaned');
   }
   if (something === 'play') {
+    console.log('played');
   }
 }
 
