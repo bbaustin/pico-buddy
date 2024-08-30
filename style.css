@@ -107,10 +107,6 @@ main {
   font-size: 18px;
 }
 
-#tb {
-  float: right;
-}
-
 #hm {
   width: 100%;
   display: grid;

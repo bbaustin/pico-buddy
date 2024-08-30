@@ -6,7 +6,6 @@
 ******************************/
 
 const textBox = document.querySelector('#t');
-const textBoxButton = document.querySelector('#tb');
 
 /* Dictionary */
 // Emojis
@@ -215,36 +214,13 @@ let lastEvent = '';
 
 const DELAY_BETWEEN_EVENTS = [3000, 4000, 5000, 6000];
 
-// TODO: These might wanna be methods . I wish I were using TS
 /**
  *
  * @param {'food' | 'water' | 'diaper'} event type
  */
-// TODO: add these phrases in the dictionary for peace of mind, and just grab 'em here
 function askForSomething(eventType) {
-  // start timer. if quickly resolved, add to happiness
   activeEvents.push(eventType);
   createEventLi(eventType);
-
-  // TODO: Deal with phrase as shown below. But overall, need to be more DRY
-  // let phrase = `Your ${PICOBUDDY} is `;
-  // if (eventType === 'food') {
-  //   // renderEachLetter([`${phrase} hungry! ${BUTTON_INSTRUCTIONS}`]);
-  //   activeEvents.push('food');
-  //   createEventLi('feed');
-  // }
-  // if (eventType === 'water') {
-  //   // renderEachLetter([`${phrase} thirsty! ${BUTTON_INSTRUCTIONS}`]);
-  //   activeEvents.push('water');
-  //   createEventLi('hydrate');
-  // }
-  // if (eventType === 'diaper') {
-  //   // renderEachLetter([
-  //   //   `Your ${PICOBUDDY} has a dirty diaper! ${BUTTON_INSTRUCTIONS}`,
-  //   // ]);
-  //   activeEvents.push('diaper');
-  //   createEventLi('clean');
-  // }
   return;
 }
 
@@ -257,11 +233,6 @@ function createEventLi(eventType) {
     activeEventsHolder.textContent = '';
   }
   const listItem = document.createElement('li');
-  // WHERE YOU AT: Proooobably add a data-attribute to get the correct eventType.
-  // And then use this to properly manage 'accomplishing' a listItem.
-  // After that, you can work on the next tricky task, which is "timing" each event properly.
-  // Involves some thinking about what to do RE: the script
-  // Maybe instead of "next" screen in the script, you just keep adding to it. Easier? (I think so)
   const timer = createTimer();
   listItem.innerHTML = `${eventTypeVerbs[eventType]}! - `;
   listItem.dataset.eventType = eventType;
@@ -278,12 +249,10 @@ function createTimer() {
   let sec = 13;
   newTimer.innerHTML = sec;
   let timing = setInterval(() => {
-    // probably want a data-id to stop timer when event is achieved
     sec--;
     newTimer.innerHTML = sec;
     if (sec <= 0) {
       clearInterval(timing);
-      // do happiness meter thing
     }
   }, 1000);
 
@@ -308,6 +277,7 @@ buttons[2].addEventListener('click', () => {
 buttons[3].addEventListener('click', () => {
   giveSomething('play');
 });
+
 /**
  *
  * @param {'food' | 'water' | 'diaper' | 'play'} something
@@ -393,13 +363,11 @@ function delay(ms) {
 
 async function renderEachLetter(text) {
   let temp = '';
-  textBoxButton.disabled = true; // Ensure the button starts as disabled
   for (const character of text) {
     temp += character;
     textBox.textContent = temp;
     await delay(20);
   }
-  textBoxButton.disabled = false;
 }
 
 function getRandom(items) {
