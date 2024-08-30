@@ -103,7 +103,7 @@ main {
   border: 1px solid var(--b);
   overflow-y: auto;
   padding: 10px;
-  line-height: 1.5;
+  line-height: 2;
   font-size: 18px;
 }
 

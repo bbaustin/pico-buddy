@@ -22,12 +22,14 @@ const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons beneath your ${PICOBUDDY}!`;
+const PLAY = `Your ${PICOBUDDY} had a great time playing!`;
+const NOPE = 'It no longer has any use for this.';
+const NOT_NOW = `Your ${PICOBUDDY} doesn't need this right now! Thanks, though!${BUD_EMOJIS}`;
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
 const NOT_OMINOUS = 'I assure you, there is nothing ominous about this!';
 const EVOLVING = "Oh! It's evolving!";
-const NOPE = 'It no longer has any use for this.';
 
 // Script End phrases
 const TREATED = `You treated your ${PICOBUDDY} `;
@@ -40,6 +42,24 @@ const REASSURING_PHRASES = [
   "It's totally chill!",
   "It's supposed to happen this way!",
 ];
+
+// TODO: Create an object of phrases for each event type. This is a bit complicated, because it does likely depend on the day etc.
+/**
+ * const EVENT_PHRASES = {
+ *  wants {
+ *    food: '',
+ *    water: '',
+ *    diaper: '',
+ * },
+ *  receives {
+ *    food: '',
+ *    water: '',
+ *    diaper: '',
+ *    play: ''
+ * }
+ *
+ * }
+ */
 const NORMAL_HUNGRY_PHRASES = [
   `Oh! Your ${PICOBUDDY} is hungry!`,
   `You better give your ${PICOBUDDY} some food!`,
@@ -174,15 +194,26 @@ const DAY_EVENT_SCHEDULE = [
   0,
 ];
 
+const eventTypeVerbs = {
+  food: 'feed',
+  water: 'hydrate',
+  diaper: 'clean',
+  play: 'play',
+};
+
 // TODO: Every evolution, pop an event type.
 const eventTypes = ['food', 'water', 'diaper'];
+/**
+ * Array<'food | 'water' | 'diaper'>
+ */
 const activeEvents = []; // TODO: Might not need this
 const activeEventsHolder = document.querySelector('ol');
 
 /** 'food', 'water', 'diaper' */
+// might not need this either? nice to have for early days though. only used in getRandomEvent
 let lastEvent = '';
 
-const DELAY_BETWEEN_EVENTS = [10000, 13000, 15000];
+const DELAY_BETWEEN_EVENTS = [3000, 4000, 5000, 6000];
 
 // TODO: These might wanna be methods . I wish I were using TS
 /**
@@ -192,38 +223,48 @@ const DELAY_BETWEEN_EVENTS = [10000, 13000, 15000];
 // TODO: add these phrases in the dictionary for peace of mind, and just grab 'em here
 function askForSomething(eventType) {
   // start timer. if quickly resolved, add to happiness
-  let phrase = `Your ${PICOBUDDY} is `;
-  if (eventType === 'food') {
-    // renderEachLetter([`${phrase} hungry! ${BUTTON_INSTRUCTIONS}`]);
-    activeEvents.push('food');
-    createEventLi('feed');
-  }
-  if (eventType === 'water') {
-    // renderEachLetter([`${phrase} thirsty! ${BUTTON_INSTRUCTIONS}`]);
-    activeEvents.push('water');
-    createEventLi('hydrate');
-  }
-  if (eventType === 'diaper') {
-    // renderEachLetter([
-    //   `Your ${PICOBUDDY} has a dirty diaper! ${BUTTON_INSTRUCTIONS}`,
-    // ]);
-    activeEvents.push('diaper');
-    createEventLi('clean');
-  }
+  activeEvents.push(eventType);
+  createEventLi(eventType);
+
+  // TODO: Deal with phrase as shown below. But overall, need to be more DRY
+  // let phrase = `Your ${PICOBUDDY} is `;
+  // if (eventType === 'food') {
+  //   // renderEachLetter([`${phrase} hungry! ${BUTTON_INSTRUCTIONS}`]);
+  //   activeEvents.push('food');
+  //   createEventLi('feed');
+  // }
+  // if (eventType === 'water') {
+  //   // renderEachLetter([`${phrase} thirsty! ${BUTTON_INSTRUCTIONS}`]);
+  //   activeEvents.push('water');
+  //   createEventLi('hydrate');
+  // }
+  // if (eventType === 'diaper') {
+  //   // renderEachLetter([
+  //   //   `Your ${PICOBUDDY} has a dirty diaper! ${BUTTON_INSTRUCTIONS}`,
+  //   // ]);
+  //   activeEvents.push('diaper');
+  //   createEventLi('clean');
+  // }
   return;
 }
 
 /**
  * Adds an li to go in the "list of demands". The first list item also removes the text "None"
- * @param {string} whatToDo - a verb coming from askForSomething, based on the picobuddy's demands
+ * @param {string} eventType - coming from askForSomething, based on the picobuddy's demands. Morphed into a 'verb' here
  */
-function createEventLi(whatToDo) {
+function createEventLi(eventType) {
   if (activeEventsHolder.textContent.includes('None')) {
     activeEventsHolder.textContent = '';
   }
   const listItem = document.createElement('li');
+  // WHERE YOU AT: Proooobably add a data-attribute to get the correct eventType.
+  // And then use this to properly manage 'accomplishing' a listItem.
+  // After that, you can work on the next tricky task, which is "timing" each event properly.
+  // Involves some thinking about what to do RE: the script
+  // Maybe instead of "next" screen in the script, you just keep adding to it. Easier? (I think so)
   const timer = createTimer();
-  listItem.innerHTML = `${whatToDo}! - `;
+  listItem.innerHTML = `${eventTypeVerbs[eventType]}! - `;
+  listItem.dataset.eventType = eventType;
   listItem.append(timer);
   activeEventsHolder.prepend(listItem);
 }
@@ -245,6 +286,12 @@ function createTimer() {
       // do happiness meter thing
     }
   }, 1000);
+
+  // Return a function to stop the timer
+  newTimer.stop = () => {
+    clearInterval(timing);
+  };
+
   return newTimer;
 }
 
@@ -266,18 +313,53 @@ buttons[3].addEventListener('click', () => {
  * @param {'food' | 'water' | 'diaper' | 'play'} something
  */
 function giveSomething(something) {
-  if (something === 'food') {
-    console.log('gave food');
-  }
-  if (something === 'water') {
-    console.log('gave water');
-  }
-  if (something === 'diaper') {
-    console.log('cleaned');
-  }
+  /* Handle PLAY, which is never requested */
   if (something === 'play') {
-    console.log('played');
+    if (DAY < 4) {
+      // happiness?
+      // animation
+      // sound
+      return renderEachLetter(PLAY);
+    } else {
+      return renderEachLetter(NOPE);
+    }
   }
+  /* Look in the JS array of active events for the first instance of whatever button you clicked */
+  const firstIndexOfGivenEvent = activeEvents.indexOf(something);
+  const hasGivenEvent = firstIndexOfGivenEvent !== -1;
+
+  /* Handle wrong thing given */
+  if (!hasGivenEvent) {
+    return renderEachLetter(NOT_NOW);
+  }
+
+  /* Grab all the DOM li */
+  const lis = activeEventsHolder.querySelectorAll('li');
+
+  /* Get the first one that matches what you gave AND is not completed yet */
+  const firstFound = [...lis].find(
+    (li) => li.dataset.eventType === something && !li.dataset.completed
+  );
+
+  /* It should totally exist */
+  if (!firstFound) {
+    console.log('wtf');
+    return;
+  }
+
+  /* Stop the timer */
+  firstFound.querySelector('span').stop();
+
+  /* Update the happiness meter, depending on how many seconds are left in the timer */
+
+  /* Add some stylin' */
+  firstFound.style.textDecoration = 'line-through';
+
+  /* Add 'completed' for further button clicks */
+  firstFound.dataset.completed = true;
+
+  /* Remove from JS array */
+  activeEvents.splice(firstIndexOfGivenEvent, 1);
 }
 
 function getRandomEvent() {
@@ -290,6 +372,9 @@ function getRandomEvent() {
 }
 
 getRandomEvent();
+getRandomEvent();
+getRandomEvent();
+console.log(activeEvents);
 
 /******************
  /\ /\| |_(_) |___ 
