@@ -67,7 +67,7 @@ const DARK_HUNGRY_PHRASES = [
   `Your ${PICOBUDDY} must feed!`,
   `Your ${PICOBUDDY} must consume!`,
 ];
-const TRICLOPS_PHRASES = [
+const TRIEYE_PHRASES = [
   "It doesn't want anything.",
   'It waits.',
   'It watches.',
@@ -116,9 +116,15 @@ const t20 = `Hmm... I guess your ${PICOBUDDY} no longer requires your servitude!
 /** The screen where buddies are shown */
 const buddyScreen = document.querySelector('#pb');
 
+//TODO: I removed width/height. It's possible your buddies can just be arrays. I'll keep them as objects in case you wanna add other stuff
+
+/**
+ * EggBaby has its tiles drawn in a 16x16 grid, instead of the final 64x64 grid.
+ * So, to render EggBaby on the full-sized grid, we need to adjust its filled-in tiles.
+ * This will render it correctly:
+ * drawPixels([...adjustGridSizeTo64(eggBaby.filledInTiles)]);
+ */
 const eggBaby = {
-  width: 16,
-  height: 16,
   filledInTiles: [
     5, 6, 7, 8, 9, 10, 20, 27, 35, 44, 50, 61, 65, 69, 74, 78, 81, 94, 97, 102,
     105, 110, 113, 119, 120, 126, 129, 142, 145, 158, 162, 163, 164, 165, 166,
@@ -127,9 +133,13 @@ const eggBaby = {
   ],
 };
 
-const floatingEye = {
-  width: 16,
-  height: 16,
+/**
+ * EyeGuy has its tiles drawn in a 16x16 grid, instead of the final 64x64 grid.
+ * So, to render EggBaby on the full-sized grid, we need to adjust its filled-in tiles.
+ * This will render it correctly:
+ * drawPixels([...adjustGridSizeTo64(eyeGuy.filledInTiles)]);
+ */
+const eyeGuy = {
   filledInTiles: [
     5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53,
     58, 59, 60, 65, 66, 67, 68, 76, 77, 81, 84, 86, 87, 88, 89, 92, 93, 94, 96,
@@ -140,30 +150,28 @@ const floatingEye = {
   ],
 };
 
-const triclops = {
-  width: 32,
-  height: 32,
+/**
+ * TriEye's tiles are already adjusted to the 64x64 grid.
+ * So, to render, you can just use:
+ * drawPixels(triEye.filledInTiles);
+ */
+const triEye = {
   filledInTiles: [
-    5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53,
-    58, 59, 60, 65, 66, 67, 68, 76, 77, 81, 84, 86, 87, 88, 89, 92, 93, 94, 96,
-    97, 99, 102, 103, 104, 105, 108, 110, 111, 112, 115, 118, 119, 121, 124,
-    127, 128, 129, 132, 134, 135, 136, 137, 140, 143, 145, 146, 147, 148, 156,
-    158, 159, 164, 165, 166, 171, 172, 173, 174, 182, 183, 184, 185, 186, 187,
-    188, 189, 194, 195, 196, 212, 213, 214, 215, 216, 217, 218, 219,
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 32, 0),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 22, 9),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 23, -7),
   ],
 };
 
 const finalForm = {
-  width: 64,
-  height: 64,
-  filledInTiles: [],
+  filledInTiles: [
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 32, 0),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 22, 9),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 23, -7),
+  ],
 };
 
 function drawPixels(filledInTiles) {
-  // WHERE YOU AT :
-  // TODO: It might make sense to make this only accept the filledInTiles. I think it will be easier to create the combined creatures for lvl3/4
-
-  console.log(filledInTiles);
   for (let i = 0; i < 4096; i++) {
     const pixel = document.createElement('div');
     pixel.classList.add('p');
@@ -178,14 +186,10 @@ function adjustGridSizeTo64(
   filledInTiles,
   originalGridSize = 16,
   extraRowOffset = 4,
-  extraColOffset
+  extraColOffset = 0
 ) {
   const newFilledInTiles = [];
   const newGridSize = 64;
-  // const rowOffset = 48; // 64 - 16
-  // const colOffset = 24; // (64 - 16) / 2
-
-  console.log(filledInTiles);
 
   filledInTiles.forEach((tile) => {
     const originalRow = Math.floor(tile / originalGridSize);
@@ -201,21 +205,10 @@ function adjustGridSizeTo64(
   return newFilledInTiles;
 }
 
-const tric = [
-  ...adjustGridSizeTo64(eggBaby.filledInTiles, 16, 32, 12),
-  ...adjustGridSizeTo64(eggBaby.filledInTiles, 16, 12, 24),
-];
-
-// drawPixels(adjustGridSizeTo64(eggBaby));
-drawPixels(tric);
-// drawPixels(triclops);
-
-// class Bud {
-//   constructor(
-//     stage,
-//   )
-//
-// }
+// drawPixels([...adjustGridSizeTo64(eggBaby.filledInTiles)]);
+// drawPixels([...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 32, 0)]);
+// drawPixels(triEye.filledInTiles);
+drawPixels(finalForm.filledInTiles);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
@@ -229,7 +222,7 @@ const DAY_EVENT_SCHEDULE = [
   3, 3, 3,
   // eye guy
   2, 2, 2,
-  // triclops
+  // triEye
   4, 4, 4,
   // final form
   0,
