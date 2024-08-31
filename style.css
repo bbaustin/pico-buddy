@@ -40,16 +40,16 @@ main {
 }
 
 #in {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   background: var(--w);
   margin-bottom: 25px;
 }
 
 #pb {
   display: grid;
-  grid-template-columns: repeat(16, 1fr);
-  grid-template-rows: repeat(16, 1fr);
+  grid-template-columns: repeat(64, 1fr);
+  grid-template-rows: repeat(64, 1fr);
   width: 100%;
   height: 100%;
 }

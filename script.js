@@ -153,7 +153,7 @@ const finalForm = {
 };
 
 function drawPixels(character) {
-  const { width, height, filledInTiles } = character;
+  let { width, height, filledInTiles } = character;
   const gridSize = width * height;
 
   for (let i = 0; i < gridSize; i++) {
@@ -166,7 +166,31 @@ function drawPixels(character) {
   }
 }
 
-drawPixels(floatingEye);
+function adjustGridSizeTo64(buddy, originalGridSize = 16) {
+  const { filledInTiles } = buddy;
+  const newFilledInTiles = [];
+  const newGridSize = 64;
+  // const rowOffset = 48; // 64 - 16
+  // const colOffset = 24; // (64 - 16) / 2
+
+  filledInTiles.forEach((tile) => {
+    const originalRow = Math.floor(tile / originalGridSize);
+    const originalCol = tile % originalGridSize;
+
+    const newRow = originalRow + (newGridSize - originalGridSize);
+    const newCol = originalCol + (newGridSize - originalGridSize) / 2;
+
+    const newTileIndex = newRow * newGridSize + newCol;
+    newFilledInTiles.push(newTileIndex);
+  });
+  return {
+    width: 64,
+    height: 64,
+    filledInTiles: newFilledInTiles,
+  };
+}
+
+drawPixels(adjustGridSizeTo64(eggBaby));
 
 // class Bud {
 //   constructor(
