@@ -252,6 +252,8 @@ function createTimer() {
     sec--;
     newTimer.innerHTML = sec;
     if (sec <= 0) {
+      manageHappines(-1.67);
+      // TODO: determine if you want stuff to get greyed out etc.
       clearInterval(timing);
     }
   }, 1000);
@@ -286,7 +288,7 @@ function giveSomething(something) {
   /* Handle PLAY, which is never requested */
   if (something === 'play') {
     if (DAY < 4) {
-      // happiness?
+      manageHappines(1);
       // animation
       // sound
       return renderEachLetter(PLAY);
@@ -317,10 +319,17 @@ function giveSomething(something) {
     return;
   }
 
+  const timer = firstFound.querySelector('span');
+
   /* Stop the timer */
-  firstFound.querySelector('span').stop();
+  timer.stop();
+
+  const timerRemainder = parseFloat(timer.textContent);
 
   /* Update the happiness meter, depending on how many seconds are left in the timer */
+  if (timerRemainder > 9) {
+    manageHappines(2);
+  } else if (timerRemainder > 0) manageHappines(1);
 
   /* Add some stylin' */
   firstFound.style.textDecoration = 'line-through';
@@ -344,7 +353,34 @@ function getRandomEvent() {
 getRandomEvent();
 getRandomEvent();
 getRandomEvent();
-console.log(activeEvents);
+
+const happinessMeterMarker = document.querySelector('#hmm');
+let happiness = 0;
+/**
+ * Add a percentage to move the happiness meter. Max is 45%, min is -45%.
+ * // TODO: Smooth move with
+ * @param {number} happinessAddend - amount to add / subtract to the happiness meter. 3 for super fast, 2 for normal, and 1 for playing. minus is -1.67
+ */
+function manageHappines(happinessAddend) {
+  happiness += happinessAddend;
+  happiness = clamp(happiness, -45, 45);
+  handleHappinessMeterMarker(happiness);
+  happinessMeterMarker.style.left = `${happiness}%`;
+}
+
+function handleHappinessMeterMarker(happiness) {
+  if (happiness === -45) {
+    happinessMeterMarker.textContent = '😭';
+  } else if (happiness < -15) {
+    happinessMeterMarker.textContent = '😢';
+  } else if (happiness < 15) {
+    happinessMeterMarker.textContent = '🙂';
+  } else if (happiness < 45) {
+    happinessMeterMarker.textContent = '😀';
+  } else {
+    happinessMeterMarker.textContent = '🥰';
+  }
+}
 
 /******************
  /\ /\| |_(_) |___ 
@@ -372,6 +408,10 @@ async function renderEachLetter(text) {
 
 function getRandom(items) {
   return items[Math.floor(Math.random() * items.length)];
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
 }
 
 renderEachLetter(t6);
