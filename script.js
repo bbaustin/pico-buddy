@@ -143,7 +143,14 @@ const floatingEye = {
 const triclops = {
   width: 32,
   height: 32,
-  filledInTiles: [],
+  filledInTiles: [
+    5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53,
+    58, 59, 60, 65, 66, 67, 68, 76, 77, 81, 84, 86, 87, 88, 89, 92, 93, 94, 96,
+    97, 99, 102, 103, 104, 105, 108, 110, 111, 112, 115, 118, 119, 121, 124,
+    127, 128, 129, 132, 134, 135, 136, 137, 140, 143, 145, 146, 147, 148, 156,
+    158, 159, 164, 165, 166, 171, 172, 173, 174, 182, 183, 184, 185, 186, 187,
+    188, 189, 194, 195, 196, 212, 213, 214, 215, 216, 217, 218, 219,
+  ],
 };
 
 const finalForm = {
@@ -152,11 +159,12 @@ const finalForm = {
   filledInTiles: [],
 };
 
-function drawPixels(character) {
-  let { width, height, filledInTiles } = character;
-  const gridSize = width * height;
+function drawPixels(filledInTiles) {
+  // WHERE YOU AT :
+  // TODO: It might make sense to make this only accept the filledInTiles. I think it will be easier to create the combined creatures for lvl3/4
 
-  for (let i = 0; i < gridSize; i++) {
+  console.log(filledInTiles);
+  for (let i = 0; i < 4096; i++) {
     const pixel = document.createElement('div');
     pixel.classList.add('p');
     if (filledInTiles.includes(i)) {
@@ -166,31 +174,41 @@ function drawPixels(character) {
   }
 }
 
-function adjustGridSizeTo64(buddy, originalGridSize = 16) {
-  const { filledInTiles } = buddy;
+function adjustGridSizeTo64(
+  filledInTiles,
+  originalGridSize = 16,
+  extraRowOffset = 4,
+  extraColOffset
+) {
   const newFilledInTiles = [];
   const newGridSize = 64;
   // const rowOffset = 48; // 64 - 16
   // const colOffset = 24; // (64 - 16) / 2
 
+  console.log(filledInTiles);
+
   filledInTiles.forEach((tile) => {
     const originalRow = Math.floor(tile / originalGridSize);
-    const originalCol = tile % originalGridSize;
+    const originalCol = (tile % originalGridSize) + extraColOffset;
 
-    const newRow = originalRow + (newGridSize - originalGridSize);
+    const newRow =
+      originalRow + (newGridSize - originalGridSize - extraRowOffset);
     const newCol = originalCol + (newGridSize - originalGridSize) / 2;
 
     const newTileIndex = newRow * newGridSize + newCol;
     newFilledInTiles.push(newTileIndex);
   });
-  return {
-    width: 64,
-    height: 64,
-    filledInTiles: newFilledInTiles,
-  };
+  return newFilledInTiles;
 }
 
-drawPixels(adjustGridSizeTo64(eggBaby));
+const tric = [
+  ...adjustGridSizeTo64(eggBaby.filledInTiles, 16, 32, 12),
+  ...adjustGridSizeTo64(eggBaby.filledInTiles, 16, 12, 24),
+];
+
+// drawPixels(adjustGridSizeTo64(eggBaby));
+drawPixels(tric);
+// drawPixels(triclops);
 
 // class Bud {
 //   constructor(
