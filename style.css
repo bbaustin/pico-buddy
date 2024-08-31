@@ -3,9 +3,9 @@
   --g: #6f6f6f;
   --b: #0f0f0f;
   --f: 'Comic Sans MS', sans-serif;
-  --hi: #63d500;
+  --hi: #00b9d5;
   --mi: #f6d91c;
-  --lo: #fa0f07;
+  --lo: #fa078d;
 }
 
 main {
@@ -109,23 +109,16 @@ main {
 
 #hm {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-}
-
-#hm div {
   height: 30px;
-  justify-self: stretch;
-  background: var(--hi);
-  border-right: 1px solid var(--b);
+  background: linear-gradient(to left, var(--lo), var(--mi), var(--hi));
+  text-align: center;
+  padding-top: 5px;
 }
 
-#hm div.mi {
-  background: var(--mi);
-}
-
-#hm div.lo {
-  background: var(--lo);
+#hmm {
+  position: relative;
+  left: 0;
+  display: inline;
 }
 
 /* animation: bounce 1s steps(2) infinite; 
