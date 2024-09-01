@@ -154,7 +154,9 @@ const UNBECOMING = 'The Great Unbecoming';
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
 const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
 const NOPE = 'It no longer has any use for this.';
-const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS}`;
+const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS.join(
+  ' '
+)}`;
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
@@ -209,16 +211,21 @@ const TRIEYE_PHRASES = [
 
 // WHERE YOU AT:
 // Then figure out how to like... have the non-scripted events happen.
-const d1_t1 = `Congratulations on your new ${PICOBUDDY()} !`;
-const d1_t2 = SEE;
-const d1_t3 = () => drawEggBaby();
-const d1_t4 = `Oh! It's an ${EGGBABY()} !`;
-const d1_t5 = "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !";
-const d1_t6 = `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`;
-const d1_t7 = `${BUTTON_INSTRUCTIONS}`;
-const d1_t8 = `Your ${PICOBUDDY()} will reach full maturity in 13 days!`;
-const d1_t9 = `${NOT_OMINOUS}`;
-const d1_t10 = `${getRandom(REASSURING_PHRASES)}`;
+const eventsDay1To4 = [
+  `Congratulations on your new ${PICOBUDDY()} !`,
+  SEE,
+  () => drawEggBaby(),
+  `Oh! It's an ${EGGBABY()} !`,
+  "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
+  `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
+  `${BUTTON_INSTRUCTIONS}`,
+  `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
+  `${NOT_OMINOUS}`,
+  `${getRandom(REASSURING_PHRASES)}`,
+  `Oh! Looks like your ${PICOBUDDY()} needs something!`,
+  `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
+  () => getRandomEvent(),
+];
 
 // Day 5, 6, 7, 8
 const d2_t1 = EVOLVING;
@@ -252,18 +259,7 @@ const t20 = `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitud
 |___/\__\___/|_|   \__, |_|_|_| |_|\___|
                    |___/                
 *****************************************/
-handleScriptEventsSequentially([
-  d1_t1,
-  d1_t2,
-  d1_t3,
-  d1_t4,
-  d1_t5,
-  d1_t6,
-  d1_t7,
-  d1_t8,
-  d1_t9,
-  d1_t10,
-]);
+handleScriptEventsSequentially(eventsDay1To4);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
@@ -439,10 +435,6 @@ function getRandomEvent() {
   lastEvent = newEvent;
   return askForSomething(newEvent);
 }
-
-getRandomEvent();
-getRandomEvent();
-getRandomEvent();
 
 const happinessMeterMarker = document.querySelector('#hmm');
 let happiness = 0;
