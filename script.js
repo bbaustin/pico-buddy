@@ -14,16 +14,19 @@ const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
 const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
 
 // Names
-const PICOBUDDY = `PicoBuddy${getRandom(BUD_EMOJIS)}`;
+const PICOBUDDY = () => {
+  const emoji = getRandom(BUD_EMOJIS);
+  return `${emoji}PicoBuddy${emoji}`;
+};
 const EGGBABY = `EggBaby${getRandom(EGG_EMOJIS)}`;
 const EYEGUY = `EyeGuy${getRandom(EYE_EMOJIS)}`;
 const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
-const BUTTON_INSTRUCTIONS = `Use the buttons beneath your ${PICOBUDDY}!`;
-const PLAY = `Your ${PICOBUDDY} had a great time playing!`;
+const BUTTON_INSTRUCTIONS = `Use the buttons beneath your ${PICOBUDDY()}!`;
+const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
 const NOPE = 'It no longer has any use for this.';
-const NOT_NOW = `Your ${PICOBUDDY} doesn't need this right now! Thanks, though!${BUD_EMOJIS}`;
+const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS}`;
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
@@ -31,8 +34,8 @@ const NOT_OMINOUS = 'I assure you, there is nothing ominous about this!';
 const EVOLVING = "Oh! It's evolving!";
 
 // Script End phrases
-const TREATED = `You treated your ${PICOBUDDY} `;
-const TREATED_RESULT = `Your ${PICOBUDDY} sees this as a sign of `;
+const TREATED = `You treated your ${PICOBUDDY()} `;
+const TREATED_RESULT = `Your ${PICOBUDDY()} sees this as a sign of `;
 const UNBECOMING_BEGINS = `when ${UNBECOMING} begins.`;
 
 const REASSURING_PHRASES = [
@@ -60,12 +63,12 @@ const REASSURING_PHRASES = [
  * }
  */
 const NORMAL_HUNGRY_PHRASES = [
-  `Oh! Your ${PICOBUDDY} is hungry!`,
-  `You better give your ${PICOBUDDY} some food!`,
+  `Oh! Your ${PICOBUDDY()} is hungry!`,
+  `You better give your ${PICOBUDDY()} some food!`,
 ];
 const DARK_HUNGRY_PHRASES = [
-  `Your ${PICOBUDDY} must feed!`,
-  `Your ${PICOBUDDY} must consume!`,
+  `Your ${PICOBUDDY()} must feed!`,
+  `Your ${PICOBUDDY()} must consume!`,
 ];
 const TRIEYE_PHRASES = [
   "It doesn't want anything.",
@@ -75,36 +78,37 @@ const TRIEYE_PHRASES = [
 
 /* Script */
 // Day 1, 2, 3, 4
-const t1 = `Congratulations on your new ${PICOBUDDY}!`;
-const t2 = SEE;
-const t3 = `Oh! It's an ${EGGBABY}!`;
-const t4 = "It's an egg with a diaper! That's pretty cute!";
-const t5 = `When it cries, you'll have to feed it, give it water, change its diaper, or play with it! ${BUTTON_INSTRUCTIONS}`;
-const t6 = `Your ${PICOBUDDY} will reach full maturity in 13 days! ${NOT_OMINOUS} ${getRandom(
-  REASSURING_PHRASES
-)}`;
+const d1_t1 = `Congratulations on your new ${PICOBUDDY()}!`;
+const d1_t2 = SEE;
+const d1_t3 = `Oh! It's an ${EGGBABY}!`;
+const d1_t4 = "It's an egg with a diaper! That's pretty cute!";
+const d1_t5 = `When it cries, you'll have to feed it, give it water, change its diaper, or play with it!`;
+const d1_t6 = `${BUTTON_INSTRUCTIONS}`;
+const d1_t7 = `Your ${PICOBUDDY()} will reach full maturity in 13 days!`;
+const d1_t8 = `${NOT_OMINOUS}`;
+const d1_t9 = `${getRandom(REASSURING_PHRASES)}`;
 
 // Day 5, 6, 7, 8
-const t7 = EVOLVING;
-const t8 = SEE;
-const t9 = `Oh! It's an ${EYEGUY}!`;
-const t10 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
+const d2_t1 = EVOLVING;
+const d2_t2 = SEE;
+const d2_t3 = `Oh! It's an ${EYEGUY}!`;
+const d2_t4 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
 
 // Day 9, 10, 11, 12
-const t11 = EVOLVING;
-const t12 = SEE;
-const t13 = "Oh! It's an...";
-const t14 = 'Um...';
-const t15 = "It's got more eyes!";
+const d3_t1 = EVOLVING;
+const d3_t2 = SEE;
+const d3_t3 = "Oh! It's an...";
+const d3_t4 = 'Um...';
+const d3_t5 = "It's got more eyes!";
 
 // Day 13
-const t16 = EVOLVING;
-const t17 = 'This is its final form!';
-const t18 = SEE;
-const t19 = "Oh! That's a lotta eyes!";
+const d4_t1 = EVOLVING;
+const d4_t2 = 'This is its final form!';
+const d4_t3 = SEE;
+const d4_t4 = "Oh! That's a lotta eyes!";
 
 // End
-const t20 = `Hmm... I guess your ${PICOBUDDY} no longer requires your servitude!`;
+const t20 = `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`;
 
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
@@ -442,12 +446,43 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// TODO: Where you at
+// Have text add to existing text i guess (not disappear )
+
+/**
+ * Renders text character-by-character, like old-school video game scroll.
+ * TODO: These can be color-coded based on 1. fun or 2. type by adding class to newTextContainer
+ * @param { string } text
+ */
 async function renderEachLetter(text) {
+  const newTextContainer = document.createElement('div');
+  textBox.prepend(newTextContainer);
   let temp = '';
   for (const character of text) {
     temp += character;
-    textBox.textContent = temp;
+    newTextContainer.innerHTML = temp;
     await delay(20);
+  }
+}
+
+/**
+ * This will take an array of messages; it will render the first one,
+ * look at the number of characters in the previous one, and
+ * render the next one based on the total time it takes to render the previous one
+ *
+ * @param {Array<string>} messages - array of messages.
+ * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
+ */
+async function renderMessagesSequentially(messages, addDelay = false) {
+  for (const message of messages) {
+    await renderEachLetter(message);
+    if (addDelay) {
+      /* Calculate delay based on message length */
+      const baseDelay = 500; // Base delay in ms for short messages
+      const lengthFactor = 10; // Additional ms per character in the message
+      const messageDelay = baseDelay + message.length * lengthFactor;
+      await delay(messageDelay);
+    }
   }
 }
 
@@ -459,4 +494,7 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-renderEachLetter(t6);
+renderMessagesSequentially(
+  [d1_t1, d1_t2, d1_t3, d1_t4, d1_t5, d1_t6, d1_t7, d1_t8, d1_t9],
+  true
+);
