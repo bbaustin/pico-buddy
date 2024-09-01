@@ -1,3 +1,125 @@
+/*************************************
+| |__  _   _  __| | __| (_) ___  ___ 
+| '_ \| | | |/ _` |/ _` | |/ _ \/ __|
+| |_) | |_| | (_| | (_| | |  __/\__ \
+|_.__/ \__,_|\__,_|\__,_|_|\___||___/
+*************************************/
+
+/** The screen where buddies are shown */
+const buddyScreen = document.querySelector('#pb');
+
+/**
+ * EggBaby has its tiles drawn in a 16x16 grid, instead of the final 64x64 grid.
+ * So, to render EggBaby on the full-sized grid, we need to adjust its filled-in tiles.
+ * This will render it correctly:
+ * drawPixels([...adjustGridSizeTo64(eggBaby)]);
+ */
+function drawEggBaby() {
+  drawPixels([...adjustGridSizeTo64(eggBaby)]);
+  // make sound
+}
+const eggBaby = [
+  5, 6, 7, 8, 9, 10, 20, 27, 35, 44, 50, 61, 65, 69, 74, 78, 81, 94, 97, 102,
+  105, 110, 113, 119, 120, 126, 129, 142, 145, 158, 162, 163, 164, 165, 166,
+  167, 168, 169, 170, 171, 172, 173, 178, 189, 195, 200, 201, 202, 204, 211,
+  220, 228, 235, 245, 246, 247, 248, 249, 250,
+];
+
+/**
+ * EyeGuy has its tiles drawn in a 16x16 grid, instead of the final 64x64 grid.
+ * So, to render EggBaby on the full-sized grid, we need to adjust its filled-in tiles.
+ * This will render it correctly:
+ * drawPixels([...adjustGridSizeTo64(eyeGuy)]);
+ */
+function drawEyeGuy() {
+  drawPixels([...adjustGridSizeTo64(eyeGuy, 16, 32, 0)]);
+}
+const eyeGuy = [
+  5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53, 58,
+  59, 60, 65, 66, 67, 68, 76, 77, 81, 84, 86, 87, 88, 89, 92, 93, 94, 96, 97,
+  99, 102, 103, 104, 105, 108, 110, 111, 112, 115, 118, 119, 121, 124, 127, 128,
+  129, 132, 134, 135, 136, 137, 140, 143, 145, 146, 147, 148, 156, 158, 159,
+  164, 165, 166, 171, 172, 173, 174, 182, 183, 184, 185, 186, 187, 188, 189,
+  194, 195, 196, 212, 213, 214, 215, 216, 217, 218, 219,
+];
+
+/**
+ * TriEye's tiles are already adjusted to the 64x64 grid.
+ * So, to render, you can just use:
+ * drawPixels(triEye);
+ */
+function drawTriEye() {
+  drawPixels(triEye);
+}
+const triEye = [
+  ...adjustGridSizeTo64(eyeGuy, 16, 32, 0),
+  ...adjustGridSizeTo64(eyeGuy, 16, 22, 9),
+  ...adjustGridSizeTo64(eyeGuy, 16, 23, -7),
+];
+
+/**
+ * Final Form's tiles are already adjusted to the 64x64 grid.
+ * So, to render, you can just use:
+ * drawPixels(finalForm)
+ */
+function drawFinalForm() {
+  drawPixels(finalForm);
+}
+const finalForm = [
+  // top
+  ...adjustGridSizeTo64(eyeGuy, 16, 45, 0),
+  // row 2
+  ...adjustGridSizeTo64(eyeGuy, 16, 36, -7),
+  ...adjustGridSizeTo64(eyeGuy, 16, 35, 8),
+  // row 3
+  ...adjustGridSizeTo64(eyeGuy, 16, 25, -16),
+  ...adjustGridSizeTo64(eyeGuy, 16, 24, 0),
+  ...adjustGridSizeTo64(eyeGuy, 16, 25, 16),
+  // row 4
+  ...adjustGridSizeTo64(eyeGuy, 16, 15, -23),
+  ...adjustGridSizeTo64(eyeGuy, 16, 13, -8),
+  ...adjustGridSizeTo64(eyeGuy, 16, 13, 8),
+  ...adjustGridSizeTo64(eyeGuy, 16, 13, 22),
+  // row 5
+  ...adjustGridSizeTo64(eyeGuy, 16, 1, -17),
+  ...adjustGridSizeTo64(eyeGuy, 16, 3, -1),
+  ...adjustGridSizeTo64(eyeGuy, 16, 3, 15),
+];
+
+function drawPixels(filledInTiles) {
+  for (let i = 0; i < 4096; i++) {
+    const pixel = document.createElement('div');
+    pixel.classList.add('p');
+    if (filledInTiles.includes(i)) {
+      pixel.classList.add('fill');
+    }
+    buddyScreen.appendChild(pixel);
+  }
+}
+
+function adjustGridSizeTo64(
+  filledInTiles,
+  originalGridSize = 16,
+  extraRowOffset = 4,
+  extraColOffset = 0
+) {
+  const newFilledInTiles = [];
+  const newGridSize = 64;
+
+  filledInTiles.forEach((tile) => {
+    const originalRow = Math.floor(tile / originalGridSize);
+    const originalCol = (tile % originalGridSize) + extraColOffset;
+
+    const newRow =
+      originalRow + (newGridSize - originalGridSize - extraRowOffset);
+    const newCol = originalCol + (newGridSize - originalGridSize) / 2;
+
+    const newTileIndex = newRow * newGridSize + newCol;
+    newFilledInTiles.push(newTileIndex);
+  });
+  return newFilledInTiles;
+}
+
 /****************************
 / / /\ \ \___  _ __ __| |___ 
 \ \/  \/ / _ \| '__/ _` / __|
@@ -84,34 +206,41 @@ const TRIEYE_PHRASES = [
 
 /* Script */
 // Day 1, 2, 3, 4
+
+// WHERE YOU AT:
+// Then figure out how to like... have the non-scripted events happen.
 const d1_t1 = `Congratulations on your new ${PICOBUDDY()} !`;
 const d1_t2 = SEE;
-const d1_t3 = `Oh! It's an ${EGGBABY()} !`;
-const d1_t4 = "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !";
-const d1_t5 = `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`;
-const d1_t6 = `${BUTTON_INSTRUCTIONS}`;
-const d1_t7 = `Your ${PICOBUDDY()} will reach full maturity in 13 days!`;
-const d1_t8 = `${NOT_OMINOUS}`;
-const d1_t9 = `${getRandom(REASSURING_PHRASES)}`;
+const d1_t3 = () => drawEggBaby();
+const d1_t4 = `Oh! It's an ${EGGBABY()} !`;
+const d1_t5 = "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !";
+const d1_t6 = `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`;
+const d1_t7 = `${BUTTON_INSTRUCTIONS}`;
+const d1_t8 = `Your ${PICOBUDDY()} will reach full maturity in 13 days!`;
+const d1_t9 = `${NOT_OMINOUS}`;
+const d1_t10 = `${getRandom(REASSURING_PHRASES)}`;
 
 // Day 5, 6, 7, 8
 const d2_t1 = EVOLVING;
 const d2_t2 = SEE;
-const d2_t3 = `Oh! It's an ${EYEGUY()} !`;
-const d2_t4 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
+const d2_t3 = () => drawEyeGuy();
+const d2_t4 = `Oh! It's an ${EYEGUY()} !`;
+const d2_t5 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
 
 // Day 9, 10, 11, 12
 const d3_t1 = EVOLVING;
 const d3_t2 = SEE;
-const d3_t3 = "Oh! It's an...";
-const d3_t4 = 'Um...';
-const d3_t5 = "It's got more eyes!";
+const d3_t3 = () => drawTriEye();
+const d3_t4 = "Oh! It's an...";
+const d3_t5 = 'Um...';
+const d3_t6 = "It's got more eyes!";
 
 // Day 13
 const d4_t1 = EVOLVING;
 const d4_t2 = 'This is its final form!';
 const d4_t3 = SEE;
-const d4_t4 = "Oh! That's a lotta eyes!";
+const d4_t4 = () => drawFinalForm();
+const d4_t5 = "Oh! That's a lotta eyes!";
 
 // End
 const t20 = `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`;
@@ -123,124 +252,18 @@ const t20 = `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitud
 |___/\__\___/|_|   \__, |_|_|_| |_|\___|
                    |___/                
 *****************************************/
-renderMessagesSequentially(
-  [d1_t1, d1_t2, d1_t3, d1_t4, d1_t5, d1_t6, d1_t7, d1_t8, d1_t9],
-  true
-);
-
-/*************************************
-| |__  _   _  __| | __| (_) ___  ___ 
-| '_ \| | | |/ _` |/ _` | |/ _ \/ __|
-| |_) | |_| | (_| | (_| | |  __/\__ \
-|_.__/ \__,_|\__,_|\__,_|_|\___||___/
-*************************************/
-
-/** The screen where buddies are shown */
-const buddyScreen = document.querySelector('#pb');
-
-/**
- * EggBaby has its tiles drawn in a 16x16 grid, instead of the final 64x64 grid.
- * So, to render EggBaby on the full-sized grid, we need to adjust its filled-in tiles.
- * This will render it correctly:
- * drawPixels([...adjustGridSizeTo64(eggBaby)]);
- */
-const eggBaby = [
-  5, 6, 7, 8, 9, 10, 20, 27, 35, 44, 50, 61, 65, 69, 74, 78, 81, 94, 97, 102,
-  105, 110, 113, 119, 120, 126, 129, 142, 145, 158, 162, 163, 164, 165, 166,
-  167, 168, 169, 170, 171, 172, 173, 178, 189, 195, 200, 201, 202, 204, 211,
-  220, 228, 235, 245, 246, 247, 248, 249, 250,
-];
-
-/**
- * EyeGuy has its tiles drawn in a 16x16 grid, instead of the final 64x64 grid.
- * So, to render EggBaby on the full-sized grid, we need to adjust its filled-in tiles.
- * This will render it correctly:
- * drawPixels([...adjustGridSizeTo64(eyeGuy)]);
- */
-const eyeGuy = [
-  5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53, 58,
-  59, 60, 65, 66, 67, 68, 76, 77, 81, 84, 86, 87, 88, 89, 92, 93, 94, 96, 97,
-  99, 102, 103, 104, 105, 108, 110, 111, 112, 115, 118, 119, 121, 124, 127, 128,
-  129, 132, 134, 135, 136, 137, 140, 143, 145, 146, 147, 148, 156, 158, 159,
-  164, 165, 166, 171, 172, 173, 174, 182, 183, 184, 185, 186, 187, 188, 189,
-  194, 195, 196, 212, 213, 214, 215, 216, 217, 218, 219,
-];
-
-/**
- * TriEye's tiles are already adjusted to the 64x64 grid.
- * So, to render, you can just use:
- * drawPixels(triEye);
- */
-const triEye = [
-  ...adjustGridSizeTo64(eyeGuy, 16, 32, 0),
-  ...adjustGridSizeTo64(eyeGuy, 16, 22, 9),
-  ...adjustGridSizeTo64(eyeGuy, 16, 23, -7),
-];
-
-/**
- * Final Form's tiles are already adjusted to the 64x64 grid.
- * So, to render, you can just use:
- * drawPixels(finalForm)
- */
-const finalForm = [
-  // top
-  ...adjustGridSizeTo64(eyeGuy, 16, 45, 0),
-  // row 2
-  ...adjustGridSizeTo64(eyeGuy, 16, 36, -7),
-  ...adjustGridSizeTo64(eyeGuy, 16, 35, 8),
-  // row 3
-  ...adjustGridSizeTo64(eyeGuy, 16, 25, -16),
-  ...adjustGridSizeTo64(eyeGuy, 16, 24, 0),
-  ...adjustGridSizeTo64(eyeGuy, 16, 25, 16),
-  // row 4
-  ...adjustGridSizeTo64(eyeGuy, 16, 15, -23),
-  ...adjustGridSizeTo64(eyeGuy, 16, 13, -8),
-  ...adjustGridSizeTo64(eyeGuy, 16, 13, 8),
-  ...adjustGridSizeTo64(eyeGuy, 16, 13, 22),
-  // row 5
-  ...adjustGridSizeTo64(eyeGuy, 16, 1, -17),
-  ...adjustGridSizeTo64(eyeGuy, 16, 3, -1),
-  ...adjustGridSizeTo64(eyeGuy, 16, 3, 15),
-];
-
-function drawPixels(filledInTiles) {
-  for (let i = 0; i < 4096; i++) {
-    const pixel = document.createElement('div');
-    pixel.classList.add('p');
-    if (filledInTiles.includes(i)) {
-      pixel.classList.add('fill');
-    }
-    buddyScreen.appendChild(pixel);
-  }
-}
-
-function adjustGridSizeTo64(
-  filledInTiles,
-  originalGridSize = 16,
-  extraRowOffset = 4,
-  extraColOffset = 0
-) {
-  const newFilledInTiles = [];
-  const newGridSize = 64;
-
-  filledInTiles.forEach((tile) => {
-    const originalRow = Math.floor(tile / originalGridSize);
-    const originalCol = (tile % originalGridSize) + extraColOffset;
-
-    const newRow =
-      originalRow + (newGridSize - originalGridSize - extraRowOffset);
-    const newCol = originalCol + (newGridSize - originalGridSize) / 2;
-
-    const newTileIndex = newRow * newGridSize + newCol;
-    newFilledInTiles.push(newTileIndex);
-  });
-  return newFilledInTiles;
-}
-
-// drawPixels([...adjustGridSizeTo64(eggBaby)]);
-// drawPixels([...adjustGridSizeTo64(eyeGuy, 16, 32, 0)]);
-drawPixels(triEye);
-drawPixels(finalForm);
+handleScriptEventsSequentially([
+  d1_t1,
+  d1_t2,
+  d1_t3,
+  d1_t4,
+  d1_t5,
+  d1_t6,
+  d1_t7,
+  d1_t8,
+  d1_t9,
+  d1_t10,
+]);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
@@ -464,9 +487,6 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// TODO: Where you at
-// Have text add to existing text i guess (not disappear )
-
 /**
  * Renders text character-by-character, like old-school video game scroll.
  * TODO: These can be color-coded based on 1. fun or 2. type by adding class to newTextContainer
@@ -491,7 +511,7 @@ async function renderEachLetter(text) {
  * @param {Array<string>} messages - array of messages.
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
-async function renderMessagesSequentially(scriptEvents, addDelay = false) {
+async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
