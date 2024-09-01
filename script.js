@@ -153,6 +153,7 @@ const UNBECOMING = 'The Great Unbecoming';
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
 const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
+const PLAY_NOPE = `Your ${PICOBUDDY()} is exhausted! Maybe you can play again tomorrow!`;
 const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS.join(
   ' '
@@ -165,6 +166,7 @@ const PRAISE_PHRASES = [
   'You rule!',
   'You rock!',
 ];
+const DAY_FINISHED = 'The next day will begin now.';
 const SLOW = 'You were a little too slow...';
 
 // Script Phrases
@@ -225,20 +227,29 @@ const TRIEYE_PHRASES = [
 /* Script */
 // Day 1, 2, 3, 4
 const eventsDay1To4 = [
+  // day 1
   `Congratulations on your new ${PICOBUDDY()} !`,
   SEE,
   () => drawEggBaby(),
-  `Oh! It's an ${EGGBABY()} !`,
-  "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
-  `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
-  `${BUTTON_INSTRUCTIONS}`,
-  `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
-  `${NOT_OMINOUS}`,
-  `${getRandom(REASSURING_PHRASES)}`,
-  `Oh! Looks like your ${PICOBUDDY()} needs something!`,
-  `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
+  // `Oh! It's an ${EGGBABY()} !`,
+  // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
+  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
+  // `${BUTTON_INSTRUCTIONS}`,
+  // `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
+  // `${NOT_OMINOUS}`,
+  // `${getRandom(REASSURING_PHRASES)}`,
+  // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
+  // `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
   () => getRandomEvent(),
   () => delay(8000),
+  () => getRandomEvent(),
+  () => delayBetweenEvents(),
+  () => getRandomEvent(),
+  // WHERE YOU AT: See if you can delay advancing the day until all events are cleared
+  // day 2
+  () => advanceDay(),
+  () => getRandomEvent(),
+  () => delayBetweenEvents(),
   () => getRandomEvent(),
   () => delayBetweenEvents(),
   () => getRandomEvent(),
@@ -283,11 +294,16 @@ handleScriptEventsSequentially(eventsDay1To4);
 |  __/\ V /  __/ | | | |_\__ \
  \___| \_/ \___|_| |_|\__|___/
 *************************************/
+const dayText = document.getElementById('day');
+
 let DAY = 1;
+let PLAY_COUNTER = 0;
 
 function advanceDay() {
   DAY += 1;
-  // update DOM
+  dayText.textContent = `Day ${DAY}`;
+  renderEachLetter(DAY_FINISHED);
+  PLAY_COUNTER = 0;
 }
 
 const eventTypeVerbs = {
@@ -390,11 +406,15 @@ function giveSomething(something) {
   /* Handle PLAY, which is never requested */
   if (something === 'play') {
     if (DAY < 4) {
-      // TODO: Add limit here
-      manageHappines(1);
-      // animation
-      // sound
-      return renderEachLetter(PLAY);
+      if (PLAY_COUNTER < 5) {
+        PLAY_COUNTER++;
+        manageHappines(1);
+        // animation
+        // sound
+        return renderEachLetter(PLAY);
+      } else {
+        return renderEachLetter(PLAY_NOPE);
+      }
     } else {
       return renderEachLetter(NOPE);
     }
