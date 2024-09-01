@@ -157,6 +157,12 @@ const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS.join(
   ' '
 )}`;
+const PRAISE_PHRASES = [
+  'Good job!',
+  'Nicely done!',
+  `Your ${PICOBUDDY()} is pleased!`,
+  'Way to go!',
+];
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
@@ -219,14 +225,14 @@ const eventsDay1To4 = [
   `Congratulations on your new ${PICOBUDDY()} !`,
   SEE,
   () => drawEggBaby(),
-  // `Oh! It's an ${EGGBABY()} !`,
-  // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
-  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
-  // `${BUTTON_INSTRUCTIONS}`,
-  // `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
-  // `${NOT_OMINOUS}`,
-  // `${getRandom(REASSURING_PHRASES)}`,
-  // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
+  `Oh! It's an ${EGGBABY()} !`,
+  "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
+  `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
+  `${BUTTON_INSTRUCTIONS}`,
+  `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
+  `${NOT_OMINOUS}`,
+  `${getRandom(REASSURING_PHRASES)}`,
+  `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
   () => getRandomEvent(),
   () => delay(8000),
@@ -520,7 +526,7 @@ async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
     if (addDelay) {
       /* Calculate delay based on message length */
       const baseDelay = 500; // Base delay in ms for short messages
-      const lengthFactor = 20; // Additional ms per character in the message
+      const lengthFactor = 25; // Additional ms per character in the message
       const messageDelay = baseDelay + scriptEvent.length * lengthFactor;
       await delay(messageDelay);
     }

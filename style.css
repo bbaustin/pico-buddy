@@ -19,6 +19,7 @@ section {
   /* This is just to use flex-grow: 1 on #t (textbox) */
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
 }
 
 #out {
@@ -31,6 +32,7 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 20px;
   /* filter: drop-shadow(-5px 0px var(--g)); */
 }
 
@@ -110,12 +112,24 @@ section {
   display: block;
 }
 
+#cd,
 #t {
+  overflow-y: auto;
   background: var(--w);
+  border: 1px solid var(--b);
+}
+
+#cd {
+  padding: 20px 30px 10px;
+}
+
+#cd h2 {
+  margin: 0 0 10px;
+}
+
+#t {
   width: 300px;
   height: 200px;
-  border: 1px solid var(--b);
-  overflow-y: auto;
   line-height: 2;
   font-size: 18px;
   flex-grow: 1;
