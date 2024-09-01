@@ -127,15 +127,16 @@ section {
 }
 
 #hm {
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(to left, var(--lo), var(--mi), var(--hi));
-  text-align: center;
-  padding-top: 5px;
+  width: 30px;
+  flex-grow: 1;
+  background: linear-gradient(var(--lo), var(--mi), var(--hi));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #hmm {
   position: relative;
-  left: 0;
+  bottom: 0;
   display: inline;
 }

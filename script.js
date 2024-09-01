@@ -233,6 +233,7 @@ const eventsDay1To4 = [
   () => getRandomEvent(),
   () => delayBetweenEvents(),
   () => getRandomEvent(),
+  () => advanceDay(),
 ];
 
 // Day 5, 6, 7, 8
@@ -274,16 +275,11 @@ handleScriptEventsSequentially(eventsDay1To4);
  \___| \_/ \___|_| |_|\__|___/
 *************************************/
 let DAY = 1;
-const DAY_EVENT_SCHEDULE = [
-  // egg baby
-  3, 3, 3,
-  // eye guy
-  2, 2, 2,
-  // triEye
-  4, 4, 4,
-  // final form
-  0,
-];
+
+function advanceDay() {
+  DAY += 1;
+  // update DOM
+}
 
 const eventTypeVerbs = {
   food: 'feed',
@@ -457,7 +453,7 @@ function manageHappines(happinessAddend) {
   happiness += happinessAddend;
   happiness = clamp(happiness, -45, 45);
   handleHappinessMeterMarker(happiness);
-  happinessMeterMarker.style.left = `${happiness}%`;
+  happinessMeterMarker.style.bottom = `${happiness}%`;
 }
 
 function handleHappinessMeterMarker(happiness) {
