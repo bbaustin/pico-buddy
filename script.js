@@ -206,59 +206,65 @@ const TRIEYE_PHRASES = [
   'It watches.',
 ];
 
+/**************************
+ ___  ___ _ __(_)_ __ | |_ 
+/ __|/ __| '__| | '_ \| __|
+\__ \ (__| |  | | |_) | |_ 
+|___/\___|_|  |_| .__/ \__|
+                |_|        
+**************************/
 /* Script */
 // Day 1, 2, 3, 4
-
-// WHERE YOU AT:
-// Then figure out how to like... have the non-scripted events happen.
 const eventsDay1To4 = [
   `Congratulations on your new ${PICOBUDDY()} !`,
   SEE,
   () => drawEggBaby(),
-  `Oh! It's an ${EGGBABY()} !`,
-  "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
-  `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
-  `${BUTTON_INSTRUCTIONS}`,
-  `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
-  `${NOT_OMINOUS}`,
-  `${getRandom(REASSURING_PHRASES)}`,
-  `Oh! Looks like your ${PICOBUDDY()} needs something!`,
+  // `Oh! It's an ${EGGBABY()} !`,
+  // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
+  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
+  // `${BUTTON_INSTRUCTIONS}`,
+  // `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
+  // `${NOT_OMINOUS}`,
+  // `${getRandom(REASSURING_PHRASES)}`,
+  // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
+  () => getRandomEvent(),
+  () => delay(8000),
+  () => getRandomEvent(),
+  () => delayBetweenEvents(),
   () => getRandomEvent(),
 ];
 
 // Day 5, 6, 7, 8
-const d2_t1 = EVOLVING;
-const d2_t2 = SEE;
-const d2_t3 = () => drawEyeGuy();
-const d2_t4 = `Oh! It's an ${EYEGUY()} !`;
-const d2_t5 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
+const eventsDay5To8 = [
+  EVOLVING,
+  SEE,
+  () => drawEyeGuy(),
+  `Oh! It's an ${EYEGUY()} !`,
+  `He's like a... a floating eye! ${NOT_OMINOUS}`,
+];
 
 // Day 9, 10, 11, 12
-const d3_t1 = EVOLVING;
-const d3_t2 = SEE;
-const d3_t3 = () => drawTriEye();
-const d3_t4 = "Oh! It's an...";
-const d3_t5 = 'Um...';
-const d3_t6 = "It's got more eyes!";
+const eventsDay9To12 = [
+  EVOLVING,
+  SEE,
+  () => drawTriEye(),
+  "Oh! It's an...",
+  'Um...',
+  "It's got more eyes!",
+];
 
 // Day 13
-const d4_t1 = EVOLVING;
-const d4_t2 = 'This is its final form!';
-const d4_t3 = SEE;
-const d4_t4 = () => drawFinalForm();
-const d4_t5 = "Oh! That's a lotta eyes!";
+const eventsDay13 = [
+  EVOLVING,
+  'This is its final form!',
+  SEE,
+  () => drawFinalForm(),
+  "Oh! That's a lotta eyes!",
+  // End
+  `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
+];
 
-// End
-const t20 = `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`;
-
-/*****************************************
- ___| |_ ___  _ __ _   _| (_)_ __   ___ 
-/ __| __/ _ \| '__| | | | | | '_ \ / _ \
-\__ \ || (_) | |  | |_| | | | | | |  __/
-|___/\__\___/|_|   \__, |_|_|_| |_|\___|
-                   |___/                
-*****************************************/
 handleScriptEventsSequentially(eventsDay1To4);
 
 /*************************************
@@ -299,6 +305,10 @@ const activeEventsHolder = document.querySelector('ol');
 let lastEvent = '';
 
 const DELAY_BETWEEN_EVENTS = [3000, 4000, 5000, 6000];
+
+async function delayBetweenEvents() {
+  delay(getRandom(DELAY_BETWEEN_EVENTS));
+}
 
 /**
  *
@@ -508,7 +518,7 @@ async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
     } else if (typeof scriptEvent === 'function') {
-      scriptEvent();
+      await scriptEvent();
     }
 
     if (addDelay) {
