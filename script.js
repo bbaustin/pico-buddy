@@ -162,7 +162,10 @@ const PRAISE_PHRASES = [
   'Nicely done!',
   `Your ${PICOBUDDY()} is pleased!`,
   'Way to go!',
+  'You rule!',
+  'You rock!',
 ];
+const SLOW = 'You were a little too slow...';
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
@@ -306,6 +309,7 @@ const activeEventsHolder = document.querySelector('ol');
 // might not need this either? nice to have for early days though. only used in getRandomEvent
 let lastEvent = '';
 
+//Math.floor(Math.random() * max) <-- could do this instead?
 const DELAY_BETWEEN_EVENTS = [3000, 4000, 5000, 6000];
 
 async function delayBetweenEvents() {
@@ -386,6 +390,7 @@ function giveSomething(something) {
   /* Handle PLAY, which is never requested */
   if (something === 'play') {
     if (DAY < 4) {
+      // TODO: Add limit here
       manageHappines(1);
       // animation
       // sound
@@ -407,38 +412,45 @@ function giveSomething(something) {
   const lis = activeEventsHolder.querySelectorAll('li');
 
   /* Get the first one that matches what you gave AND is not completed yet */
-  const firstFound = [...lis].find(
-    (li) => li.dataset.eventType === something && !li.dataset.completed
-  );
+  const oldestMatchingEvent = [...lis]
+    .reverse()
+    .find((li) => li.dataset.eventType === something && !li.dataset.completed);
 
   /* It should totally exist */
-  if (!firstFound) {
+  if (!oldestMatchingEvent) {
     console.log('wtf');
     return;
   }
 
-  const timer = firstFound.querySelector('span');
+  const timer = oldestMatchingEvent.querySelector('span');
 
   /* Stop the timer */
   timer.stop();
 
   const timerRemainder = parseFloat(timer.textContent);
 
-  /* Update the happiness meter, depending on how many seconds are left in the timer */
-  if (timerRemainder > 9) {
-    manageHappines(2);
-  } else if (timerRemainder > 0) manageHappines(1);
-
   /* Add some stylin' */
-  firstFound.style.textDecoration = 'line-through';
+  oldestMatchingEvent.style.textDecoration = 'line-through';
 
   /* Add 'completed' for further button clicks */
-  firstFound.dataset.completed = true;
+  oldestMatchingEvent.dataset.completed = true;
 
   /* Remove from JS array */
   activeEvents.splice(firstIndexOfGivenEvent, 1);
+
+  /* Update the happiness meter, depending on how many seconds are left in the timer */
+  if (timerRemainder > 9) {
+    manageHappines(2);
+    return renderEachLetter(getRandom(PRAISE_PHRASES));
+  } else if (timerRemainder > 0) {
+    manageHappines(1);
+    return renderEachLetter(getRandom(PRAISE_PHRASES));
+  } else {
+    return renderEachLetter(SLOW);
+  }
 }
 
+// TODO: Could make this a util, to get any non-matching random stuff (like phrases)
 function getRandomEvent() {
   let newEvent;
   do {
