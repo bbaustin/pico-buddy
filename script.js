@@ -165,9 +165,14 @@ const triEye = {
 
 const finalForm = {
   filledInTiles: [
-    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 32, 0),
-    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 22, 9),
-    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 23, -7),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 45, 0),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 35, 8),
+    ...adjustGridSizeTo64(eyeGuy.filledInTiles, 16, 35, -7),
+    // WHERE YOU AT: FINISH EYE GOD
+    // THEN GO INTO THE BOUNCE ANIMATION. I GUESS USING CSS
+    // BUT IF YOU WANT OFFSET, THAT WOULD BE MORE COMPLICATED JS.
+    // SO JUST DO CSS FOR NOW
+    // THAT'S A BONUS TASK LATER
   ],
 };
 
