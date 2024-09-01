@@ -18,19 +18,25 @@ const PICOBUDDY = () => {
   const emoji = getRandom(BUD_EMOJIS);
   return `${emoji}PicoBuddy${emoji}`;
 };
-const EGGBABY = `EggBaby${getRandom(EGG_EMOJIS)}`;
-const EYEGUY = `EyeGuy${getRandom(EYE_EMOJIS)}`;
+const EGGBABY = () => {
+  const emoji = getRandom(EGG_EMOJIS);
+  return `${emoji}EggBaby${emoji}`;
+};
+const EYEGUY = () => {
+  const emoji = getRandom(EYE_EMOJIS);
+  `${emoji}EyeGuy${emoji}`;
+};
 const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
-const BUTTON_INSTRUCTIONS = `Use the buttons beneath your ${PICOBUDDY()}!`;
+const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
 const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
 const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS}`;
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
-const NOT_OMINOUS = 'I assure you, there is nothing ominous about this!';
+const NOT_OMINOUS = 'I assure you, there is nothing ominous about this 😎 !';
 const EVOLVING = "Oh! It's evolving!";
 
 // Script End phrases
@@ -78,11 +84,11 @@ const TRIEYE_PHRASES = [
 
 /* Script */
 // Day 1, 2, 3, 4
-const d1_t1 = `Congratulations on your new ${PICOBUDDY()}!`;
+const d1_t1 = `Congratulations on your new ${PICOBUDDY()} !`;
 const d1_t2 = SEE;
-const d1_t3 = `Oh! It's an ${EGGBABY}!`;
-const d1_t4 = "It's an egg with a diaper! That's pretty cute!";
-const d1_t5 = `When it cries, you'll have to feed it, give it water, change its diaper, or play with it!`;
+const d1_t3 = `Oh! It's an ${EGGBABY()} !`;
+const d1_t4 = "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !";
+const d1_t5 = `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`;
 const d1_t6 = `${BUTTON_INSTRUCTIONS}`;
 const d1_t7 = `Your ${PICOBUDDY()} will reach full maturity in 13 days!`;
 const d1_t8 = `${NOT_OMINOUS}`;
@@ -91,7 +97,7 @@ const d1_t9 = `${getRandom(REASSURING_PHRASES)}`;
 // Day 5, 6, 7, 8
 const d2_t1 = EVOLVING;
 const d2_t2 = SEE;
-const d2_t3 = `Oh! It's an ${EYEGUY}!`;
+const d2_t3 = `Oh! It's an ${EYEGUY()} !`;
 const d2_t4 = `He's like a... a floating eye! ${NOT_OMINOUS}`;
 
 // Day 9, 10, 11, 12
@@ -109,6 +115,18 @@ const d4_t4 = "Oh! That's a lotta eyes!";
 
 // End
 const t20 = `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`;
+
+/*****************************************
+ ___| |_ ___  _ __ _   _| (_)_ __   ___ 
+/ __| __/ _ \| '__| | | | | | '_ \ / _ \
+\__ \ || (_) | |  | |_| | | | | | |  __/
+|___/\__\___/|_|   \__, |_|_|_| |_|\___|
+                   |___/                
+*****************************************/
+renderMessagesSequentially(
+  [d1_t1, d1_t2, d1_t3, d1_t4, d1_t5, d1_t6, d1_t7, d1_t8, d1_t9],
+  true
+);
 
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
@@ -473,14 +491,19 @@ async function renderEachLetter(text) {
  * @param {Array<string>} messages - array of messages.
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
-async function renderMessagesSequentially(messages, addDelay = false) {
-  for (const message of messages) {
-    await renderEachLetter(message);
+async function renderMessagesSequentially(scriptEvents, addDelay = false) {
+  for (const scriptEvent of scriptEvents) {
+    if (typeof scriptEvent === 'string') {
+      await renderEachLetter(scriptEvent);
+    } else if (typeof scriptEvent === 'function') {
+      scriptEvent();
+    }
+
     if (addDelay) {
       /* Calculate delay based on message length */
       const baseDelay = 500; // Base delay in ms for short messages
-      const lengthFactor = 10; // Additional ms per character in the message
-      const messageDelay = baseDelay + message.length * lengthFactor;
+      const lengthFactor = 20; // Additional ms per character in the message
+      const messageDelay = baseDelay + scriptEvent.length * lengthFactor;
       await delay(messageDelay);
     }
   }
@@ -493,8 +516,3 @@ function getRandom(items) {
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
-
-renderMessagesSequentially(
-  [d1_t1, d1_t2, d1_t3, d1_t4, d1_t5, d1_t6, d1_t7, d1_t8, d1_t9],
-  true
-);
