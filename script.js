@@ -246,7 +246,8 @@ const TRIEYE_PHRASES = [
                 |_|        
 **************************/
 /* Script */
-// Day 1, 2, 3, 4
+
+/** 3 events */
 const day1Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
@@ -267,16 +268,17 @@ const day1Events = [
   () => getRandomEvent(),
 ];
 
-// WHERE YOU AT: Create handle standard day function
-// Also, day two events are triggering in day one. Handle this differently.
-// Probably related to handleEventsSequentially and putting eventsDays1To4 all in the same array
+/** 3 events */
 const day2Events = runStandardDay();
+console.log(day2Events);
 
-const day3Events = runStandardDay();
+/** 5 events */
+const day3Events = runStandardDay(5, 0);
 
-const day4Events = runStandardDay(10, 1);
+/** 10 events */
+const day4Events = runStandardDay(10, 1000);
 
-// Day 5, 6, 7, 8
+/** */
 const day5Events = [
   EVOLVING,
   SEE,
@@ -285,7 +287,7 @@ const day5Events = [
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
 ];
 
-// Day 9, 10, 11, 12
+/**  */
 const day9Events = [
   EVOLVING,
   SEE,
@@ -295,7 +297,7 @@ const day9Events = [
   "It's got more eyes!",
 ];
 
-// Day 13
+/** 0 events */
 const day13Events = [
   EVOLVING,
   'This is its final form!',
@@ -320,6 +322,22 @@ function runStandardDay(numberOfEvents = 3, overriddenDelay) {
   return events;
 }
 
+const calendar = new Map([
+  [1, { events: day1Events, expectedEvents: 3 }],
+  [2, { events: day2Events, expectedEvents: 3 }],
+  [3, { events: day3Events, expectedEvents: 5 }],
+  [4, { events: day4Events, expectedEvents: 10 }],
+  [5, { events: day5Events, expectedEvents: 3 }],
+  [6, { events: day6Events, expectedEvents: 3 }],
+  [7, { events: day7Events, expectedEvents: 10 }],
+  [8, { events: day8Events, expectedEvents: 0 }],
+  [9, { events: day9Events, expectedEvents: 3 }],
+  [10, { events: day10Events, expectedEvents: 2 }],
+  [11, { events: day11Events, expectedEvents: 1 }],
+  [12, { events: day12Events, expectedEvents: 0 }],
+  [13, { events: day13Events, expectedEvents: 0 }],
+]);
+
 const everyDayEvents = [
   day1Events,
   day2Events,
@@ -330,7 +348,12 @@ const everyDayEvents = [
   day13Events,
 ];
 
-handleScriptEventsSequentially(day4Events);
+let DAY = 1;
+let PLAY_COUNTER = 0;
+let COMPLETED_EVENT_COUNT = 0;
+const EXPECTED_EVENTS_PER_DAY = [3, 3, 5, 10, 3, 3, 10, 0, 3, 2, 1, 0, 0];
+
+handleScriptEventsSequentially(day1Events);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
@@ -340,13 +363,9 @@ handleScriptEventsSequentially(day4Events);
 *************************************/
 const dayButton = document.getElementById('day');
 
-let DAY = 1;
-let PLAY_COUNTER = 0;
-let COMPLETED_EVENT_COUNT = 0;
-const EXPECTED_EVENTS_PER_DAY = [3, 3, 10, 0, 3, 3, 10, 0, 3, 2, 1, 0, 0];
-
-function allowForAdvanceDay() {
+async function allowForAdvanceDay() {
   // End of day text
+  await delay(500);
   renderEachLetter(PROCEED);
   dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   dayButton.disabled = false;
@@ -354,9 +373,8 @@ function allowForAdvanceDay() {
     advanceDay();
     dayButton.disabled = true;
 
-    // KINDA WHERE YOU AT: Figure out how to render day after day, without this hardcoding.
-    // temp: just see if works
-    handleScriptEventsSequentially(day4Events);
+    handleScriptEventsSequentially(everyDayEvents[DAY - 1]);
+    console.log(DAY - 1);
   });
 }
 
@@ -624,11 +642,12 @@ async function renderEachLetter(text) {
  * look at the number of characters in the previous one, and
  * render the next one based on the total time it takes to render the previous one
  *
- * @param {Array<string>} messages - array of messages.
+ * @param {Array<string | function>} messages - array of messages.
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
 async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
   console.log(scriptEvents);
+  console.log(typeof scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
