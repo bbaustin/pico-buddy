@@ -120,11 +120,17 @@ section {
 }
 
 #cd {
-  padding: 20px 30px 10px;
+  max-height: 150px;
+  padding: 20px 30px 10px 20px;
 }
 
 #cd h2 {
   margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.e {
+  color: darkgrey;
 }
 
 #t {

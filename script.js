@@ -1,3 +1,16 @@
+/**
+ * Array<'food | 'water' | 'diaper'>
+ */
+const activeEvents = [];
+const activeEventsHolder = document.querySelector('ol');
+
+const eventTypeVerbs = {
+  food: 'feed',
+  water: 'hydrate',
+  diaper: 'clean',
+  play: 'play',
+};
+
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
@@ -166,7 +179,15 @@ const PRAISE_PHRASES = [
   'You rule!',
   'You rock!',
 ];
-const DAY_FINISHED = 'The next day will begin now.';
+const DAY_FINISHED_PHRASES = [
+  "OK, I think that's all for today!",
+  `OK, time for your ${PICOBUDDY()}'s bedtime!`,
+  `OK, time for your ${PICOBUDDY()} to sleep now!`,
+];
+const PROCEED = `${getRandom(
+  DAY_FINISHED_PHRASES
+)} Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
+const NEXT_DAY_STARTING = 'The next day will begin now.';
 const SLOW = 'You were a little too slow...';
 
 // Script Phrases
@@ -226,10 +247,9 @@ const TRIEYE_PHRASES = [
 **************************/
 /* Script */
 // Day 1, 2, 3, 4
-const eventsDay1To4 = [
-  // day 1
-  `Congratulations on your new ${PICOBUDDY()} !`,
-  SEE,
+const day1Events = [
+  // `Congratulations on your new ${PICOBUDDY()} !`,
+  // SEE,
   () => drawEggBaby(),
   // `Oh! It's an ${EGGBABY()} !`,
   // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
@@ -245,19 +265,19 @@ const eventsDay1To4 = [
   () => getRandomEvent(),
   () => delayBetweenEvents(),
   () => getRandomEvent(),
-  // WHERE YOU AT: See if you can delay advancing the day until all events are cleared
-  // day 2
-  () => advanceDay(),
-  () => getRandomEvent(),
-  () => delayBetweenEvents(),
-  () => getRandomEvent(),
-  () => delayBetweenEvents(),
-  () => getRandomEvent(),
-  () => advanceDay(),
 ];
 
+// WHERE YOU AT: Create handle standard day function
+// Also, day two events are triggering in day one. Handle this differently.
+// Probably related to handleEventsSequentially and putting eventsDays1To4 all in the same array
+const day2Events = runStandardDay();
+
+const day3Events = runStandardDay();
+
+const day4Events = runStandardDay(10, 1);
+
 // Day 5, 6, 7, 8
-const eventsDay5To8 = [
+const day5Events = [
   EVOLVING,
   SEE,
   () => drawEyeGuy(),
@@ -266,7 +286,7 @@ const eventsDay5To8 = [
 ];
 
 // Day 9, 10, 11, 12
-const eventsDay9To12 = [
+const day9Events = [
   EVOLVING,
   SEE,
   () => drawTriEye(),
@@ -276,7 +296,7 @@ const eventsDay9To12 = [
 ];
 
 // Day 13
-const eventsDay13 = [
+const day13Events = [
   EVOLVING,
   'This is its final form!',
   SEE,
@@ -286,7 +306,31 @@ const eventsDay13 = [
   `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
 ];
 
-handleScriptEventsSequentially(eventsDay1To4);
+function runStandardDay(numberOfEvents = 3, overriddenDelay) {
+  const events = [];
+
+  for (let i = 0; i < numberOfEvents; i++) {
+    events.push(() => getRandomEvent());
+    events.push(() => delayBetweenEvents(overriddenDelay));
+  }
+
+  /* Remove last delay */
+  events.pop();
+
+  return events;
+}
+
+const everyDayEvents = [
+  day1Events,
+  day2Events,
+  day3Events,
+  day4Events,
+  day5Events,
+  day9Events,
+  day13Events,
+];
+
+handleScriptEventsSequentially(day4Events);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
@@ -294,51 +338,70 @@ handleScriptEventsSequentially(eventsDay1To4);
 |  __/\ V /  __/ | | | |_\__ \
  \___| \_/ \___|_| |_|\__|___/
 *************************************/
-const dayText = document.getElementById('day');
+const dayButton = document.getElementById('day');
 
 let DAY = 1;
 let PLAY_COUNTER = 0;
+let COMPLETED_EVENT_COUNT = 0;
+const EXPECTED_EVENTS_PER_DAY = [3, 3, 10, 0, 3, 3, 10, 0, 3, 2, 1, 0, 0];
+
+function allowForAdvanceDay() {
+  // End of day text
+  renderEachLetter(PROCEED);
+  dayButton.textContent = `Proceed to Day ${DAY + 1}`;
+  dayButton.disabled = false;
+  dayButton.addEventListener('click', () => {
+    advanceDay();
+    dayButton.disabled = true;
+
+    // KINDA WHERE YOU AT: Figure out how to render day after day, without this hardcoding.
+    // temp: just see if works
+    handleScriptEventsSequentially(day4Events);
+  });
+}
 
 function advanceDay() {
   DAY += 1;
-  dayText.textContent = `Day ${DAY}`;
-  renderEachLetter(DAY_FINISHED);
+  dayButton.textContent = `Day ${DAY}`;
+  renderEachLetter(NEXT_DAY_STARTING);
+  COMPLETED_EVENT_COUNT = 0;
   PLAY_COUNTER = 0;
+  activeEventsHolder.textContent = 'None!';
 }
 
-const eventTypeVerbs = {
-  food: 'feed',
-  water: 'hydrate',
-  diaper: 'clean',
-  play: 'play',
-};
-
-// TODO: Every evolution, pop an event type.
-const eventTypes = ['food', 'water', 'diaper'];
-/**
- * Array<'food | 'water' | 'diaper'>
- */
-const activeEvents = []; // TODO: Might not need this
-const activeEventsHolder = document.querySelector('ol');
-
-/** 'food', 'water', 'diaper' */
-// might not need this either? nice to have for early days though. only used in getRandomEvent
-let lastEvent = '';
+function handleEventCompletion() {
+  COMPLETED_EVENT_COUNT++;
+  console.log(COMPLETED_EVENT_COUNT);
+  /* Check if the number of events you completed matches the number of expected events for the day
+   * This is DAY - 1 due to array counting (DAY starts on 1, array starts on 0)
+   */
+  if (COMPLETED_EVENT_COUNT === EXPECTED_EVENTS_PER_DAY[DAY - 1]) {
+    allowForAdvanceDay();
+  }
+}
 
 //Math.floor(Math.random() * max) <-- could do this instead?
 const DELAY_BETWEEN_EVENTS = [3000, 4000, 5000, 6000];
 
-async function delayBetweenEvents() {
-  delay(getRandom(DELAY_BETWEEN_EVENTS));
+/**
+ * If nothing is provided, it will delay 3, 4, 5, or 6 seconds. Otherwise, it delays however many ms you provide
+ * @param {number} overriddenDelay - ms. If provided will delay this much between events
+ * @returns delay function
+ */
+async function delayBetweenEvents(overriddenDelay) {
+  if (!overriddenDelay) {
+    return delay(getRandom(DELAY_BETWEEN_EVENTS));
+  }
+  return delay(overriddenDelay);
 }
 
 /**
  *
  * @param {'food' | 'water' | 'diaper'} event type
  */
-function askForSomething(eventType) {
+function askForSomething(eventType, timeAllotted = 13) {
   activeEvents.push(eventType);
-  createEventLi(eventType);
+  createEventLi(eventType, timeAllotted);
   return;
 }
 
@@ -346,12 +409,12 @@ function askForSomething(eventType) {
  * Adds an li to go in the "list of demands". The first list item also removes the text "None"
  * @param {string} eventType - coming from askForSomething, based on the picobuddy's demands. Morphed into a 'verb' here
  */
-function createEventLi(eventType) {
+function createEventLi(eventType, timeAllotted) {
   if (activeEventsHolder.textContent.includes('None')) {
     activeEventsHolder.textContent = '';
   }
   const listItem = document.createElement('li');
-  const timer = createTimer();
+  const timer = createTimer(listItem, timeAllotted);
   listItem.innerHTML = `${eventTypeVerbs[eventType]}! - `;
   listItem.dataset.eventType = eventType;
   listItem.append(timer);
@@ -359,24 +422,30 @@ function createEventLi(eventType) {
 }
 
 /**
- * Creates timer, which counts down from 13 seconds. To be added to the "list of demands" li
+ * Creates timer, which counts down from 13 seconds by default, or whatever you passed as timeAllotted in `askForSomething`.
+ * To be added to the "list of demands" li
  * @returns timer (HTMLSpanElement)
  */
-function createTimer() {
+function createTimer(listItem, timeAllotted) {
   const newTimer = document.createElement('span');
-  let sec = 13;
+  let sec = timeAllotted;
   newTimer.innerHTML = sec;
+
+  /* Set interval for timer to count down every 1 sec */
   let timing = setInterval(() => {
     sec--;
     newTimer.innerHTML = sec;
+    /** EVENT FAILED SCENARIO */
     if (sec <= 0) {
       manageHappines(-1.67);
-      // TODO: determine if you want stuff to get greyed out etc.
+      handleEventCompletion();
+      listItem.classList.add('e');
+      listItem.dataset.expired = 'true';
       clearInterval(timing);
     }
   }, 1000);
 
-  // Return a function to stop the timer
+  /* Return a function to stop the timer */
   newTimer.stop = () => {
     clearInterval(timing);
   };
@@ -434,7 +503,12 @@ function giveSomething(something) {
   /* Get the first one that matches what you gave AND is not completed yet */
   const oldestMatchingEvent = [...lis]
     .reverse()
-    .find((li) => li.dataset.eventType === something && !li.dataset.completed);
+    .find(
+      (li) =>
+        li.dataset.eventType === something &&
+        !li.dataset.completed &&
+        !li.dataset.expired
+    );
 
   /* It should totally exist */
   if (!oldestMatchingEvent) {
@@ -458,6 +532,9 @@ function giveSomething(something) {
   /* Remove from JS array */
   activeEvents.splice(firstIndexOfGivenEvent, 1);
 
+  /* Add to the day's completed event count */
+  handleEventCompletion();
+
   /* Update the happiness meter, depending on how many seconds are left in the timer */
   if (timerRemainder > 9) {
     manageHappines(2);
@@ -473,7 +550,10 @@ function giveSomething(something) {
 // TODO: Could make this a util, to get any non-matching random stuff (like phrases)
 function getRandomEvent() {
   let newEvent;
+  let lastEvent = '';
+  const eventTypes = ['food', 'water', 'diaper'];
   do {
+    // TODO: Every evolution, pop an event type.
     newEvent = getRandom(eventTypes);
   } while (newEvent === lastEvent);
   lastEvent = newEvent;
@@ -548,6 +628,7 @@ async function renderEachLetter(text) {
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
 async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
+  console.log(scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
