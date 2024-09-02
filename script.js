@@ -159,7 +159,7 @@ const EGGBABY = () => {
 };
 const EYEGUY = () => {
   const emoji = getRandom(EYE_EMOJIS);
-  `${emoji}EyeGuy${emoji}`;
+  return `${emoji}EyeGuy${emoji}`;
 };
 const UNBECOMING = 'The Great Unbecoming';
 
@@ -252,7 +252,7 @@ const day1Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
-  // `Oh! It's an ${EGGBABY()} !`,
+  `Oh! It's an ${EGGBABY()} !`,
   // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
   // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
   // `${BUTTON_INSTRUCTIONS}`,
@@ -262,7 +262,7 @@ const day1Events = [
   // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   // `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
   () => getRandomEvent(),
-  () => delay(8000),
+  // () => delay(8000),
   () => getRandomEvent(),
   () => delayBetweenEvents(),
   () => getRandomEvent(),
@@ -287,6 +287,11 @@ const day5Events = [
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
 ];
 
+// TODO: Make interesting
+const day6Events = runStandardDay(3);
+const day7Events = runStandardDay(10);
+const day8Events = runStandardDay(0);
+
 /**  */
 const day9Events = [
   EVOLVING,
@@ -296,6 +301,11 @@ const day9Events = [
   'Um...',
   "It's got more eyes!",
 ];
+
+// TODO: Make interesting
+const day10Events = runStandardDay(2);
+const day11Events = runStandardDay(1);
+const day12Events = runStandardDay(0);
 
 /** 0 events */
 const day13Events = [
@@ -338,20 +348,9 @@ const calendar = new Map([
   [13, { events: day13Events, expectedEvents: 0 }],
 ]);
 
-const everyDayEvents = [
-  day1Events,
-  day2Events,
-  day3Events,
-  day4Events,
-  day5Events,
-  day9Events,
-  day13Events,
-];
-
 let DAY = 1;
 let PLAY_COUNTER = 0;
 let COMPLETED_EVENT_COUNT = 0;
-const EXPECTED_EVENTS_PER_DAY = [3, 3, 5, 10, 3, 3, 10, 0, 3, 2, 1, 0, 0];
 
 handleScriptEventsSequentially(day1Events);
 
@@ -362,6 +361,11 @@ handleScriptEventsSequentially(day1Events);
  \___| \_/ \___|_| |_|\__|___/
 *************************************/
 const dayButton = document.getElementById('day');
+dayButton.addEventListener('click', () => {
+  advanceDay();
+  dayButton.disabled = true;
+  handleScriptEventsSequentially(calendar.get(DAY).events);
+});
 
 async function allowForAdvanceDay() {
   // End of day text
@@ -369,17 +373,13 @@ async function allowForAdvanceDay() {
   renderEachLetter(PROCEED);
   dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   dayButton.disabled = false;
-  dayButton.addEventListener('click', () => {
-    advanceDay();
-    dayButton.disabled = true;
-
-    handleScriptEventsSequentially(everyDayEvents[DAY - 1]);
-    console.log(DAY - 1);
-  });
 }
 
 function advanceDay() {
-  DAY += 1;
+  // WHERE YOU AT: Soemthing weird happening here. When you press the button, DAY is advancing by 2
+  console.log('advance day hit' + ' ' + DAY);
+  DAY++;
+  console.log(DAY);
   dayButton.textContent = `Day ${DAY}`;
   renderEachLetter(NEXT_DAY_STARTING);
   COMPLETED_EVENT_COUNT = 0;
@@ -389,11 +389,8 @@ function advanceDay() {
 
 function handleEventCompletion() {
   COMPLETED_EVENT_COUNT++;
-  console.log(COMPLETED_EVENT_COUNT);
-  /* Check if the number of events you completed matches the number of expected events for the day
-   * This is DAY - 1 due to array counting (DAY starts on 1, array starts on 0)
-   */
-  if (COMPLETED_EVENT_COUNT === EXPECTED_EVENTS_PER_DAY[DAY - 1]) {
+  /* Check if the number of events you completed matches the number of expected events for the day */
+  if (COMPLETED_EVENT_COUNT === calendar.get(DAY).expectedEvents) {
     allowForAdvanceDay();
   }
 }
