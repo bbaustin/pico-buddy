@@ -15,6 +15,13 @@ main {
   justify-content: space-around;
 }
 
+section {
+  /* This is just to use flex-grow: 1 on #t (textbox) */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 #out {
   height: 250px;
   width: 200px;
@@ -25,6 +32,7 @@ main {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 20px;
   /* filter: drop-shadow(-5px 0px var(--g)); */
 }
 
@@ -62,7 +70,7 @@ main {
     top: 0;
   }
   100% {
-    top: -2px;
+    top: -3px;
   }
 }
 
@@ -104,27 +112,51 @@ main {
   display: block;
 }
 
+#cd,
 #t {
+  overflow-y: auto;
   background: var(--w);
+  border: 1px solid var(--b);
+}
+
+#cd {
+  max-height: 150px;
+  padding: 20px 30px 10px 20px;
+}
+
+#cd h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.e {
+  color: darkgrey;
+}
+
+#t {
   width: 300px;
   height: 200px;
-  border: 1px solid var(--b);
-  overflow-y: auto;
-  padding: 10px;
   line-height: 2;
   font-size: 18px;
+  flex-grow: 1;
+}
+
+#t div {
+  padding: 25px 20px;
+  border-bottom: 1px solid grey;
 }
 
 #hm {
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(to left, var(--lo), var(--mi), var(--hi));
-  text-align: center;
-  padding-top: 5px;
+  width: 30px;
+  flex-grow: 1;
+  background: linear-gradient(var(--lo), var(--mi), var(--hi));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #hmm {
   position: relative;
-  left: 0;
+  bottom: 0;
   display: inline;
 }
