@@ -316,6 +316,8 @@ const day13Events = [
   "Oh! That's a lotta eyes!",
   // End
   `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
+
+  // TODO: Determine ending based on happiness
 ];
 
 function runStandardDay(numberOfEvents = 3, overriddenDelay) {

@@ -8,9 +8,19 @@
   --lo: #fa078d;
 }
 
+body {
+  background-color: var(--w);
+  /* opacity: 0.8; */
+  background-image: linear-gradient(var(--hi) 1px, transparent 1px),
+    linear-gradient(to right, var(--hi) 1px, var(--w) 1px);
+  background-size: 30px 30px;
+  margin: 0;
+}
+
 main {
   display: flex;
-  padding: 25px 0;
+  height: 90vh;
+  padding: 10px 0;
   font-family: var(--f);
   justify-content: space-around;
 }
