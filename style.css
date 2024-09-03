@@ -2,10 +2,11 @@
   --w: #dfdfdf;
   --g: #6f6f6f;
   --b: #0f0f0f;
-  --f: 'Comic Sans MS', sans-serif;
+  --f: monospace;
   --hi: #00b9d5;
   --mi: #f6d91c;
   --lo: #fa078d;
+  --1psb: 1px solid #0f0f0f;
 }
 
 body {
@@ -26,10 +27,11 @@ main {
 }
 
 section {
-  /* This is just to use flex-grow: 1 on #t (textbox) */
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 150px;
 }
 
 #out {
@@ -43,6 +45,7 @@ section {
   align-items: center;
   flex-direction: column;
   margin-bottom: 20px;
+  border: var(--1psb);
   /* filter: drop-shadow(-5px 0px var(--g)); */
 }
 
@@ -55,6 +58,7 @@ section {
   border-radius: 48%;
   left: -10px;
   z-index: -1;
+  border: var(--1psb);
 }
 
 #in {
@@ -62,6 +66,7 @@ section {
   height: 120px;
   background: var(--w);
   margin-bottom: 20px;
+  border: var(--1psb);
 }
 
 #pb {
@@ -84,6 +89,19 @@ section {
   }
 }
 
+.ab {
+  animation: aggressiveBounce 0.5s steps(2) infinite;
+}
+
+@keyframes aggressiveBounce {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -10px;
+  }
+}
+
 #pb .p.fill {
   background: var(--b);
 }
@@ -99,9 +117,9 @@ section {
   height: 15px;
   background: magenta;
   border-radius: 100%;
-  filter: drop-shadow(-1px 0px var(--g));
   border: 0;
   cursor: pointer;
+  border: var(--1psb);
 }
 
 .b:active {
@@ -115,6 +133,7 @@ section {
   transform: translate(-40%, -5px);
   display: none;
   width: fit-content;
+  border: var(--1psb);
   font-family: var(--f);
 }
 
@@ -126,7 +145,7 @@ section {
 #t {
   overflow-y: auto;
   background: var(--w);
-  border: 1px solid var(--b);
+  border: var(--1psb);
 }
 
 #cd {
@@ -153,7 +172,12 @@ section {
 
 #t div {
   padding: 25px 20px;
-  border-bottom: 1px solid grey;
+  border-bottom: var(--1psb);
+}
+
+button {
+  font-family: var(--f);
+  margin-bottom: 10px;
 }
 
 #hm {
@@ -163,6 +187,7 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: var(--1psb);
 }
 
 #hmm {
