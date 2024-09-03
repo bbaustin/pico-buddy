@@ -77,10 +77,10 @@ section {
   height: 100%;
   position: relative;
   top: 0;
-  animation: bounce 1.25s steps(2) infinite;
+  animation: a-b 1.25s steps(2) infinite;
 }
 
-@keyframes bounce {
+@keyframes a-b {
   0% {
     top: 0;
   }
@@ -90,10 +90,10 @@ section {
 }
 
 .ab {
-  animation: aggressiveBounce 0.5s steps(2) infinite;
+  animation: a-ab 0.25s steps(2) 5;
 }
 
-@keyframes aggressiveBounce {
+@keyframes a-ab {
   0% {
     top: 0;
   }
