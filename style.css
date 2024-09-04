@@ -77,10 +77,13 @@ section {
   height: 100%;
   position: relative;
   top: 0;
-  animation: a-b 1.25s steps(2) infinite;
 }
 
-@keyframes a-b {
+.sb {
+  animation: bounce 1.25s steps(2) infinite;
+}
+
+@keyframes bounce {
   0% {
     top: 0;
   }
@@ -89,16 +92,16 @@ section {
   }
 }
 
-.ab {
-  animation: a-ab 0.25s steps(2) 5;
+.bb {
+  animation: bigBounce 0.25s steps(2) 5;
 }
 
-@keyframes a-ab {
+@keyframes bigBounce {
   0% {
     top: 0;
   }
   100% {
-    top: -10px;
+    top: -6px;
   }
 }
 
@@ -128,7 +131,7 @@ section {
 
 .b p {
   background: pink;
-  padding: 5px 10px 10px;
+  padding: 10px;
   font-size: 24px;
   transform: translate(-40%, -5px);
   display: none;
@@ -194,4 +197,5 @@ button {
   position: relative;
   bottom: 0;
   display: inline;
+  user-select: none; /* Standard */
 }

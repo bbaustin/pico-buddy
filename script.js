@@ -420,29 +420,35 @@ async function askForSomething(eventType, timeAllotted = 13) {
   activeEvents.push(eventType);
   createEventLi(eventType, timeAllotted);
   // animation
-  zzfx(
-    ...[
-      ,
-      1.15,
-      200,
-      0.1,
-      0.11,
-      0.07,
-      ,
-      3.4,
-      ,
-      99,
-      386,
-      0.07,
-      0.04,
-      ,
-      ,
-      ,
-      ,
-      0.81,
-      0.28,
-    ]
-  ); // Powerup 263  return;
+  playAskSound('eggBaby');
+}
+
+function playAskSound(character) {
+  if (character === 'eggBaby') {
+    return zzfx(
+      ...[
+        0.5,
+        1.15,
+        200,
+        0.1,
+        0.11,
+        0.07,
+        ,
+        3.4,
+        ,
+        99,
+        386,
+        0.07,
+        0.04,
+        ,
+        ,
+        ,
+        ,
+        0.81,
+        0.28,
+      ]
+    ); // Powerup 263  return;
+  }
 }
 
 /**
@@ -518,6 +524,7 @@ function giveSomething(something) {
       if (PLAY_COUNTER < 5) {
         PLAY_COUNTER++;
         manageHappines(1);
+        toggleGivenAnimation();
         // animation
         // sound
         return renderEachLetter(PLAY);
@@ -534,6 +541,7 @@ function giveSomething(something) {
 
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
+    // sound
     return renderEachLetter(NOT_NOW);
   }
 
@@ -587,6 +595,23 @@ function giveSomething(something) {
   }
 }
 
+let animationTimeout;
+
+function toggleGivenAnimation() {
+  clearTimeout(animationTimeout);
+
+  buddyScreen.classList.remove('bb');
+
+  // Force a reflow to ensure the browser registers the change
+  void buddyScreen.offsetWidth;
+
+  buddyScreen.classList.add('bb');
+
+  animationTimeout = setTimeout(() => {
+    buddyScreen.classList.remove('bb');
+  }, 1250);
+}
+
 // TODO: Could make this a util, to get any non-matching random stuff (like phrases)
 function getRandomEvent() {
   let newEvent;
@@ -612,6 +637,32 @@ function manageHappines(happinessAddend) {
   happiness = clamp(happiness, -45, 45);
   handleHappinessMeterMarker(happiness);
   happinessMeterMarker.style.bottom = `${happiness}%`;
+  toggleGivenAnimation();
+  zzfx(
+    ...[
+      5,
+      0.8,
+      422,
+      0.02,
+      0.02,
+      0.19,
+      ,
+      1.2,
+      ,
+      51,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      0.64,
+      0.03,
+      ,
+      975,
+    ]
+  ); // Jump 284
 }
 
 function handleHappinessMeterMarker(happiness) {
