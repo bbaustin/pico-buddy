@@ -2,24 +2,36 @@
   --w: #dfdfdf;
   --g: #6f6f6f;
   --b: #0f0f0f;
-  --f: 'Comic Sans MS', sans-serif;
+  --f: monospace;
   --hi: #00b9d5;
   --mi: #f6d91c;
   --lo: #fa078d;
+  --1psb: 1px solid #0f0f0f;
+}
+
+body {
+  background-color: var(--w);
+  /* opacity: 0.8; */
+  background-image: linear-gradient(var(--hi) 1px, transparent 1px),
+    linear-gradient(to right, var(--hi) 1px, var(--w) 1px);
+  background-size: 30px 30px;
+  margin: 0;
 }
 
 main {
   display: flex;
-  padding: 25px 0;
+  height: 90vh;
+  padding: 10px 0;
   font-family: var(--f);
   justify-content: space-around;
 }
 
 section {
-  /* This is just to use flex-grow: 1 on #t (textbox) */
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 150px;
 }
 
 #out {
@@ -33,6 +45,7 @@ section {
   align-items: center;
   flex-direction: column;
   margin-bottom: 20px;
+  border: var(--1psb);
   /* filter: drop-shadow(-5px 0px var(--g)); */
 }
 
@@ -45,6 +58,7 @@ section {
   border-radius: 48%;
   left: -10px;
   z-index: -1;
+  border: var(--1psb);
 }
 
 #in {
@@ -52,6 +66,7 @@ section {
   height: 120px;
   background: var(--w);
   margin-bottom: 20px;
+  border: var(--1psb);
 }
 
 #pb {
@@ -62,6 +77,9 @@ section {
   height: 100%;
   position: relative;
   top: 0;
+}
+
+.sb {
   animation: bounce 1.25s steps(2) infinite;
 }
 
@@ -71,6 +89,19 @@ section {
   }
   100% {
     top: -3px;
+  }
+}
+
+.bb {
+  animation: bigBounce 0.25s steps(2) 5;
+}
+
+@keyframes bigBounce {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -6px;
   }
 }
 
@@ -89,9 +120,9 @@ section {
   height: 15px;
   background: magenta;
   border-radius: 100%;
-  filter: drop-shadow(-1px 0px var(--g));
   border: 0;
   cursor: pointer;
+  border: var(--1psb);
 }
 
 .b:active {
@@ -100,11 +131,12 @@ section {
 
 .b p {
   background: pink;
-  padding: 5px 10px 10px;
+  padding: 10px;
   font-size: 24px;
   transform: translate(-40%, -5px);
   display: none;
   width: fit-content;
+  border: var(--1psb);
   font-family: var(--f);
 }
 
@@ -116,7 +148,7 @@ section {
 #t {
   overflow-y: auto;
   background: var(--w);
-  border: 1px solid var(--b);
+  border: var(--1psb);
 }
 
 #cd {
@@ -143,7 +175,12 @@ section {
 
 #t div {
   padding: 25px 20px;
-  border-bottom: 1px solid grey;
+  border-bottom: var(--1psb);
+}
+
+button {
+  font-family: var(--f);
+  margin-bottom: 10px;
 }
 
 #hm {
@@ -153,10 +190,12 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: var(--1psb);
 }
 
 #hmm {
   position: relative;
   bottom: 0;
   display: inline;
+  user-select: none; /* Standard */
 }
