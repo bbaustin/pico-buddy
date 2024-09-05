@@ -35,6 +35,26 @@ section {
   min-width: 150px;
 }
 
+#modal {
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(25px);
+}
+
+#modal div {
+  text-align: center;
+  border: var(--1psb);
+  background: var(--w);
+  padding: 30px 70px;
+  margin-bottom: 25px;
+  font-family: var(--f);
+}
+
 #out {
   height: 250px;
   width: 200px;

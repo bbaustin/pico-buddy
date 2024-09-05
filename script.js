@@ -168,7 +168,6 @@ const UNBECOMING = 'The Great Unbecoming';
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
 const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
-const PLAY_NOPE = `Your ${PICOBUDDY()} is exhausted! Maybe you can play again tomorrow!`;
 const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS.join(
   ' '
@@ -272,7 +271,6 @@ const day1Events = [
 
 /** 3 events */
 const day2Events = runStandardDay();
-console.log(day2Events);
 
 /** 5 events */
 const day3Events = runStandardDay(5, 0);
@@ -337,6 +335,7 @@ function runStandardDay(numberOfEvents = 3, overriddenDelay) {
 }
 
 const calendar = new Map([
+  // [0, { events: [], expectedEvents: 0 }],
   [1, { events: day1Events, expectedEvents: 3 }],
   [2, { events: day2Events, expectedEvents: 3 }],
   [3, { events: day3Events, expectedEvents: 5 }],
@@ -356,7 +355,7 @@ let DAY = 1;
 let PLAY_COUNTER = 0;
 let COMPLETED_EVENT_COUNT = 0;
 
-handleScriptEventsSequentially(day1Events);
+handleScriptEventsSequentially([]);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
@@ -364,6 +363,14 @@ handleScriptEventsSequentially(day1Events);
 |  __/\ V /  __/ | | | |_\__ \
  \___| \_/ \___|_| |_|\__|___/
 *************************************/
+
+/* Start of Game */
+const modalButton = document.getElementById('mb');
+modalButton.addEventListener('click', () => {
+  document.getElementById('modal').remove();
+  handleScriptEventsSequentially(day1Events);
+});
+
 const dayButton = document.getElementById('day');
 dayButton.addEventListener('click', () => {
   advanceDay();
@@ -519,23 +526,6 @@ buttons[3].addEventListener('click', () => {
  * @param {'food' | 'water' | 'diaper' | 'play'} something
  */
 function giveSomething(something) {
-  /* Handle PLAY, which is never requested */
-  if (something === 'play') {
-    if (DAY < 4) {
-      if (PLAY_COUNTER < 5) {
-        PLAY_COUNTER++;
-        manageHappines(1);
-        toggleGivenAnimation();
-        // animation
-        // sound
-        return renderEachLetter(PLAY);
-      } else {
-        return renderEachLetter(PLAY_NOPE);
-      }
-    } else {
-      return renderEachLetter(NOPE);
-    }
-  }
   /* Look in the JS array of active events for the first instance of whatever button you clicked */
   const firstIndexOfGivenEvent = activeEvents.indexOf(something);
   const hasGivenEvent = firstIndexOfGivenEvent !== -1;
@@ -617,7 +607,7 @@ function toggleGivenAnimation() {
 function getRandomEvent() {
   let newEvent;
   let lastEvent = '';
-  const eventTypes = ['food', 'water', 'diaper'];
+  const eventTypes = ['food', 'water', 'diaper', 'play'];
   do {
     // TODO: Every evolution, pop an event type.
     newEvent = getRandom(eventTypes);
