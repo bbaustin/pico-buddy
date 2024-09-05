@@ -680,6 +680,19 @@ function handleHappinessMeterMarker(happiness) {
   }
 }
 
+/***************************                     
+  ___| |__   __ _  ___  ___ 
+ / __| '_ \ / _` |/ _ \/ __|
+| (__| | | | (_| | (_) \__ \
+ \___|_| |_|\__,_|\___/|___/
+****************************/
+const bod = document.body;
+
+function setCursor(showCursor) {
+  bod.classList.remove(showCursor ? 'nc' : 'c');
+  bod.classList.add(showCursor ? 'c' : 'nc');
+}
+
 /******************
  /\ /\| |_(_) |___ 
 / / \ \ __| | / __|
