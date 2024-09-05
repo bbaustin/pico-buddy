@@ -7,6 +7,7 @@
   --mi: #f6d91c;
   --lo: #fa078d;
   --1psb: 1px solid #0f0f0f;
+  --c: url(c.png), auto;
 }
 
 body {
@@ -121,7 +122,6 @@ section {
   background: magenta;
   border-radius: 100%;
   border: 0;
-  cursor: pointer;
   border: var(--1psb);
 }
 
@@ -142,6 +142,10 @@ section {
 
 .b:hover p {
   display: block;
+}
+
+button {
+  cursor: var(--c);
 }
 
 #cd,
@@ -198,4 +202,12 @@ button {
   bottom: 0;
   display: inline;
   user-select: none; /* Standard */
+}
+
+.c {
+  cursor: var(--c);
+}
+
+.nc {
+  cursor: none;
 }
