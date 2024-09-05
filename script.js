@@ -491,7 +491,7 @@ function createTimer(listItem, timeAllotted) {
     newTimer.innerHTML = sec;
     /** EVENT FAILED SCENARIO */
     if (sec <= 0) {
-      manageHappines(-1.67);
+      manageHappines(-1.67, false);
       handleEventCompletion();
       listItem.classList.add('e');
       listItem.dataset.expired = 'true';
@@ -623,37 +623,65 @@ let happiness = 0;
  * // TODO: Smooth move with
  * @param {number} happinessAddend - amount to add / subtract to the happiness meter. 3 for super fast, 2 for normal, and 1 for playing. minus is -1.67
  */
-function manageHappines(happinessAddend) {
+function manageHappines(happinessAddend, isHappy = true) {
   happiness += happinessAddend;
   happiness = clamp(happiness, -45, 45);
   handleHappinessMeterMarker(happiness);
   happinessMeterMarker.style.bottom = `${happiness}%`;
-  toggleGivenAnimation();
-  zzfx(
-    ...[
-      5,
-      0.8,
-      422,
-      0.02,
-      0.02,
-      0.19,
-      ,
-      1.2,
-      ,
-      51,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      0.64,
-      0.03,
-      ,
-      975,
-    ]
-  ); // Jump 284
+  if (isHappy) {
+    toggleGivenAnimation();
+    zzfx(
+      ...[
+        5,
+        0.8,
+        422,
+        0.02,
+        0.02,
+        0.19,
+        ,
+        1.2,
+        ,
+        51,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        0.64,
+        0.03,
+        ,
+        975,
+      ]
+    ); // Jump 284
+  } else {
+    zzfx(
+      ...[
+        0.6,
+        0.2,
+        75,
+        0.01,
+        0.13,
+        0.06,
+        2,
+        1.6,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        0.96,
+        0.01,
+        0.48,
+        -1371,
+      ]
+    ); // Music 315
+  }
 }
 
 function handleHappinessMeterMarker(happiness) {
@@ -724,7 +752,6 @@ async function renderEachLetter(text) {
  */
 async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
   console.log(scriptEvents);
-  console.log(typeof scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
