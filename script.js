@@ -29,7 +29,6 @@ const buddyScreen = document.querySelector('#pb');
  */
 function drawEggBaby() {
   drawPixels([...adjustGridSizeTo64(eggBaby)]);
-  // make sound
 }
 const eggBaby = [
   5, 6, 7, 8, 9, 10, 20, 27, 35, 44, 50, 61, 65, 69, 74, 78, 81, 94, 97, 102,
@@ -100,6 +99,9 @@ const finalForm = [
 ];
 
 function drawPixels(filledInTiles) {
+  // Clear the previous pixels
+  buddyScreen.innerHTML = '';
+
   for (let i = 0; i < 4096; i++) {
     const pixel = document.createElement('div');
     pixel.classList.add('p');
@@ -397,8 +399,7 @@ function handleEventCompletion() {
   }
 }
 
-//Math.floor(Math.random() * max) <-- could do this instead?
-const DELAY_BETWEEN_EVENTS = [3000, 4000, 5000, 6000];
+const DELAY_BETWEEN_EVENTS = getRandomInt(500, 2000);
 
 /**
  * If nothing is provided, it will delay 3, 4, 5, or 6 seconds. Otherwise, it delays however many ms you provide
@@ -668,9 +669,9 @@ function manageHappines(happinessAddend) {
 function handleHappinessMeterMarker(happiness) {
   if (happiness === -45) {
     happinessMeterMarker.textContent = '😭';
-  } else if (happiness < -15) {
+  } else if (happiness < -10) {
     happinessMeterMarker.textContent = '😢';
-  } else if (happiness < 15) {
+  } else if (happiness < 10) {
     happinessMeterMarker.textContent = '🙂';
   } else if (happiness < 45) {
     happinessMeterMarker.textContent = '😀';
@@ -740,6 +741,10 @@ async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
 
 function getRandom(items) {
   return items[Math.floor(Math.random() * items.length)];
+}
+
+function getRandomInt(x, y) {
+  return Math.floor(Math.random() * (y - x + 1)) + x;
 }
 
 function clamp(value, min, max) {
