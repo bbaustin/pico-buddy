@@ -11,6 +11,21 @@ const eventTypeVerbs = {
   play: 'play',
 };
 
+const bod = document.body;
+const buttons = document.getElementsByClassName('b');
+buttons[0].addEventListener('click', () => {
+  giveSomething('food');
+});
+buttons[1].addEventListener('click', () => {
+  giveSomething('water');
+});
+buttons[2].addEventListener('click', () => {
+  giveSomething('diaper');
+});
+buttons[3].addEventListener('click', () => {
+  giveSomething('play');
+});
+
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
@@ -188,7 +203,8 @@ const DAY_FINISHED_PHRASES = [
 const PROCEED = `${getRandom(
   DAY_FINISHED_PHRASES
 )} Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
-const NEXT_DAY_STARTING = 'The next day will begin now.';
+// const NEXT_DAY_STARTING = `🌞 Get ready for another awesome day with your ${PICOBUDDY()}!`;
+const CHECK_LIST = 'Check out the list of current demands!';
 const SLOW = 'You were a little too slow...';
 
 // Script Phrases
@@ -205,7 +221,8 @@ const REASSURING_PHRASES = [
   "Don't worry!",
   "Don't sweat it!",
   "It's totally chill!",
-  "It's supposed to happen this way!",
+  'Nothing to worry about!',
+  'Take a chill pill!',
 ];
 
 // TODO: Create an object of phrases for each event type. This is a bit complicated, because it does likely depend on the day etc.
@@ -253,7 +270,7 @@ const day1Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
-  `Oh! It's an ${EGGBABY()} !`,
+  // `Oh! It's an ${EGGBABY()} !`,
   // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
   // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
   // `${BUTTON_INSTRUCTIONS}`,
@@ -262,21 +279,28 @@ const day1Events = [
   // `${getRandom(REASSURING_PHRASES)}`,
   // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   // `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
-  () => getRandomEvent(),
-  // () => delay(8000),
-  () => getRandomEvent(),
-  () => delayBetweenEvents(),
-  () => getRandomEvent(),
+  ...runStandardDay(3),
 ];
 
 /** 3 events */
-const day2Events = runStandardDay();
+const day2Events = [CHECK_LIST, ...runStandardDay()];
 
 /** 5 events */
-const day3Events = runStandardDay(5, 0);
+const day3Events = [
+  'I think you got the hang of it! Today might be a little bit more intense!',
+  CHECK_LIST,
+  ...runStandardDay(5, 0),
+];
 
 /** 10 events */
-const day4Events = runStandardDay(10, 1000);
+const day4Events = [
+  'So, actually, before we start today, I have something exciting to share!',
+  `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
+  getRandom(REASSURING_PHRASES),
+  'Anyway...',
+  CHECK_LIST,
+  ...runStandardDay(10, 1000),
+];
 
 /** */
 const day5Events = [
@@ -285,12 +309,36 @@ const day5Events = [
   () => drawEyeGuy(),
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
+  CHECK_LIST,
+  ...runStandardDay(5, 1000),
 ];
 
-// TODO: Make interesting
-const day6Events = runStandardDay(3);
-const day7Events = runStandardDay(10);
-const day8Events = runStandardDay(0);
+const day6Events = [
+  'So, I have to be totally honest with you...',
+  `Sometimes weird stuff happens if your ${PICOBUDDY()} evolves into an ${EYEGUY()}...`,
+  getRandom(REASSURING_PHRASES),
+  'But yeah... Just keep your eyes open for any weird stuff. Or keep your eye open, I guess..!',
+  'Anyway...',
+  ...runStandardDay(7, 1250),
+];
+
+const day7Events = [
+  'Huh, everything is still normal. Maybe I misjudged the situation!',
+  delay(1250),
+  () => toggleClass('flip', document.body),
+  CHECK_LIST,
+  runStandardDay(10),
+];
+
+const day8Events = [
+  () => toggleClass('flip', document.body), // return to normal.
+  `By the way, it looks like your ${PICOBUDDY()} might evolve again soon!`,
+  'Just keep up the good work and it might evolve into something cute 😘 !',
+  // [...buttons].forEach((button) => {
+  //   toggleClass('invisible', button);
+  // }),
+  runStandardDay(7, 1250),
+];
 
 /**  */
 const day9Events = [
@@ -380,19 +428,17 @@ dayButton.addEventListener('click', () => {
 
 async function allowForAdvanceDay() {
   // End of day text
-  await delay(500);
+  await delay(1500);
   renderEachLetter(PROCEED);
   dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   dayButton.disabled = false;
 }
 
 function advanceDay() {
-  // WHERE YOU AT: Soemthing weird happening here. When you press the button, DAY is advancing by 2
-  console.log('advance day hit' + ' ' + DAY);
   DAY++;
-  console.log(DAY);
   dayButton.textContent = `Day ${DAY}`;
-  renderEachLetter(NEXT_DAY_STARTING);
+  // renderEachLetter(NEXT_DAY_STARTING);
+  delay(1500);
   COMPLETED_EVENT_COUNT = 0;
   PLAY_COUNTER = 0;
   activeEventsHolder.textContent = 'None!';
@@ -507,20 +553,6 @@ function createTimer(listItem, timeAllotted) {
   return newTimer;
 }
 
-const buttons = document.getElementsByClassName('b');
-buttons[0].addEventListener('click', () => {
-  giveSomething('food');
-});
-buttons[1].addEventListener('click', () => {
-  giveSomething('water');
-});
-buttons[2].addEventListener('click', () => {
-  giveSomething('diaper');
-});
-buttons[3].addEventListener('click', () => {
-  giveSomething('play');
-});
-
 /**
  *
  * @param {'food' | 'water' | 'diaper' | 'play'} something
@@ -551,7 +583,6 @@ function giveSomething(something) {
 
   /* It should totally exist */
   if (!oldestMatchingEvent) {
-    console.log('wtf');
     return;
   }
 
@@ -704,11 +735,16 @@ function handleHappinessMeterMarker(happiness) {
 | (__| | | | (_| | (_) \__ \
  \___|_| |_|\__,_|\___/|___/
 ****************************/
-const bod = document.body;
 
 function setCursor(showCursor) {
-  bod.classList.remove(showCursor ? 'nc' : 'c');
-  bod.classList.add(showCursor ? 'c' : 'nc');
+  document.body.classList.remove(showCursor ? 'nc' : 'c');
+  document.body.classList.add(showCursor ? 'c' : 'nc');
+}
+
+function toggleClass(className, element) {
+  element.classList.contains(className)
+    ? element.classList.remove(className)
+    : element.classList.add(className);
 }
 
 /******************
