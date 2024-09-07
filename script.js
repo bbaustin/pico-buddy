@@ -49,6 +49,8 @@ function setButtons(verbs) {
 }
 setButtons(eventTypeVerbs);
 
+const labels = document.querySelectorAll('.b p');
+
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
@@ -280,7 +282,7 @@ const TRIEYE_PHRASES = [
 **************************/
 /* Script */
 
-const day8Events = [
+const day9Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -352,20 +354,20 @@ const day7Events = [
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
   'Well, anyway, good luck!',
   CHECK_LIST,
-  runStandardDay(10),
+  ...runStandardDay(10),
 ];
 
-const day1Events = [
-  // 'OK, sorry about yesterday 🤕.',
-  // 'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
-  // `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
-  // 'Just keep up the good work and it might evolve into something cute 😘 !',
+const day8Events = [
+  'OK, sorry about yesterday 🤕.',
+  'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
+  `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
+  'Just keep up the good work and it might evolve into something cute 😘 !',
   () => makeManyCursors(),
-  runStandardDay(10),
+  ...runStandardDay(10),
 ];
 
 /**  */
-const day9Events = [
+const day1Events = [
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
   'But, good news: today it is going to evolve!!',
@@ -373,13 +375,28 @@ const day9Events = [
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
+  delay(1000), // TODO: Idk if this works in the array like this
   "Well, I've never seen this before.",
   "It's definitely got more eyes!",
-  // TODO: Make button labels not visible
+  () => {
+    labels.forEach((label) => {
+      toggleClass('invisible', label);
+    });
+  },
+  `Hmm, it looks like the labeling systems for your ${PICOBUDDY()} device's buttons suddenly stopped working.`,
+  'Sorry... Good luck with today!',
+  ...runStandardDay(8, 1000),
 ];
 
 // TODO: Glitch text
-const day10Events = runStandardDay(2);
+const day10Events = [
+  () => {
+    labels.forEach((label) => {
+      toggleClass('invisible', label);
+    });
+  },
+  runStandardDay(2),
+];
 const day11Events = runStandardDay(1);
 const day12Events = runStandardDay(0);
 
@@ -426,7 +443,7 @@ const calendar = new Map([
   [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
   [8, { events: day8Events, expectedEvents: 10 }],
-  [9, { events: day9Events, expectedEvents: 3 }],
+  [9, { events: day9Events, expectedEvents: 10 }],
   [10, { events: day10Events, expectedEvents: 2 }],
   [11, { events: day11Events, expectedEvents: 1 }],
   [12, { events: day12Events, expectedEvents: 0 }],
@@ -910,7 +927,6 @@ async function renderEachLetter(text) {
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
 async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
-  console.log(scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
