@@ -395,7 +395,7 @@ const day10Events = [
       toggleClass('invisible', label);
     });
   },
-  runStandardDay(2),
+  runStandardDay(7),
 ];
 const day11Events = runStandardDay(1);
 const day12Events = runStandardDay(0);
@@ -703,7 +703,7 @@ function getRandomEvent(customEventTypes) {
 
   do {
     newEvent = getRandom(eventTypes);
-  } while (newEvent === lastEvent); // TODO: This doesn't work?
+  } while (newEvent === lastEvent);
   lastEvent = newEvent;
   return askForSomething(newEvent);
 }
