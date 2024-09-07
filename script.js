@@ -209,8 +209,8 @@ const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
-const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
-const NOPE = 'It no longer has any use for this.';
+// const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
+// const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
   BUD_EMOJIS
 )} !`;
@@ -238,7 +238,6 @@ const J_DAY_FINISHED_PHRASES = 'OK, 終わりました！　おやすみなさ�
 const PROCEED = `${
   DAY === 6 ? J_DAY_FINISHED_PHRASES : getRandom(DAY_FINISHED_PHRASES)
 } Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
-// const NEXT_DAY_STARTING = `🌞 Get ready for another awesome day with your ${PICOBUDDY()}!`;
 const CHECK_LIST = 'Check out the list of current demands!';
 const SLOW = 'You were a little too slow... 🐢';
 const J_SLOW = '遅いな。。。🐢';
@@ -261,19 +260,19 @@ const REASSURING_PHRASES = [
   'Take a chill pill!',
 ];
 
-const NORMAL_HUNGRY_PHRASES = [
-  `Oh! Your ${PICOBUDDY()} is hungry!`,
-  `You better give your ${PICOBUDDY()} some food!`,
-];
-const DARK_HUNGRY_PHRASES = [
-  `Your ${PICOBUDDY()} must feed!`,
-  `Your ${PICOBUDDY()} must consume!`,
-];
-const TRIEYE_PHRASES = [
-  "It doesn't want anything.",
-  'It waits.',
-  'It watches.',
-];
+// const NORMAL_HUNGRY_PHRASES = [
+//   `Oh! Your ${PICOBUDDY()} is hungry!`,
+//   `You better give your ${PICOBUDDY()} some food!`,
+// ];
+// const DARK_HUNGRY_PHRASES = [
+//   `Your ${PICOBUDDY()} must feed!`,
+//   `Your ${PICOBUDDY()} must consume!`,
+// ];
+// const TRIEYE_PHRASES = [
+//   "It doesn't want anything.",
+//   'It waits.',
+//   'It watches.',
+// ];
 
 /**************************
  ___  ___ _ __(_)_ __ | |_ 
@@ -284,7 +283,7 @@ const TRIEYE_PHRASES = [
 **************************/
 /* Script */
 
-const day1Events = [
+const day11Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -300,10 +299,20 @@ const day1Events = [
   ...runStandardDay(3),
 ];
 
-const day2Events = [CHECK_LIST, ...runStandardDay()];
+const day2Events = [
+  "Good morning! Today's a brand new day! 🎉",
+  `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days. 😌`,
+  'But they usually get a bit more demanding as time goes on. 😅',
+  'So enjoy these early days while they last! ⏳',
+  `In the end, our memories are the only things we have, as the universe continues its slow, silent march towards the eternal nothingness of ${UNBECOMING}.`,
+  `Oh! I think your ${PICOBUDDY()} might be hungry! 🍇🍉🥝`,
+  CHECK_LIST,
+  ...runStandardDay(),
+];
 
 const day3Events = [
-  'I think you got the hang of it! Today might be a little bit more intense!',
+  'I think you got the hang of it! Today might be a little bit more intense! 🏃‍♀️💨',
+  'But you totally got this! I believe in you!',
   CHECK_LIST,
   ...runStandardDay(5, 0),
 ];
@@ -311,7 +320,7 @@ const day3Events = [
 const day4Events = [
   'So, actually, before we start today, I have something exciting to share!',
   `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
-  'Anyway...',
+  "I can't wait to see what it will turn into! 🦋",
   CHECK_LIST,
   ...runStandardDay(10, 1000),
 ];
@@ -323,10 +332,11 @@ const day5Events = [
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
   'Well, actually... I have to be totally honest with you...',
-  `I've heard that weird stuff can happen if your ${PICOBUDDY()} evolves into an ${EYEGUY()}...`,
+  `I've heard that weird stuff can happen if your ${PICOBUDDY()} evolves into an ${EYEGUY()}... 😬`,
   "But like, don't sweat it! 😓 ➡️ 🤗 You'll be totally fine!",
-  delay(1000),
+  () => delay(1000),
   () => toggleClass('flip', document.body),
+  'Huh, did something just change on your end?',
   CHECK_LIST,
   ...runStandardDay(5, 1000),
 ];
@@ -352,8 +362,9 @@ const day6Events = [
 const day7Events = [
   () => setButtons(eventTypeVerbs),
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
-  "I hate to say it, but today, something's wrong with your mouse...",
+  "I hate to say it, but today, something's wrong with your mouse 🖱️...",
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
+  // todo--> you need to toggle class here, right?
   'Well, anyway, good luck!',
   CHECK_LIST,
   ...runStandardDay(10),
@@ -373,13 +384,16 @@ const day9Events = [
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
   'But, good news: today it is going to evolve!!',
+  'Think of all the possibilities of life! 🧬 🐟 🦕 🐊 🐿️ 🦍 🧍',
+  'I have a really good feeling about this!',
   SEE,
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
-  delay(1000), // TODO: Idk if this works in the array like this
+  () => delay(1000),
   "Well, I've never seen this before.",
-  "It's definitely got more eyes!",
+  "I wouldn't say it's super cute, but... 😶",
+  "Beauty is in the eye of the beholder 👁️! Or, in the 'eyes', if you will.. 👁️👁️👁️!",
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
@@ -407,14 +421,26 @@ const day10Events = [
   CHECK_LIST,
   ...runStandardDay(7, 1500),
 ];
-const day11Events = [
+
+const day1Events = [
   () => {
     document
       .querySelectorAll('.b')
       .forEach((button) => (button.style.position = 'initial'));
   },
-  runStandardDay(1),
+  () =>
+    setButtons({
+      hydrate: 'hydrate',
+      play: 'play',
+      feed: 'feed',
+      clean: 'clean',
+    }),
+  "Hey, I don't have too much time to talk today.",
+  `Your ${PICOBUDDY()} is really causing some problems with the buttons on its device.`,
+  CHECK_LIST,
+  ...runStandardDay(7),
 ];
+
 const day12Events = runStandardDay(0);
 
 const day13Events = [
@@ -631,7 +657,7 @@ function giveSomething(something) {
 
   /* Account for foreign language day*/
   const praisePhrases = DAY !== 6 ? PRAISE_PHRASES : J_PRAISE_PHRASES;
-\  const slow = DAY !== 6 ? SLOW : J_SLOW;
+  const slow = DAY !== 6 ? SLOW : J_SLOW;
   const nowNow = DAY !== 6 ? NOT_NOW : J_NOT_NOW;
 
   /* Handle wrong thing given */
@@ -948,7 +974,8 @@ async function renderEachLetter(text) {
  * @param {Array<string | function>} messages - array of messages.
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
-async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
+async function handleScriptEventsSequentially(scriptEvents) {
+  console.log(scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
@@ -956,13 +983,11 @@ async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
       await scriptEvent();
     }
 
-    if (addDelay) {
-      /* Calculate delay based on message length */
-      const baseDelay = 500; // Base delay in ms for short messages
-      const lengthFactor = 25; // Additional ms per character in the message
-      const messageDelay = baseDelay + scriptEvent.length * lengthFactor;
-      await delay(messageDelay);
-    }
+    /* Calculate delay based on message length */
+    const baseDelay = 500; // Base delay in ms for short messages
+    const lengthFactor = 25; // Additional ms per character in the message
+    const messageDelay = baseDelay + scriptEvent.length * lengthFactor;
+    await delay(messageDelay);
   }
 }
 
