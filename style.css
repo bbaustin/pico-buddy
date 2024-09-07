@@ -70,12 +70,12 @@ section {
   border-radius: 48%;
   position: relative;
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   margin-bottom: 20px;
   border: var(--1psb);
-  /* filter: drop-shadow(-5px 0px var(--g)); */
 }
 
 #out::before {

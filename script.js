@@ -1,30 +1,67 @@
+/*****************************
+  __ _| | ___ | |__   __ _| |
+ / _` | |/ _ \| '_ \ / _` | |
+| (_| | | (_) | |_) | (_| | |
+ \__, |_|\___/|_.__/ \__,_|_|
+ |___/                       
+*******************************/
+
 /**
- * Array<'food | 'water' | 'diaper'>
+ * Array<'feed' | 'hydrate' | 'clean' | 'play'>
  */
+let DAY = 1;
+
 const activeEvents = [];
 const activeEventsHolder = document.querySelector('ol');
 
 const eventTypeVerbs = {
-  food: 'feed',
-  water: 'hydrate',
-  diaper: 'clean',
+  feed: 'feed',
+  hydrate: 'hydrate',
+  clean: 'clean',
   play: 'play',
 };
 
 const bod = document.body;
-const buttons = document.getElementsByClassName('b');
-buttons[0].addEventListener('click', () => {
-  giveSomething('food');
-});
-buttons[1].addEventListener('click', () => {
-  giveSomething('water');
-});
-buttons[2].addEventListener('click', () => {
-  giveSomething('diaper');
-});
-buttons[3].addEventListener('click', () => {
-  giveSomething('play');
-});
+const buttonHolder = document.getElementById('bh');
+
+/**
+ *
+ * @param {{
+ * feed: string,
+ * hydrate: string,
+ * clean: string,
+ * play: string}} verbs
+ */
+function setButtons(verbs) {
+  buttonHolder.innerHTML = '';
+  Object.values(verbs).forEach((verb) => {
+    const button = document.createElement('button');
+    button.addEventListener('click', () => {
+      console.log(verb);
+      giveSomething(verb);
+    });
+    button.classList.add('b');
+    buttonHolder.appendChild(button);
+    const p = document.createElement('p');
+    p.textContent = verb;
+    button.appendChild(p);
+  });
+}
+setButtons(eventTypeVerbs);
+
+// const buttons = document.getElementsByClassName('b');
+// buttons[0].addEventListener('click', () => {
+//   giveSomething('food');
+// });
+// buttons[1].addEventListener('click', () => {
+//   giveSomething('water');
+// });
+// buttons[2].addEventListener('click', () => {
+//   giveSomething('diaper');
+// });
+// buttons[3].addEventListener('click', () => {
+//   giveSomething('play');
+// });
 
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
@@ -184,32 +221,41 @@ const UNBECOMING = 'The Great Unbecoming';
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
 const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
 const NOPE = 'It no longer has any use for this.';
-const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS.join(
-  ' '
-)}`;
+const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
+  BUD_EMOJIS
+)} !`;
+const J_NOT_NOW = 'ちょっと違うね。。！ 😅'; //'それは今必要ではないな。。。'
 const PRAISE_PHRASES = [
   'Good job!',
   'Nicely done!',
   `Your ${PICOBUDDY()} is pleased!`,
   'Way to go!',
-  'You rule!',
-  'You rock!',
+  'You rule 😎 !',
+  'You rock 🎸 !',
+];
+const J_PRAISE_PHRASES = [
+  'よくやった 👍！',
+  'できた 👏！！',
+  'やったね 🎉！',
+  'すごい 🎸！',
 ];
 const DAY_FINISHED_PHRASES = [
   "OK, I think that's all for today!",
   `OK, time for your ${PICOBUDDY()}'s bedtime!`,
   `OK, time for your ${PICOBUDDY()} to sleep now!`,
 ];
-const PROCEED = `${getRandom(
-  DAY_FINISHED_PHRASES
-)} Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
+const J_DAY_FINISHED_PHRASES = 'OK, 終わりました！　おやすみなさい！';
+const PROCEED = `${
+  DAY === 6 ? J_DAY_FINISHED_PHRASES : getRandom(DAY_FINISHED_PHRASES)
+} Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
 // const NEXT_DAY_STARTING = `🌞 Get ready for another awesome day with your ${PICOBUDDY()}!`;
 const CHECK_LIST = 'Check out the list of current demands!';
-const SLOW = 'You were a little too slow...';
+const SLOW = 'You were a little too slow... 🐢';
+const J_SLOW = '遅いな。。。🐢';
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
-const NOT_OMINOUS = 'I assure you, there is nothing ominous about this 😎 !';
+const NOT_OMINOUS = 'I assure you, this is totally normal and not ominous 😎 !';
 const EVOLVING = "Oh! It's evolving!";
 
 // Script End phrases
@@ -254,7 +300,7 @@ const day1Events = [
   () => drawEggBaby(),
   // `Oh! It's an ${EGGBABY()} !`,
   // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
-  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
+  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, give it a bath 🛁, or play with it 🧸 !`,
   // `${BUTTON_INSTRUCTIONS}`,
   // `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
   // `${NOT_OMINOUS}`,
@@ -295,30 +341,41 @@ const day5Events = [
   ...runStandardDay(5, 1000),
 ];
 
+const japaneseVocab = ['食べる', '飲む', '入浴する', '遊ぶ'];
+
 const day6Events = [
-  () => toggleClass('flip', document.body), // return to normal.
-  "Yesterday wasn't so bad, right? But glad to have things back to normal.",
-  '今日は普通の日なので、よかったですね！',
-  'さ、🥰ピコバディ🥰 は今日何がほしかな。。？',
-  'じゃ、始めましょうか。。！',
-  ...runStandardDay(7, 1250),
+  // () => toggleClass('flip', document.body), // return to normal.
+  // "Yesterday wasn't so bad, right? But glad to have things back to normal.",
+  // '今日は普通の日なので、よかったですね 😅 ！',
+  // 'さ、🥰ピコバディ🥰 は今日何がほしかな。。？',
+  // 'じゃ、始めましょうか！！',
+  () =>
+    setButtons({
+      feed: japaneseVocab[0],
+      hydrate: japaneseVocab[1],
+      clean: japaneseVocab[2],
+      play: japaneseVocab[3],
+    }),
+  ...runStandardDay(7, 3500, japaneseVocab),
 ];
 
 const day7Events = [
-  'Huh, everything is still normal. Maybe I misjudged the situation!',
-
+  () => setButtons(eventTypeVerbs),
+  `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
+  "I hate to say it, but today, something's wrong with your mouse...",
+  `I think your ${EYEGUY()} deleted the cursor png or something...`,
+  'Well, anyway, good luck!',
   CHECK_LIST,
   runStandardDay(10),
 ];
 
 const day8Events = [
-  `By the way, it looks like your ${PICOBUDDY()} might evolve again soon!`,
+  'OK, sorry about yesterday 🤕.',
+  'We totally fixed the cursor problem, and you should be able to see your cursor again today.',
+  `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
-  // [...buttons].forEach((button) => {
-  //   toggleClass('invisible', button);
-  // }),
-  () => console.log('why above run now'),
-  runStandardDay(7, 1250),
+  // TODO: Cursor duplication
+  runStandardDay(10),
 ];
 
 /**  */
@@ -351,11 +408,15 @@ const day13Events = [
   // TODO: Determine ending based on happiness
 ];
 
-function runStandardDay(numberOfEvents = 3, overriddenDelay) {
+function runStandardDay(
+  numberOfEvents = 3,
+  overriddenDelay,
+  overriddenEventTypes
+) {
   const events = [];
 
   for (let i = 0; i < numberOfEvents; i++) {
-    events.push(() => getRandomEvent());
+    events.push(() => getRandomEvent(overriddenEventTypes));
     events.push(() => delayBetweenEvents(overriddenDelay));
   }
 
@@ -374,7 +435,7 @@ const calendar = new Map([
   [5, { events: day5Events, expectedEvents: 5 }],
   [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
-  [8, { events: day8Events, expectedEvents: 7 }],
+  [8, { events: day8Events, expectedEvents: 10 }],
   [9, { events: day9Events, expectedEvents: 3 }],
   [10, { events: day10Events, expectedEvents: 2 }],
   [11, { events: day11Events, expectedEvents: 1 }],
@@ -382,7 +443,6 @@ const calendar = new Map([
   [13, { events: day13Events, expectedEvents: 0 }],
 ]);
 
-let DAY = 1;
 let PLAY_COUNTER = 0;
 let COMPLETED_EVENT_COUNT = 0;
 
@@ -451,7 +511,7 @@ async function delayBetweenEvents(overriddenDelay) {
 
 /**
  *
- * @param {'food' | 'water' | 'diaper'} event type
+ * @param {'feed' | 'hydrate' | 'clean' | 'play'} event type
  */
 async function askForSomething(eventType, timeAllotted = 13) {
   activeEvents.push(eventType);
@@ -498,7 +558,7 @@ function createEventLi(eventType, timeAllotted) {
   }
   const listItem = document.createElement('li');
   const timer = createTimer(listItem, timeAllotted);
-  listItem.innerHTML = `${eventTypeVerbs[eventType]}! - `;
+  listItem.innerHTML = `${eventType}! - `;
   listItem.dataset.eventType = eventType;
   listItem.append(timer);
   activeEventsHolder.prepend(listItem);
@@ -538,17 +598,22 @@ function createTimer(listItem, timeAllotted) {
 
 /**
  *
- * @param {'food' | 'water' | 'diaper' | 'play'} something
+ * @param {'feed' | 'hydrate' | 'clean' | 'play'} something
  */
 function giveSomething(something) {
   /* Look in the JS array of active events for the first instance of whatever button you clicked */
   const firstIndexOfGivenEvent = activeEvents.indexOf(something);
   const hasGivenEvent = firstIndexOfGivenEvent !== -1;
 
+  /* Account for foreign language day*/
+  const praisePhrases = DAY === 6 ? PRAISE_PHRASES : J_PRAISE_PHRASES;
+  const slow = DAY === 6 ? SLOW : J_SLOW;
+  const nowNow = DAY === 6 ? NOT_NOW : J_NOT_NOW;
+
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
     // sound
-    return renderEachLetter(NOT_NOW);
+    return renderEachLetter(nowNow);
   }
 
   /* Grab all the DOM li */
@@ -591,12 +656,12 @@ function giveSomething(something) {
   /* Update the happiness meter, depending on how many seconds are left in the timer */
   if (timerRemainder > 9) {
     manageHappines(2);
-    return renderEachLetter(getRandom(PRAISE_PHRASES));
+    return renderEachLetter(getRandom(praisePhrases));
   } else if (timerRemainder > 0) {
     manageHappines(1);
-    return renderEachLetter(getRandom(PRAISE_PHRASES));
+    return renderEachLetter(getRandom(praisePhrases));
   } else {
-    return renderEachLetter(SLOW);
+    return renderEachLetter(slow);
   }
 }
 
@@ -617,15 +682,21 @@ function toggleGivenAnimation() {
   }, 1250);
 }
 
-// TODO: Could make this a util, to get any non-matching random stuff (like phrases)
-function getRandomEvent() {
+/** used in getRandomEvent */
+let lastEvent = '';
+
+/**
+ *
+ * @param {Array<string>} customEventTypes - array of events that must match the event listener of the picobuddy device buttons
+ * @returns
+ */
+function getRandomEvent(customEventTypes) {
   let newEvent;
-  let lastEvent = '';
-  const eventTypes = ['food', 'water', 'diaper', 'play'];
+  const eventTypes = customEventTypes || ['feed', 'hydrate', 'clean', 'play'];
+
   do {
-    // TODO: Every evolution, pop an event type.
     newEvent = getRandom(eventTypes);
-  } while (newEvent === lastEvent);
+  } while (newEvent === lastEvent); // TODO: This doesn't work?
   lastEvent = newEvent;
   return askForSomething(newEvent);
 }
