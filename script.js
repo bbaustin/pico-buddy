@@ -49,20 +49,6 @@ function setButtons(verbs) {
 }
 setButtons(eventTypeVerbs);
 
-// const buttons = document.getElementsByClassName('b');
-// buttons[0].addEventListener('click', () => {
-//   giveSomething('food');
-// });
-// buttons[1].addEventListener('click', () => {
-//   giveSomething('water');
-// });
-// buttons[2].addEventListener('click', () => {
-//   giveSomething('diaper');
-// });
-// buttons[3].addEventListener('click', () => {
-//   giveSomething('play');
-// });
-
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
@@ -294,7 +280,7 @@ const TRIEYE_PHRASES = [
 **************************/
 /* Script */
 
-const day1Events = [
+const day8Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -369,26 +355,30 @@ const day7Events = [
   runStandardDay(10),
 ];
 
-const day8Events = [
-  'OK, sorry about yesterday 🤕.',
-  'We totally fixed the cursor problem, and you should be able to see your cursor again today.',
-  `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
-  'Just keep up the good work and it might evolve into something cute 😘 !',
-  // TODO: Cursor duplication
+const day1Events = [
+  // 'OK, sorry about yesterday 🤕.',
+  // 'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
+  // `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
+  // 'Just keep up the good work and it might evolve into something cute 😘 !',
+  () => makeManyCursors(),
   runStandardDay(10),
 ];
 
 /**  */
 const day9Events = [
-  EVOLVING,
+  'Super sorry about all the technical issues recently!',
+  `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
+  'But, good news: today it is going to evolve!!',
   SEE,
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
-  "It's got more eyes!",
+  "Well, I've never seen this before.",
+  "It's definitely got more eyes!",
+  // TODO: Make button labels not visible
 ];
 
-// TODO: Make interesting
+// TODO: Glitch text
 const day10Events = runStandardDay(2);
 const day11Events = runStandardDay(1);
 const day12Events = runStandardDay(0);
@@ -705,7 +695,6 @@ const happinessMeterMarker = document.querySelector('#hmm');
 let happiness = 0;
 /**
  * Add a percentage to move the happiness meter. Max is 45%, min is -45%.
- * // TODO: Smooth move with
  * @param {number} happinessAddend - amount to add / subtract to the happiness meter. 3 for super fast, 2 for normal, and 1 for playing. minus is -1.67
  */
 function manageHappines(happinessAddend, isHappy = true) {
@@ -801,6 +790,86 @@ function toggleClass(className, element) {
     : element.classList.add(className);
 }
 
+function duplicateCursors() {
+  const pic = document.createElement('img');
+  pic.src = './c.png';
+  pic.style.position = 'absolute';
+  pic.style.width = '11px';
+  bod.append(pic);
+
+  const margin = 13;
+  let directionX = 1; // 1 means right, -1 means left
+  let directionY = 1; // 1 means down, -1 means up
+  let speed = 1;
+  let pause = false;
+  let posX = 13; //getRandomStartPosition(window.innerWidth - pic.width - margin);
+  let posY = 13; //getRandomStartPosition(window.innerHeight - pic.height - margin);
+
+  function randomSpeed() {
+    return getRandomInt(0.5, 5);
+  }
+
+  function randomPause() {
+    return getRandomInt(250, 500);
+  }
+
+  function getRandomStartPosition(maxPosition) {
+    return getRandomInt(margin, maxPosition - margin * 2);
+  }
+
+  function moveImage() {
+    if (!pause) {
+      // Update position
+      posX += directionX * speed;
+      posY += directionY * speed;
+
+      // Apply movement to the img element
+      pic.style.left = `${posX}px`;
+      pic.style.top = `${posY}px`;
+
+      // Randomly change direction
+      if (Math.random() < 0.01) {
+        directionX = Math.random() > 0.5 ? 1 : -1; // Randomly switch left or right
+        directionY = Math.random() > 0.5 ? 1 : -1; // Randomly switch up or down
+      }
+
+      // Occasionally vary speed
+      if (Math.random() < 0.05) {
+        speed = randomSpeed();
+      }
+
+      // If it gets close to the edge of the screen, reverse direction
+      const windowWidth = window.innerWidth - pic.width - margin;
+      const windowHeight = window.innerHeight - pic.height - margin;
+
+      if (posX <= margin || posX >= windowWidth) {
+        directionX *= -1; // Reverse horizontal direction
+      }
+      if (posY <= margin || posY >= windowHeight) {
+        directionY *= -1; // Reverse vertical direction
+      }
+
+      // Occasionally stop to mimic human-like pauses
+      if (Math.random() < 0.01) {
+        pause = true;
+        setTimeout(() => {
+          pause = false;
+        }, randomPause()); // Pause for a random duration
+      }
+    }
+
+    requestAnimationFrame(moveImage);
+  }
+
+  // Start moving the image
+  moveImage();
+}
+
+function makeManyCursors() {
+  for (let i = 0; i < 50; i++) {
+    duplicateCursors();
+  }
+}
 /******************
  /\ /\| |_(_) |___ 
 / / \ \ __| | / __|
