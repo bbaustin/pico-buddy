@@ -32,13 +32,15 @@ const buttonHolder = document.getElementById('bh');
  * clean: string,
  * play: string}} verbs
  */
-function setButtons(verbs) {
+function setButtons(verbs, optionalClickEvent) {
   buttonHolder.innerHTML = '';
   Object.values(verbs).forEach((verb) => {
     const button = document.createElement('button');
     button.addEventListener('click', () => {
-      console.log(verb);
       giveSomething(verb);
+      if (optionalClickEvent) {
+        optionalClickEvent(button);
+      }
     });
     button.classList.add('b');
     buttonHolder.appendChild(button);
@@ -282,7 +284,7 @@ const TRIEYE_PHRASES = [
 **************************/
 /* Script */
 
-const day9Events = [
+const day1Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -332,11 +334,11 @@ const day5Events = [
 const japaneseVocab = ['食べる', '飲む', '入浴する', '遊ぶ'];
 
 const day6Events = [
-  // () => toggleClass('flip', document.body), // return to normal.
-  // "Yesterday wasn't so bad, right? But glad to have things back to normal.",
-  // '今日は普通の日なので、よかったですね 😅 ！',
-  // 'さ、🥰ピコバディ🥰 は今日何がほしかな。。？',
-  // 'じゃ、始めましょうか！！',
+  () => toggleClass('flip', document.body), // return to normal.
+  "Yesterday wasn't so bad, right? But glad to have things back to normal.",
+  '今日は普通の日なので、よかったですね 😅 ！',
+  'さ、🥰ピコバディ🥰 は今日何がほしかな。。？',
+  'じゃ、始めましょうか！！',
   () =>
     setButtons({
       feed: japaneseVocab[0],
@@ -367,7 +369,7 @@ const day8Events = [
 ];
 
 /**  */
-const day1Events = [
+const day9Events = [
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
   'But, good news: today it is going to evolve!!',
@@ -390,14 +392,29 @@ const day1Events = [
 
 // TODO: Glitch text
 const day10Events = [
+  /* Reset back to normal */
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
     });
   },
-  runStandardDay(7),
+  () => {
+    setButtons(eventTypeVerbs, moveToRandomLocation);
+  },
+  'Hey, we got the labels working again on the buttons.',
+  "I'm not totally convinced that the buttons are working perfectly, though.",
+  "Well, let's see...",
+  CHECK_LIST,
+  ...runStandardDay(7, 1500),
 ];
-const day11Events = runStandardDay(1);
+const day11Events = [
+  () => {
+    document
+      .querySelectorAll('.b')
+      .forEach((button) => (button.style.position = 'initial'));
+  },
+  runStandardDay(1),
+];
 const day12Events = runStandardDay(0);
 
 const day13Events = [
@@ -613,9 +630,9 @@ function giveSomething(something) {
   const hasGivenEvent = firstIndexOfGivenEvent !== -1;
 
   /* Account for foreign language day*/
-  const praisePhrases = DAY === 6 ? PRAISE_PHRASES : J_PRAISE_PHRASES;
-  const slow = DAY === 6 ? SLOW : J_SLOW;
-  const nowNow = DAY === 6 ? NOT_NOW : J_NOT_NOW;
+  const praisePhrases = DAY !== 6 ? PRAISE_PHRASES : J_PRAISE_PHRASES;
+\  const slow = DAY !== 6 ? SLOW : J_SLOW;
+  const nowNow = DAY !== 6 ? NOT_NOW : J_NOT_NOW;
 
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
@@ -794,17 +811,26 @@ function handleHappinessMeterMarker(happiness) {
  / __| '_ \ / _` |/ _ \/ __|
 | (__| | | | (_| | (_) \__ \
  \___|_| |_|\__,_|\___/|___/
-****************************/
+ ****************************/
 
 function setCursor(showCursor) {
   document.body.classList.remove(showCursor ? 'nc' : 'c');
   document.body.classList.add(showCursor ? 'c' : 'nc');
 }
 
-function toggleClass(className, element) {
-  element.classList.contains(className)
-    ? element.classList.remove(className)
-    : element.classList.add(className);
+function moveToRandomLocation(element) {
+  const margin = 20;
+  const randomX = getRandomInt(
+    margin,
+    window.innerWidth - element.offsetWidth - margin
+  );
+  const randomY = getRandomInt(
+    margin,
+    window.innerHeight - element.offsetHeight - margin
+  );
+  element.style.position = 'absolute';
+  element.style.left = `${randomX}px`;
+  element.style.top = `${randomY}px`;
 }
 
 function duplicateCursors() {
@@ -819,8 +845,8 @@ function duplicateCursors() {
   let directionY = 1; // 1 means down, -1 means up
   let speed = 1;
   let pause = false;
-  let posX = 13; //getRandomStartPosition(window.innerWidth - pic.width - margin);
-  let posY = 13; //getRandomStartPosition(window.innerHeight - pic.height - margin);
+  let posX = 13;
+  let posY = 13;
 
   function randomSpeed() {
     return getRandomInt(0.5, 5);
@@ -830,17 +856,13 @@ function duplicateCursors() {
     return getRandomInt(250, 500);
   }
 
-  function getRandomStartPosition(maxPosition) {
-    return getRandomInt(margin, maxPosition - margin * 2);
-  }
-
   function moveImage() {
     if (!pause) {
       // Update position
       posX += directionX * speed;
       posY += directionY * speed;
 
-      // Apply movement to the img element
+      // Apply movement to the img element // TODO: This can be a util maybe
       pic.style.left = `${posX}px`;
       pic.style.top = `${posY}px`;
 
@@ -954,6 +976,12 @@ function getRandomInt(x, y) {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function toggleClass(className, element) {
+  element.classList.contains(className)
+    ? element.classList.remove(className)
+    : element.classList.add(className);
 }
 
 let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
