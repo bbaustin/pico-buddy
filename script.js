@@ -161,7 +161,7 @@ const textBox = document.querySelector('#t');
 
 /* Dictionary */
 // Emojis
-const BUD_EMOJIS = ['❤️', '💖', '😊', '😍', '🤩', '👾'];
+const BUD_EMOJIS = ['💗', '💞', '💓', '💖', '😊', '😍', '🤩', '👾'];
 const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
 const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
 
@@ -225,23 +225,6 @@ const REASSURING_PHRASES = [
   'Take a chill pill!',
 ];
 
-// TODO: Create an object of phrases for each event type. This is a bit complicated, because it does likely depend on the day etc.
-/**
- * const EVENT_PHRASES = {
- *  wants {
- *    food: '',
- *    water: '',
- *    diaper: '',
- * },
- *  receives {
- *    food: '',
- *    water: '',
- *    diaper: '',
- *    play: ''
- * }
- *
- * }
- */
 const NORMAL_HUNGRY_PHRASES = [
   `Oh! Your ${PICOBUDDY()} is hungry!`,
   `You better give your ${PICOBUDDY()} some food!`,
@@ -265,7 +248,6 @@ const TRIEYE_PHRASES = [
 **************************/
 /* Script */
 
-/** 3 events */
 const day1Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
@@ -282,61 +264,60 @@ const day1Events = [
   ...runStandardDay(3),
 ];
 
-/** 3 events */
 const day2Events = [CHECK_LIST, ...runStandardDay()];
 
-/** 5 events */
 const day3Events = [
   'I think you got the hang of it! Today might be a little bit more intense!',
   CHECK_LIST,
   ...runStandardDay(5, 0),
 ];
 
-/** 10 events */
 const day4Events = [
   'So, actually, before we start today, I have something exciting to share!',
   `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
-  getRandom(REASSURING_PHRASES),
   'Anyway...',
   CHECK_LIST,
   ...runStandardDay(10, 1000),
 ];
 
-/** */
 const day5Events = [
   EVOLVING,
   SEE,
   () => drawEyeGuy(),
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
+  'Well, actually... I have to be totally honest with you...',
+  `I've heard that weird stuff can happen if your ${PICOBUDDY()} evolves into an ${EYEGUY()}...`,
+  "But like, don't sweat it! 😓 ➡️ 🤗 You'll be totally fine!",
+  delay(1000),
+  () => toggleClass('flip', document.body),
   CHECK_LIST,
   ...runStandardDay(5, 1000),
 ];
 
 const day6Events = [
-  'So, I have to be totally honest with you...',
-  `Sometimes weird stuff happens if your ${PICOBUDDY()} evolves into an ${EYEGUY()}...`,
-  getRandom(REASSURING_PHRASES),
-  'But yeah... Just keep your eyes open for any weird stuff. Or keep your eye open, I guess..!',
-  'Anyway...',
+  () => toggleClass('flip', document.body), // return to normal.
+  "Yesterday wasn't so bad, right? But glad to have things back to normal.",
+  '今日は普通の日なので、よかったですね！',
+  'さ、🥰ピコバディ🥰 は今日何がほしかな。。？',
+  'じゃ、始めましょうか。。！',
   ...runStandardDay(7, 1250),
 ];
 
 const day7Events = [
   'Huh, everything is still normal. Maybe I misjudged the situation!',
-  delay(1250),
-  () => toggleClass('flip', document.body),
+
   CHECK_LIST,
   runStandardDay(10),
 ];
 
 const day8Events = [
-  () => toggleClass('flip', document.body), // return to normal.
   `By the way, it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
   // [...buttons].forEach((button) => {
   //   toggleClass('invisible', button);
   // }),
+  () => console.log('why above run now'),
   runStandardDay(7, 1250),
 ];
 
@@ -355,15 +336,17 @@ const day10Events = runStandardDay(2);
 const day11Events = runStandardDay(1);
 const day12Events = runStandardDay(0);
 
-/** 0 events */
 const day13Events = [
   EVOLVING,
   'This is its final form!',
   SEE,
   () => drawFinalForm(),
   "Oh! That's a lotta eyes!",
+  'OK, this is the last day. Ready??',
+  ...runStandardDay(13, 0),
   // End
-  `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
+  'OK, finished!',
+  `Hmm... From now on... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
 
   // TODO: Determine ending based on happiness
 ];
@@ -388,10 +371,10 @@ const calendar = new Map([
   [2, { events: day2Events, expectedEvents: 3 }],
   [3, { events: day3Events, expectedEvents: 5 }],
   [4, { events: day4Events, expectedEvents: 10 }],
-  [5, { events: day5Events, expectedEvents: 3 }],
-  [6, { events: day6Events, expectedEvents: 3 }],
+  [5, { events: day5Events, expectedEvents: 5 }],
+  [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
-  [8, { events: day8Events, expectedEvents: 0 }],
+  [8, { events: day8Events, expectedEvents: 7 }],
   [9, { events: day9Events, expectedEvents: 3 }],
   [10, { events: day10Events, expectedEvents: 2 }],
   [11, { events: day11Events, expectedEvents: 1 }],
