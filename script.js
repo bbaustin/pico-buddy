@@ -265,20 +265,6 @@ const REASSURING_PHRASES = [
   'Take a chill pill!',
 ];
 
-// const NORMAL_HUNGRY_PHRASES = [
-//   `Oh! Your ${PICOBUDDY()} is hungry!`,
-//   `You better give your ${PICOBUDDY()} some food!`,
-// ];
-// const DARK_HUNGRY_PHRASES = [
-//   `Your ${PICOBUDDY()} must feed!`,
-//   `Your ${PICOBUDDY()} must consume!`,
-// ];
-// const TRIEYE_PHRASES = [
-//   "It doesn't want anything.",
-//   'It waits.',
-//   'It watches.',
-// ];
-
 /**************************
  ___  ___ _ __(_)_ __ | |_ 
 / __|/ __| '__| | '_ \| __|
@@ -289,7 +275,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day12Events = [
+const day13Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -302,7 +288,7 @@ const day12Events = [
   // `${getRandom(REASSURING_PHRASES)}`,
   // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   // `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
-  ...runStandardDay(3),
+  ...runStandardDay(),
 ];
 
 const day2Events = [
@@ -381,7 +367,7 @@ const day8Events = [
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
   `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
-  () => makeManyCursors(),
+  () => makeManyCursors(), // TODO: You probably have to remove these cursors, right? Also, still going OOB
   ...runStandardDay(10),
 ];
 
@@ -419,9 +405,7 @@ const day10Events = [
     });
   },
   /* Add random move on button click */
-  () => {
-    setButtons(eventTypeVerbs, moveToRandomLocation);
-  },
+  () => setButtons(eventTypeVerbs, moveToRandomLocation),
   `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
   "I'm not totally convinced that the buttons are working perfectly, though 😖 😖 😖 😖!",
   'As one thing is fixed 🥳, another thing breaks 🤕!',
@@ -456,8 +440,7 @@ const day11Events = [
   ...runStandardDay(7),
 ];
 
-// All eye emojis for labels and text?
-const day1Events = [
+const day12Events = [
   garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
   garbleText('The button issue is finally resolved, I think 🙌!'),
   garbleText(
@@ -471,7 +454,7 @@ const day1Events = [
   ...runStandardDay(7),
 ];
 
-const day13Events = [
+const day1Events = [
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its final form!`,
   SEE,
@@ -481,12 +464,32 @@ const day13Events = [
   `This is the harbinger of ${UNBECOMING}!`,
   'I think this is ⭐️literally⭐️ the last day!',
   'Everything we worked for leads up to this!',
-  `So let's have fun with our ${PICOBUDDY()} one more time 😄`,
+  `So let's have fun with our ${PICOBUDDY()} one last time 😄!`,
   CHECK_LIST,
-  ...runStandardDay(13, 0),
-  // TODO: Run events with a mix of stuf from pervious chaos days
-  // End
-  'OK, finished!',
+  ...runStandardDay(5, 0),
+  () => delay(3000),
+  () => makeManyCursors(),
+  ...runStandardDay(5, 0),
+  () => delay(3000),
+  () => {
+    Object.entries(eventTypeVerbs).forEach(([key, value]) => {
+      eventTypeVerbs[key] = garbleText(value);
+    });
+    setButtons(eventTypeVerbs, moveToRandomLocation);
+  },
+  ...runStandardDay(5, 0),
+  () => delay(5000),
+  () => {
+    Object.entries(eventTypeVerbs).forEach(([key, value]) => {
+      eventTypeVerbs[key] = garbleText(value);
+    });
+  },
+  () => toggleClass('flip', document.body),
+  ...runStandardDay(5, 0),
+
+  /// TODO: need to add this conclusion section differently? Like... Proceed to conclusion button or something
+  'OK! Finished!',
+  // Line based on happiness
   `Hmm... From now on... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
 
   // TODO: Determine ending based on happiness
@@ -520,11 +523,11 @@ const calendar = new Map([
   [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
   [8, { events: day8Events, expectedEvents: 10 }],
-  [9, { events: day9Events, expectedEvents: 10 }],
-  [10, { events: day10Events, expectedEvents: 2 }],
-  [11, { events: day11Events, expectedEvents: 1 }],
-  [12, { events: day12Events, expectedEvents: 0 }],
-  [13, { events: day13Events, expectedEvents: 0 }],
+  [9, { events: day9Events, expectedEvents: 8 }],
+  [10, { events: day10Events, expectedEvents: 7 }],
+  [11, { events: day11Events, expectedEvents: 7 }],
+  [12, { events: day12Events, expectedEvents: 7 }],
+  [13, { events: day13Events, expectedEvents: 20 }],
 ]);
 
 let PLAY_COUNTER = 0;
@@ -931,7 +934,7 @@ function garbleText(text, percentage = 0.95) {
  * @returns text augmented with eyes if DAY 12, otherwise the original text
  */
 function shouldGarble(text, optionalPercentOverride) {
-  return DAY === 1 ? garbleText(text, optionalPercentOverride) : text;
+  return DAY === 12 ? garbleText(text, optionalPercentOverride) : text;
 }
 
 function duplicateCursors() {
@@ -979,8 +982,8 @@ function duplicateCursors() {
       }
 
       // If it gets close to the edge of the screen, reverse direction
-      const windowWidth = window.innerWidth - pic.width - margin;
-      const windowHeight = window.innerHeight - pic.height - margin;
+      const windowWidth = window.innerWidth - pic.width - margin * 2;
+      const windowHeight = window.innerHeight - pic.height - margin * 2;
 
       if (posX <= margin || posX >= windowWidth) {
         directionX *= -1; // Reverse horizontal direction
