@@ -420,9 +420,9 @@ const day1Events = [
   'Just living your life is a kind of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
   "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
   'Together, we can do anything 💪 But also nothing 🤔',
-  "But yeah, anyway 😀! Let's keep pushing!",
+  "But yeah, anyway 😀! Let's keep pushing 😉!",
   CHECK_LIST,
-  ...runStandardDay(7, 1500),
+  ...runStandardDay(10, 1250),
 ];
 
 const day11Events = [
@@ -1127,7 +1127,7 @@ async function renderEachLetter(text) {
   for (const character of text) {
     temp += character;
     newTextContainer.innerHTML = temp;
-    await delay(20);
+    await delay(25);
   }
 }
 
