@@ -273,7 +273,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day7Events = [
+const day8Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -289,7 +289,7 @@ const day7Events = [
   ...runStandardDay(),
 ];
 
-const day8Events = [
+const day9Events = [
   "Good morning! Today's a brand new day! 🎉",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
@@ -353,7 +353,7 @@ const day6Events = [
   ...runStandardDay(7, 3500, japaneseVocab),
 ];
 
-const day1Events = [
+const day7Events = [
   () => setButtons(eventTypeVerbs),
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
   "I hate to say it, but today, something's wrong with your mouse 🖱️...",
@@ -364,23 +364,24 @@ const day1Events = [
   ...runStandardDay(10),
 ];
 
-const day2Events = [
+const day1Events = [
   () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
   `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
-  // WHERE YOU AT: TODO: You probably have to remove these cursors, right?
+  'Anyway, since the cursor problem is figured out, today should be a bit easier 😁 !',
   () => makeManyCursors(),
   ...runStandardDay(10),
 ];
 
 /**  */
-const day9Events = [
+const day2Events = [
+  () => removeAllCursors(),
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
   'But, good news: today it is going to evolve!!',
-  'Think of all the possibilities of life! 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍',
+  'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
   'I have a really good feeling about this!',
   SEE,
   () => drawTriEye(),
@@ -389,7 +390,8 @@ const day9Events = [
   () => delay(1000),
   "Well, I've never seen this before.",
   "I wouldn't say it's super cute, but... 😶",
-  "Beauty is in the eye of the beholder 👁️! Or, in the 'eyes', if you will... 👁️👁️👁️!",
+  'Beauty is in the eye of the beholder 👁️!',
+  "Or, in the 'eyes', if you will... 👁️👁️👁️!",
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
@@ -475,6 +477,7 @@ const day13Events = [
   () => makeManyCursors(),
   ...runStandardDay(5, 0),
   () => delay(3000),
+  /* Warping buttons */
   () => {
     Object.entries(eventTypeVerbs).forEach(([key, value]) => {
       eventTypeVerbs[key] = garbleText(value);
@@ -483,11 +486,13 @@ const day13Events = [
   },
   ...runStandardDay(5, 0),
   () => delay(5000),
+  /* Garble text */
   () => {
     Object.entries(eventTypeVerbs).forEach(([key, value]) => {
       eventTypeVerbs[key] = garbleText(value);
     });
   },
+  /* Flip */
   () => toggleClass('flip', document.body),
   ...runStandardDay(5, 0),
 ];
@@ -1005,7 +1010,10 @@ function duplicateCursors() {
   pic.src = './c.png';
   pic.style.position = 'absolute';
   pic.style.width = '11px';
-  bod.append(pic);
+  pic.classList.add(
+    'duplicate'
+  ); /* Might not be needed; only used for removing element later */
+  document.querySelector('main').append(pic);
 
   const margin = 13;
   let directionX = 1; // 1 means right, -1 means left
@@ -1086,6 +1094,10 @@ function makeManyCursors() {
   for (let i = 0; i < 50; i++) {
     duplicateCursors();
   }
+}
+
+function removeAllCursors() {
+  document.querySelectorAll('.duplicate').forEach((cursor) => cursor.remove());
 }
 /******************
  /\ /\| |_(_) |___ 
