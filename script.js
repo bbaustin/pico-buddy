@@ -34,7 +34,7 @@ const buttonHolder = document.getElementById('bh');
  * clean: string,
  * play: string}} verbs
  */
-function setButtons(verbs, optionalClickEvent) {
+function setButtons(verbs, optionalClickEvent, isDisabled) {
   buttonHolder.innerHTML = '';
   Object.values(verbs).forEach((verb) => {
     const button = document.createElement('button');
@@ -45,6 +45,7 @@ function setButtons(verbs, optionalClickEvent) {
       }
     });
     button.classList.add('b');
+    button.disabled = isDisabled;
     buttonHolder.appendChild(button);
     const p = document.createElement('p');
     p.textContent = verb;
@@ -54,6 +55,7 @@ function setButtons(verbs, optionalClickEvent) {
 setButtons(eventTypeVerbs);
 
 const labels = document.querySelectorAll('.b p');
+console.log(labels);
 
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
@@ -89,7 +91,7 @@ const eggBaby = [
  * drawPixels([...adjustGridSizeTo64(eyeGuy)]);
  */
 function drawEyeGuy() {
-  drawPixels([...adjustGridSizeTo64(eyeGuy, 16, 32, 0)]);
+  drawPixels([...adjustGridSizeTo64(eyeGuy, 16, 22, 0)]);
 }
 const eyeGuy = [
   5, 6, 7, 8, 9, 10, 11, 12, 20, 21, 29, 30, 38, 39, 40, 41, 42, 51, 52, 53, 58,
@@ -194,7 +196,7 @@ const textBox = document.querySelector('#t');
 // Emojis
 const BUD_EMOJIS = ['💗', '💞', '💓', '💖', '😊', '😍', '🤩', '👾'];
 const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
-const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
+const EYE_EMOJIS = ['👁️', '👁️‍🗨️', '👀'];
 const BUTTON_EMOJI = '🟣 🟣 🟣 🟣 ';
 
 // Names
@@ -276,20 +278,20 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day14Events = [
-  // `Congratulations on your new ${PICOBUDDY()} !`,
-  // SEE,
-  () => drawEggBaby(),
-  // `Oh! It's an ${EGGBABY()} !`,
-  // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
-  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, give it a bath 🛁, or play with it 🧸 !`,
-  // `${BUTTON_INSTRUCTIONS}`,
-  // `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
-  // `${NOT_OMINOUS}`,
-  // `${getRandom(REASSURING_PHRASES)}`,
-  // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
-  // `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
-  ...runStandardDay(),
+const day1Events = [
+  `Congratulations on your new ${PICOBUDDY()} !`,
+  SEE,
+  () => drawTriEye(),
+  `Oh! It's an ${EGGBABY()} !`,
+  "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
+  `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, give it a bath 🛁, or play with it 🧸 !`,
+  `${BUTTON_INSTRUCTIONS}`,
+  `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
+  `${NOT_OMINOUS}`,
+  `${getRandom(REASSURING_PHRASES)}`,
+  `Oh! Looks like your ${PICOBUDDY()} needs something!`,
+  `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
+  ...runStandardDay(3, 1000),
 ];
 
 const day2Events = [
@@ -302,7 +304,7 @@ const day2Events = [
   () => delay(750),
   `Oh! I think your ${PICOBUDDY()} might be hungry! 🍇🍉🥝`,
   CHECK_LIST,
-  ...runStandardDay(),
+  ...runStandardDay(4, 500),
 ];
 
 const day3Events = [
@@ -315,9 +317,9 @@ const day3Events = [
 const day4Events = [
   'So, actually, before we start today, I have something exciting to share!',
   `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
-  "I can't wait to see what it will turn into! 🦋",
+  "I can't wait to see what it will turn into 🦋 !",
   CHECK_LIST,
-  ...runStandardDay(10, 1000),
+  ...runStandardDay(10, 500),
 ];
 
 const day5Events = [
@@ -335,7 +337,7 @@ const day5Events = [
   () => toggleClass('flip', document.body),
   'Huh, did something just change on your end?',
   CHECK_LIST,
-  ...runStandardDay(5, 1000),
+  ...runStandardDay(7, 777),
 ];
 
 const japaneseVocab = ['食べる', '飲む', 'お風呂', '遊ぶ'];
@@ -361,6 +363,7 @@ const day7Events = [
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
   "I hate to say it, but today, something's wrong with your mouse 🖱️...",
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
+  "Hint: if you find this totally difficult and un-fun 😣, you should be able to use your 'tab' key 🧠 !",
   () => setCursor(false),
   'Well, anyway, good luck!',
   CHECK_LIST,
@@ -391,10 +394,11 @@ const day9Events = [
   "Oh! It's an...",
   'Um...',
   () => delay(1000),
-  "Well, I've never seen this before.",
+  'Well...',
   "I wouldn't say it's super cute, but... 😶",
   'Beauty is in the eye of the beholder 👁️!',
   "Or, in the 'eyes', if you will... 👁️👁️👁️!",
+  // NOTE: This stopped working randomly, but seems to be OK now. Keep an eye on it, not joking
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
@@ -450,14 +454,17 @@ const day11Events = [
 ];
 
 const day12Events = [
+  () => setButtons(eventTypeVerbs),
   garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
-  garbleText('The button issue is finally resolved, I think 🙌!'),
+  garbleText(
+    'All the problems with the buttons are finally resolved, I think 🙌!'
+  ),
   garbleText(
     `Also, I think your ${PICOBUDDY()} will evolve one last time 🥳!!!`
   ),
   garbleText(`This is its ${FINAL_FORM}!!`), // TODO: Special text?
   garbleText(
-    "The last two evolutions weren't that cute 😒, so I have really high hopes for this last one 😍 !!!"
+    "The last two evolutions weren't that cute 😒, so I have really high hopes for it this time 😍 !!!"
   ),
   garbleText("Alright, let's work hard 💪 play hard ⛹️ until then!"),
   ...runStandardDay(7),
@@ -500,13 +507,16 @@ const day13Events = [
   ...runStandardDay(5, 0),
 ];
 
-const day1Events = [
-  // 'Wow!! You made it all the way to the end 🥳!',
-  // `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
-  // 'I hope you had fun 🦄!',
-  // `Well, anyway, I guess your ${PICOBUDDY()} no longer requires your servitude!`,
-  // `It's all grown-up and totally ready to help bring about ${UNBECOMING} !!`,
-  // "So, let's calculate 🧮 how well you did!",
+const day14Events = [
+  () => toggleClass('flip', document.body),
+  () => removeAllCursors(),
+  () => setButtons(eventTypeVerbs, null, true),
+  'Wow!! You made it all the way to the end 🥳!',
+  `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
+  'I hope you had fun 🦄!',
+  `Well, anyway, I guess your ${PICOBUDDY()} no longer requires your servitude!`,
+  `It's all grown-up and totally ready to help bring about ${UNBECOMING} !!`,
+  "So, let's calculate 🧮 how well you did!",
   `In the end, your ${PICOBUDDY()} had a happiness level of ${
     ((happiness + 45) / 90) * 100
   }% !`,
@@ -535,7 +545,7 @@ function runStandardDay(
 const calendar = new Map([
   // [0, { events: [], expectedEvents: 0 }],
   [1, { events: day1Events, expectedEvents: 3 }],
-  [2, { events: day2Events, expectedEvents: 3 }],
+  [2, { events: day2Events, expectedEvents: 4 }],
   [3, { events: day3Events, expectedEvents: 5 }],
   [4, { events: day4Events, expectedEvents: 10 }],
   [5, { events: day5Events, expectedEvents: 5 }],
@@ -543,7 +553,7 @@ const calendar = new Map([
   [7, { events: day7Events, expectedEvents: 10 }],
   [8, { events: day8Events, expectedEvents: 10 }],
   [9, { events: day9Events, expectedEvents: 8 }],
-  [10, { events: day10Events, expectedEvents: 7 }],
+  [10, { events: day10Events, expectedEvents: 10 }],
   [11, { events: day11Events, expectedEvents: 7 }],
   [12, { events: day12Events, expectedEvents: 7 }],
   [13, { events: day13Events, expectedEvents: 20 }],
