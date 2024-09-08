@@ -4,6 +4,7 @@
 | (_| | | (_) | |_) | (_| | |
  \__, |_|\___/|_.__/ \__,_|_|
  |___/                       
+ global
 *******************************/
 
 /**
@@ -58,6 +59,7 @@ const labels = document.querySelectorAll('.b p');
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
 | |_) | |_| | (_| | (_| | |  __/\__ \
 |_.__/ \__,_|\__,_|\__,_|_|\___||___/
+buddies
 *************************************/
 
 /** The screen where buddies are shown */
@@ -182,6 +184,7 @@ function adjustGridSizeTo64(
 \ \/  \/ / _ \| '__/ _` / __|
  \  /\  / (_) | | | (_| \__ \
   \/  \/ \___/|_|  \__,_|___/
+words
 ******************************/
 
 const textBox = document.querySelector('#t');
@@ -191,6 +194,7 @@ const textBox = document.querySelector('#t');
 const BUD_EMOJIS = ['💗', '💞', '💓', '💖', '😊', '😍', '🤩', '👾'];
 const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
 const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
+const BUTTON_EMOJI = '🟣 🟣 🟣 🟣 ';
 
 // Names
 const PICOBUDDY = () => {
@@ -208,7 +212,8 @@ const EYEGUY = () => {
 const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
-const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
+const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
+
 // const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
 // const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
@@ -280,10 +285,11 @@ const REASSURING_PHRASES = [
 \__ \ (__| |  | | |_) | |_ 
 |___/\___|_|  |_| .__/ \__|
                 |_|        
+                script
 **************************/
 /* Script */
 
-const day11Events = [
+const day12Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -393,7 +399,7 @@ const day9Events = [
   () => delay(1000),
   "Well, I've never seen this before.",
   "I wouldn't say it's super cute, but... 😶",
-  "Beauty is in the eye of the beholder 👁️! Or, in the 'eyes', if you will.. 👁️👁️👁️!",
+  "Beauty is in the eye of the beholder 👁️! Or, in the 'eyes', if you will... 👁️👁️👁️!",
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
@@ -412,17 +418,24 @@ const day10Events = [
       toggleClass('invisible', label);
     });
   },
+  /* Add random move on button click */
   () => {
     setButtons(eventTypeVerbs, moveToRandomLocation);
   },
-  'Hey, we got the labels working again on the buttons.',
-  "I'm not totally convinced that the buttons are working perfectly, though.",
-  "Well, let's see...",
+  `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
+  "I'm not totally convinced that the buttons are working perfectly, though 😖 😖 😖 😖!",
+  'As one thing is fixed 🥳, another thing breaks 🤕!',
+  `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥!`,
+  'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨!',
+  "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
+  'Together, we can do anything 💪 But also nothing 🤔',
+  "But yeah, anyway 😀! Let's keep going!",
   CHECK_LIST,
   ...runStandardDay(7, 1500),
 ];
 
-const day1Events = [
+// Add better script here
+const day11Events = [
   () => {
     document
       .querySelectorAll('.b')
@@ -435,22 +448,43 @@ const day1Events = [
       feed: 'feed',
       clean: 'clean',
     }),
-  "Hey, I don't have too much time to talk today.",
-  `Your ${PICOBUDDY()} is really causing some problems with the buttons on its device.`,
+  'Hey there!',
+  `Your ${PICOBUDDY()} is really causing some problems with its device's buttons ${BUTTON_EMOJI}!`,
+  'But the problem is allllmoooooossssst fixed!',
+  "Alright, let's have an awesome day 🌈 ! What do you say? 😊",
   CHECK_LIST,
   ...runStandardDay(7),
 ];
 
-const day12Events = runStandardDay(0);
+// All eye emojis for labels and text?
+const day1Events = [
+  garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
+  garbleText('The button issue is finally resolved, I think 🙌!'),
+  garbleText(
+    `Also, I think your ${PICOBUDDY()} will evolve one last time 🥳!!!`
+  ),
+  garbleText('This is its final form!!'), // TODO: Special text?
+  garbleText(
+    "The last two evolutions weren't that cute 😒, so I have really high hopes for this last one 😍 !!!"
+  ),
+  garbleText("Alright, let's work hard 💪 play hard ⛹️ until then!"),
+  ...runStandardDay(7),
+];
 
 const day13Events = [
-  EVOLVING,
-  'This is its final form!',
+  'OK, this is the 13th day!!!',
+  `Your ${PICOBUDDY()} is going to evolve into its final form!`,
   SEE,
   () => drawFinalForm(),
-  "Oh! That's a lotta eyes!",
-  'OK, this is the last day. Ready??',
+  'Wow!!!',
+  'I recognize this 👀! This is super exciting!!!',
+  `This is the harbinger of ${UNBECOMING}!`,
+  'I think this is ⭐️literally⭐️ the last day!',
+  'Everything we worked for leads up to this!',
+  `So let's have fun with our ${PICOBUDDY()} one more time 😄`,
+  CHECK_LIST,
   ...runStandardDay(13, 0),
+  // TODO: Run events with a mix of stuf from pervious chaos days
   // End
   'OK, finished!',
   `Hmm... From now on... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
@@ -503,6 +537,7 @@ handleScriptEventsSequentially([]);
  / _ \ \ / / _ \ '_ \| __/ __|
 |  __/\ V /  __/ | | | |_\__ \
  \___| \_/ \___|_| |_|\__|___/
+events
 *************************************/
 
 /* Start of Game */
@@ -608,7 +643,7 @@ function createEventLi(eventType, timeAllotted) {
   }
   const listItem = document.createElement('li');
   const timer = createTimer(listItem, timeAllotted);
-  listItem.innerHTML = `${eventType}! - `;
+  listItem.innerHTML = `${shouldGarble(eventType, 0.8)}! - `;
   listItem.dataset.eventType = eventType;
   listItem.append(timer);
   activeEventsHolder.prepend(listItem);
@@ -658,12 +693,14 @@ function giveSomething(something) {
   /* Account for foreign language day*/
   const praisePhrases = DAY !== 6 ? PRAISE_PHRASES : J_PRAISE_PHRASES;
   const slow = DAY !== 6 ? SLOW : J_SLOW;
-  const nowNow = DAY !== 6 ? NOT_NOW : J_NOT_NOW;
+  const notNow = DAY !== 6 ? NOT_NOW : J_NOT_NOW;
+
+  const garbleChance = 0.75;
 
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
     // sound
-    return renderEachLetter(nowNow);
+    return renderEachLetter(shouldGarble(notNow), garbleChance);
   }
 
   /* Grab all the DOM li */
@@ -704,14 +741,21 @@ function giveSomething(something) {
   handleEventCompletion();
 
   /* Update the happiness meter, depending on how many seconds are left in the timer */
+  // TODO: This 9 is kinda arbitrary, since timers might not always be the same. Maybe get rid of this feature
   if (timerRemainder > 9) {
     manageHappines(2);
-    return renderEachLetter(getRandom(praisePhrases));
+    return renderEachLetter(
+      shouldGarble(getRandom(praisePhrases)),
+      garbleChance
+    );
   } else if (timerRemainder > 0) {
     manageHappines(1);
-    return renderEachLetter(getRandom(praisePhrases));
+    return renderEachLetter(
+      shouldGarble(getRandom(praisePhrases)),
+      garbleChance
+    );
   } else {
-    return renderEachLetter(slow);
+    return renderEachLetter(shouldGarble(slow), garbleChance);
   }
 }
 
@@ -837,6 +881,7 @@ function handleHappinessMeterMarker(happiness) {
  / __| '_ \ / _` |/ _ \/ __|
 | (__| | | | (_| | (_) \__ \
  \___|_| |_|\__,_|\___/|___/
+ chaos
  ****************************/
 
 function setCursor(showCursor) {
@@ -857,6 +902,36 @@ function moveToRandomLocation(element) {
   element.style.position = 'absolute';
   element.style.left = `${randomX}px`;
   element.style.top = `${randomY}px`;
+}
+
+/**
+ *
+ * @param {string} text
+ * @param {number} percentage - Percent that text will NOT be garbled. Should be between 0 and 1. Default is .95 (meaning 5% chance to garble), but this value can be overridden.
+ * @returns
+ */
+function garbleText(text, percentage = 0.95) {
+  const percent = clamp(percentage, 0, 1);
+  let newText = '';
+  for (const character of text) {
+    if (character === ' ') {
+      newText += ' ';
+    } else if (Math.random() > percent) {
+      newText += '👁️';
+    } else {
+      newText += character;
+    }
+  }
+  return newText;
+}
+
+/**
+ * Checks if it's DAY 12, because on that day, we get text interspersed with eye emojis.
+ * @param {string} text to be rendered
+ * @returns text augmented with eyes if DAY 12, otherwise the original text
+ */
+function shouldGarble(text, optionalPercentOverride) {
+  return DAY === 1 ? garbleText(text, optionalPercentOverride) : text;
 }
 
 function duplicateCursors() {
@@ -940,6 +1015,7 @@ function makeManyCursors() {
 / / \ \ __| | / __|
 \ \_/ / |_| | \__ \
  \___/ \__|_|_|___/
+ utils
 *******************/
 /**
  * Utility function to create a delay.
