@@ -55,7 +55,6 @@ function setButtons(verbs, optionalClickEvent, isDisabled) {
 setButtons(eventTypeVerbs);
 
 const labels = document.querySelectorAll('.b p');
-console.log(labels);
 
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
@@ -281,7 +280,7 @@ const REASSURING_PHRASES = [
 const day1Events = [
   `Congratulations on your new ${PICOBUDDY()} !`,
   SEE,
-  () => drawTriEye(),
+  () => drawEggBaby(),
   `Oh! It's an ${EGGBABY()} !`,
   "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
   `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, give it a bath 🛁, or play with it 🧸 !`,
@@ -295,19 +294,20 @@ const day1Events = [
 ];
 
 const day2Events = [
-  "Good morning! Today's a brand new day! 🎉",
+  () => console.log(happiness),
+  "Good morning! Today's a brand new day 🎉 !",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
   'So enjoy these early days while they last ⏳!',
   `In the end, our memories 📝 are the most precious things we have 🥰 !`,
   `Everything else just slips away like grains of sand ⌛️, as the universe continues its slow, silent drift towards the eternal nothingness of ${UNBECOMING}.`,
-  () => delay(750),
   `Oh! I think your ${PICOBUDDY()} might be hungry! 🍇🍉🥝`,
   CHECK_LIST,
   ...runStandardDay(4, 500),
 ];
 
 const day3Events = [
+  () => console.log(happiness),
   'I think you are getting the hang of this! Today might be a little bit more intense! 🏃‍♀️💨',
   'But you totally got this! I believe in you!',
   CHECK_LIST,
@@ -315,14 +315,17 @@ const day3Events = [
 ];
 
 const day4Events = [
+  () => console.log(happiness),
   'So, actually, before we start today, I have something exciting to share!',
   `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
   "I can't wait to see what it will turn into 🦋 !",
   CHECK_LIST,
-  ...runStandardDay(10, 500),
+  ...runStandardDay(10, 0),
 ];
 
 const day5Events = [
+  () => console.log(happiness),
+  'Hello 👋 ! Today is a very important day...',
   EVOLVING,
   SEE,
   () => drawEyeGuy(),
@@ -343,8 +346,11 @@ const day5Events = [
 const japaneseVocab = ['食べる', '飲む', 'お風呂', '遊ぶ'];
 
 const day6Events = [
+  () => console.log(happiness),
+
   () => toggleClass('flip', document.body), // return to normal.
-  "Yesterday wasn't so bad, right? But glad to have things back to normal.",
+  'Woah! Yesterday was super weird 😱!',
+  "I'm glad things are back to normal!",
   '今日は普通の日なので、よかったですね 😅 ！',
   'さ、🥰ピコバディ🥰 は今日は何が欲しいかな。。？',
   'じゃ、始めようか！！',
@@ -359,6 +365,8 @@ const day6Events = [
 ];
 
 const day7Events = [
+  () => console.log(happiness),
+
   () => setButtons(eventTypeVerbs),
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
   "I hate to say it, but today, something's wrong with your mouse 🖱️...",
@@ -371,6 +379,8 @@ const day7Events = [
 ];
 
 const day8Events = [
+  () => console.log(happiness),
+
   () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
@@ -383,6 +393,8 @@ const day8Events = [
 
 /**  */
 const day9Events = [
+  () => console.log(happiness),
+
   () => removeAllCursors(),
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
@@ -398,7 +410,7 @@ const day9Events = [
   "I wouldn't say it's super cute, but... 😶",
   'Beauty is in the eye of the beholder 👁️!',
   "Or, in the 'eyes', if you will... 👁️👁️👁️!",
-  // NOTE: This stopped working randomly, but seems to be OK now. Keep an eye on it, not joking
+  // TODO: This does not work!!! and also was a little boring?
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
@@ -409,8 +421,9 @@ const day9Events = [
   ...runStandardDay(8, 1000),
 ];
 
-// TODO: Glitch text
 const day10Events = [
+  () => console.log(happiness),
+
   /* Reset back to normal */
   () => {
     labels.forEach((label) => {
@@ -433,6 +446,8 @@ const day10Events = [
 ];
 
 const day11Events = [
+  () => console.log(happiness),
+
   () => {
     document
       .querySelectorAll('.b')
@@ -454,6 +469,8 @@ const day11Events = [
 ];
 
 const day12Events = [
+  () => console.log(happiness),
+
   () => setButtons(eventTypeVerbs),
   garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
   garbleText(
@@ -471,6 +488,8 @@ const day12Events = [
 ];
 
 const day13Events = [
+  () => console.log(happiness),
+
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
   SEE,
@@ -582,6 +601,7 @@ modalButton.addEventListener('click', () => {
 const dayButton = document.getElementById('day');
 dayButton.addEventListener('click', () => {
   advanceDay();
+  dayButton.classList.remove('loud-button');
   dayButton.disabled = true;
   handleScriptEventsSequentially(calendar.get(DAY).events);
 });
@@ -597,6 +617,7 @@ async function allowForAdvanceDay() {
       "Whew 😮‍💨! What a day 🤗! OK, let's wrap things up and see how you did!!"
     );
   }
+  dayButton.classList.add('loud-button');
   dayButton.disabled = false;
 }
 
@@ -738,8 +759,7 @@ function giveSomething(something) {
 
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
-    // sound
-    manageHappiness(-0.5);
+    manageHappiness(-0.5, false);
     return renderEachLetter(shouldGarble(notNow), garbleChance);
   }
 

@@ -224,6 +224,33 @@ button {
   margin-bottom: 10px;
 }
 
+#day {
+  padding: 8px;
+  background: var(--w);
+  border: var(--1psb);
+}
+
+#day:disabled {
+  border: 1px solid darkgrey;
+}
+
+.loud-button {
+  animation: loud 2s infinite;
+}
+
+@keyframes loud {
+  0% {
+    background: var(--w);
+  }
+  50% {
+    background: var(--mi);
+  }
+
+  100% {
+    background: var(--w);
+  }
+}
+
 #hm {
   width: 30px;
   flex-grow: 1;
