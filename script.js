@@ -216,9 +216,7 @@ const FINAL_FORM = 'final form';
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
 
-const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
-  BUD_EMOJIS
-)} !`;
+const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now!!`;
 const J_NOT_NOW = 'ちょっと違うね。。！ 😅';
 const PRAISE_PHRASES = [
   'Good job!',
@@ -275,7 +273,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day13Events = [
+const day10Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -291,7 +289,7 @@ const day13Events = [
   ...runStandardDay(),
 ];
 
-const day2Events = [
+const day9Events = [
   "Good morning! Today's a brand new day! 🎉",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
@@ -360,27 +358,30 @@ const day7Events = [
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
   "I hate to say it, but today, something's wrong with your mouse 🖱️...",
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
-  // TODO:--> you need to toggle class here, right?
+  () => setCursor(false),
   'Well, anyway, good luck!',
   CHECK_LIST,
   ...runStandardDay(10),
 ];
 
 const day8Events = [
+  () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
   `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
-  () => makeManyCursors(), // TODO: You probably have to remove these cursors, right?
+  'Anyway, since the cursor problem is figured out, today should be a bit easier 😁 !',
+  () => makeManyCursors(),
   ...runStandardDay(10),
 ];
 
 /**  */
-const day9Events = [
+const day2Events = [
+  () => removeAllCursors(),
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
   'But, good news: today it is going to evolve!!',
-  'Think of all the possibilities of life! 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍',
+  'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
   'I have a really good feeling about this!',
   SEE,
   () => drawTriEye(),
@@ -389,7 +390,8 @@ const day9Events = [
   () => delay(1000),
   "Well, I've never seen this before.",
   "I wouldn't say it's super cute, but... 😶",
-  "Beauty is in the eye of the beholder 👁️! Or, in the 'eyes', if you will... 👁️👁️👁️!",
+  'Beauty is in the eye of the beholder 👁️!',
+  "Or, in the 'eyes', if you will... 👁️👁️👁️!",
   () => {
     labels.forEach((label) => {
       toggleClass('invisible', label);
@@ -401,7 +403,7 @@ const day9Events = [
 ];
 
 // TODO: Glitch text
-const day10Events = [
+const day1Events = [
   /* Reset back to normal */
   () => {
     labels.forEach((label) => {
@@ -411,16 +413,16 @@ const day10Events = [
   /* Add random move on button click */
   () => setButtons(eventTypeVerbs, moveToRandomLocation),
   `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
-  "I'm not totally convinced that the buttons are working perfectly, though 😖 😖 😖 😖!",
+  "I'm not sure if the buttons are working 100%, though 😖 😖 😖 😖!",
   'As one thing is fixed 🥳, another thing breaks 🤕!',
   `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥!`,
   'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨!',
-  "Just living your life is a kind of Sisyphean endeavor, isn't it 😩🫸🪨 ?",
+  'Just living your life is a kind of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
   "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
   'Together, we can do anything 💪 But also nothing 🤔',
-  "But yeah, anyway 😀! Let's keep pushing!",
+  "But yeah, anyway 😀! Let's keep pushing 😉!",
   CHECK_LIST,
-  ...runStandardDay(7, 1500),
+  ...runStandardDay(10, 1250),
 ];
 
 const day11Events = [
@@ -458,7 +460,7 @@ const day12Events = [
   ...runStandardDay(7),
 ];
 
-const day14Events = [
+const day13Events = [
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
   SEE,
@@ -475,6 +477,7 @@ const day14Events = [
   () => makeManyCursors(),
   ...runStandardDay(5, 0),
   () => delay(3000),
+  /* Warping buttons */
   () => {
     Object.entries(eventTypeVerbs).forEach(([key, value]) => {
       eventTypeVerbs[key] = garbleText(value);
@@ -483,16 +486,18 @@ const day14Events = [
   },
   ...runStandardDay(5, 0),
   () => delay(5000),
+  /* Garble text */
   () => {
     Object.entries(eventTypeVerbs).forEach(([key, value]) => {
       eventTypeVerbs[key] = garbleText(value);
     });
   },
+  /* Flip */
   () => toggleClass('flip', document.body),
   ...runStandardDay(5, 0),
 ];
 
-const day1Events = [
+const day14Events = [
   // 'Wow!! You made it all the way to the end 🥳!',
   // `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
   // 'I hope you had fun 🦄!',
@@ -686,7 +691,7 @@ function createTimer(listItem, timeAllotted) {
     newTimer.innerHTML = sec;
     /** EVENT FAILED SCENARIO */
     if (sec <= 0) {
-      manageHappines(-1.67, false);
+      manageHappiness(-1.67, false);
       handleEventCompletion();
       listItem.classList.add('e');
       listItem.dataset.expired = 'true';
@@ -721,6 +726,7 @@ function giveSomething(something) {
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
     // sound
+    manageHappiness(-0.5);
     return renderEachLetter(shouldGarble(notNow), garbleChance);
   }
 
@@ -764,13 +770,13 @@ function giveSomething(something) {
   /* Update the happiness meter, depending on how many seconds are left in the timer */
   // TODO: This 9 is kinda arbitrary, since timers might not always be the same. Maybe get rid of this feature
   if (timerRemainder > 9) {
-    manageHappines(2);
+    manageHappiness(2);
     return renderEachLetter(
       shouldGarble(getRandom(praisePhrases)),
       garbleChance
     );
   } else if (timerRemainder > 0) {
-    manageHappines(1);
+    manageHappiness(1);
     return renderEachLetter(
       shouldGarble(getRandom(praisePhrases)),
       garbleChance
@@ -821,7 +827,7 @@ const happinessMeterMarker = document.querySelector('#hmm');
  * Add a percentage to move the happiness meter. Max is 45%, min is -45%.
  * @param {number} happinessAddend - amount to add / subtract to the happiness meter. 3 for super fast, 2 for normal, and 1 for playing. minus is -1.67
  */
-function manageHappines(happinessAddend, isHappy = true) {
+function manageHappiness(happinessAddend, isHappy = true) {
   happiness += happinessAddend;
   happiness = clamp(happiness, -45, 45);
   handleHappinessMeterMarker(happiness);
@@ -944,6 +950,11 @@ function determineHappinessConclusion() {
  chaos
  ****************************/
 
+/**
+ * Pass true to ensure that the cursor is visible, via the '.c'
+ * Otherwise, '.nc' class will make the cursor invisible.
+ * @param {boolean} showCursor
+ */
 function setCursor(showCursor) {
   document.body.classList.remove(showCursor ? 'nc' : 'c');
   document.body.classList.add(showCursor ? 'c' : 'nc');
@@ -957,7 +968,7 @@ function moveToRandomLocation(element) {
   );
   const randomY = getRandomInt(
     margin,
-    window.innerHeight - element.offsetHeight - margin
+    window.innerHeight - element.offsetHeight - 150 // not sure exactly high the button is when label is visible
   );
   element.style.position = 'absolute';
   element.style.left = `${randomX}px`;
@@ -999,7 +1010,10 @@ function duplicateCursors() {
   pic.src = './c.png';
   pic.style.position = 'absolute';
   pic.style.width = '11px';
-  bod.append(pic);
+  pic.classList.add(
+    'duplicate'
+  ); /* Might not be needed; only used for removing element later */
+  document.querySelector('main').append(pic);
 
   const margin = 13;
   let directionX = 1; // 1 means right, -1 means left
@@ -1081,6 +1095,10 @@ function makeManyCursors() {
     duplicateCursors();
   }
 }
+
+function removeAllCursors() {
+  document.querySelectorAll('.duplicate').forEach((cursor) => cursor.remove());
+}
 /******************
  /\ /\| |_(_) |___ 
 / / \ \ __| | / __|
@@ -1109,7 +1127,7 @@ async function renderEachLetter(text) {
   for (const character of text) {
     temp += character;
     newTextContainer.innerHTML = temp;
-    await delay(20);
+    await delay(25);
   }
 }
 
