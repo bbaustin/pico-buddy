@@ -528,7 +528,6 @@ const calendar = new Map([
   [13, { events: day13Events, expectedEvents: 20 }],
 ]);
 
-let PLAY_COUNTER = 0;
 let COMPLETED_EVENT_COUNT = 0;
 
 handleScriptEventsSequentially([]);
@@ -556,21 +555,29 @@ dayButton.addEventListener('click', () => {
 });
 
 async function allowForAdvanceDay() {
-  // End of day text
+  /* Delay for end of day text */
   await delay(1500);
-  renderEachLetter(PROCEED);
-  dayButton.textContent = `Proceed to Day ${DAY + 1}`;
+  if (DAY < 14) {
+    renderEachLetter(PROCEED);
+    dayButton.textContent = `Proceed to Day ${DAY + 1}`;
+  } else {
+    renderEachLetter(
+      "Whew 😮‍💨! What a day 🤗! OK, let's wrap things up and see how you did!!"
+    );
+  }
   dayButton.disabled = false;
 }
 
 function advanceDay() {
   DAY++;
-  dayButton.textContent = `Day ${DAY}`;
-  // renderEachLetter(NEXT_DAY_STARTING);
   delay(1500);
   COMPLETED_EVENT_COUNT = 0;
-  PLAY_COUNTER = 0;
-  activeEventsHolder.textContent = 'None!';
+  if (DAY === 14) {
+    dayButton.textContent = 'Conclusion';
+  } else {
+    dayButton.textContent = `Day ${DAY}`;
+    activeEventsHolder.textContent = 'None!';
+  }
 }
 
 function handleEventCompletion() {
@@ -584,7 +591,7 @@ function handleEventCompletion() {
 const DELAY_BETWEEN_EVENTS = getRandomInt(500, 2000);
 
 /**
- * If nothing is provided, it will delay 3, 4, 5, or 6 seconds. Otherwise, it delays however many ms you provide
+ * If nothing is provided, it will delay between 500 and 2000 milliseconds. Otherwise, it delays however many ms you provide
  * @param {number} overriddenDelay - ms. If provided will delay this much between events
  * @returns delay function
  */
@@ -602,7 +609,6 @@ async function delayBetweenEvents(overriddenDelay) {
 async function askForSomething(eventType, timeAllotted = 13) {
   activeEvents.push(eventType);
   createEventLi(eventType, timeAllotted);
-  // animation
   playAskSound('eggBaby');
 }
 
@@ -964,7 +970,7 @@ function duplicateCursors() {
       posX += directionX * speed;
       posY += directionY * speed;
 
-      // Apply movement to the img element // TODO: This can be a util maybe
+      // Apply movement to the img element
       pic.style.left = `${posX}px`;
       pic.style.top = `${posY}px`;
 
@@ -980,14 +986,25 @@ function duplicateCursors() {
       }
 
       // If it gets close to the edge of the screen, reverse direction
-      const windowWidth = window.innerWidth - pic.width - margin * 2;
-      const windowHeight = window.innerHeight - pic.height - margin * 2;
+      const windowWidth = window.innerWidth - pic.width - margin;
+      const windowHeight = window.innerHeight - pic.height - margin;
 
-      if (posX <= margin || posX >= windowWidth) {
+      // If it gets close to or goes beyond the edge of the screen, reverse direction
+      if (posX < margin) {
+        posX = margin; // Teleport back inside the margin
         directionX *= -1; // Reverse horizontal direction
       }
-      if (posY <= margin || posY >= windowHeight) {
+      if (posX > windowWidth) {
+        posX = windowWidth; // Teleport back inside the window
+        directionX *= -1;
+      }
+      if (posY < margin) {
+        posY = margin; // Teleport back inside the margin
         directionY *= -1; // Reverse vertical direction
+      }
+      if (posY > windowHeight) {
+        posY = windowHeight; // Teleport back inside the window
+        directionY *= -1;
       }
 
       // Occasionally stop to mimic human-like pauses
