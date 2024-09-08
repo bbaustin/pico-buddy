@@ -1,21 +1,65 @@
+/*****************************
+  __ _| | ___ | |__   __ _| |
+ / _` | |/ _ \| '_ \ / _` | |
+| (_| | | (_) | |_) | (_| | |
+ \__, |_|\___/|_.__/ \__,_|_|
+ |___/                       
+ global
+*******************************/
+
 /**
- * Array<'food | 'water' | 'diaper'>
+ * Array<'feed' | 'hydrate' | 'clean' | 'play'>
  */
+let DAY = 1;
+
 const activeEvents = [];
 const activeEventsHolder = document.querySelector('ol');
 
 const eventTypeVerbs = {
-  food: 'feed',
-  water: 'hydrate',
-  diaper: 'clean',
+  feed: 'feed',
+  hydrate: 'hydrate',
+  clean: 'clean',
   play: 'play',
 };
+
+const bod = document.body;
+const buttonHolder = document.getElementById('bh');
+
+/**
+ *
+ * @param {{
+ * feed: string,
+ * hydrate: string,
+ * clean: string,
+ * play: string}} verbs
+ */
+function setButtons(verbs, optionalClickEvent) {
+  buttonHolder.innerHTML = '';
+  Object.values(verbs).forEach((verb) => {
+    const button = document.createElement('button');
+    button.addEventListener('click', () => {
+      giveSomething(verb);
+      if (optionalClickEvent) {
+        optionalClickEvent(button);
+      }
+    });
+    button.classList.add('b');
+    buttonHolder.appendChild(button);
+    const p = document.createElement('p');
+    p.textContent = verb;
+    button.appendChild(p);
+  });
+}
+setButtons(eventTypeVerbs);
+
+const labels = document.querySelectorAll('.b p');
 
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
 | |_) | |_| | (_| | (_| | |  __/\__ \
 |_.__/ \__,_|\__,_|\__,_|_|\___||___/
+buddies
 *************************************/
 
 /** The screen where buddies are shown */
@@ -140,15 +184,17 @@ function adjustGridSizeTo64(
 \ \/  \/ / _ \| '__/ _` / __|
  \  /\  / (_) | | | (_| \__ \
   \/  \/ \___/|_|  \__,_|___/
+words
 ******************************/
 
 const textBox = document.querySelector('#t');
 
 /* Dictionary */
 // Emojis
-const BUD_EMOJIS = ['❤️', '💖', '😊', '😍', '🤩', '👾'];
+const BUD_EMOJIS = ['💗', '💞', '💓', '💖', '😊', '😍', '🤩', '👾'];
 const EGG_EMOJIS = ['🐣', '🥚', '🍳', '🍼', '👶'];
 const EYE_EMOJIS = ['👁️', '🧿', '👁️‍🗨️', '🪬', '👀'];
+const BUTTON_EMOJI = '🟣 🟣 🟣 🟣 ';
 
 // Names
 const PICOBUDDY = () => {
@@ -166,35 +212,42 @@ const EYEGUY = () => {
 const UNBECOMING = 'The Great Unbecoming';
 
 // Game Phrases
-const BUTTON_INSTRUCTIONS = `Use the buttons below the screen 🟣 🟣 🟣 🟣 !`;
-const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
-const PLAY_NOPE = `Your ${PICOBUDDY()} is exhausted! Maybe you can play again tomorrow!`;
-const NOPE = 'It no longer has any use for this.';
-const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though!${BUD_EMOJIS.join(
-  ' '
-)}`;
+const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
+
+const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
+  BUD_EMOJIS
+)} !`;
+const J_NOT_NOW = 'ちょっと違うね。。！ 😅';
 const PRAISE_PHRASES = [
   'Good job!',
   'Nicely done!',
   `Your ${PICOBUDDY()} is pleased!`,
   'Way to go!',
-  'You rule!',
-  'You rock!',
+  'You rule 😎 !',
+  'You rock 🎸 !',
+];
+const J_PRAISE_PHRASES = [
+  'よくやった 👍！',
+  'できた 👏！！',
+  'やったね 🎉！',
+  'すごい 🎸！',
 ];
 const DAY_FINISHED_PHRASES = [
   "OK, I think that's all for today!",
   `OK, time for your ${PICOBUDDY()}'s bedtime!`,
   `OK, time for your ${PICOBUDDY()} to sleep now!`,
 ];
-const PROCEED = `${getRandom(
-  DAY_FINISHED_PHRASES
-)} Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
-const NEXT_DAY_STARTING = 'The next day will begin now.';
-const SLOW = 'You were a little too slow...';
+const J_DAY_FINISHED_PHRASES = 'OK, 終わりました！　おやすみなさい！';
+const PROCEED = `${
+  DAY === 6 ? J_DAY_FINISHED_PHRASES : getRandom(DAY_FINISHED_PHRASES)
+} Click the button to the right of your ${PICOBUDDY()} device to proceed!`;
+const CHECK_LIST = 'Check out the list of current demands!';
+const SLOW = 'You were a little too slow... 🐢';
+const J_SLOW = '遅いな。。。🐢';
 
 // Script Phrases
 const SEE = "Let's see what it looks like...";
-const NOT_OMINOUS = 'I assure you, there is nothing ominous about this 😎 !';
+const NOT_OMINOUS = 'I assure you, this is totally normal and not ominous 😎 !';
 const EVOLVING = "Oh! It's evolving!";
 
 // Script End phrases
@@ -206,38 +259,8 @@ const REASSURING_PHRASES = [
   "Don't worry!",
   "Don't sweat it!",
   "It's totally chill!",
-  "It's supposed to happen this way!",
-];
-
-// TODO: Create an object of phrases for each event type. This is a bit complicated, because it does likely depend on the day etc.
-/**
- * const EVENT_PHRASES = {
- *  wants {
- *    food: '',
- *    water: '',
- *    diaper: '',
- * },
- *  receives {
- *    food: '',
- *    water: '',
- *    diaper: '',
- *    play: ''
- * }
- *
- * }
- */
-const NORMAL_HUNGRY_PHRASES = [
-  `Oh! Your ${PICOBUDDY()} is hungry!`,
-  `You better give your ${PICOBUDDY()} some food!`,
-];
-const DARK_HUNGRY_PHRASES = [
-  `Your ${PICOBUDDY()} must feed!`,
-  `Your ${PICOBUDDY()} must consume!`,
-];
-const TRIEYE_PHRASES = [
-  "It doesn't want anything.",
-  'It waits.',
-  'It watches.',
+  'Nothing to worry about!',
+  'Take a chill pill!',
 ];
 
 /**************************
@@ -246,87 +269,239 @@ const TRIEYE_PHRASES = [
 \__ \ (__| |  | | |_) | |_ 
 |___/\___|_|  |_| .__/ \__|
                 |_|        
+                script
 **************************/
 /* Script */
 
-/** 3 events */
-const day1Events = [
+const day13Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
-  `Oh! It's an ${EGGBABY()} !`,
+  // `Oh! It's an ${EGGBABY()} !`,
   // "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
-  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, change its diaper 🧷, or play with it 🧸 !`,
+  // `When it cries 🥺, you'll have to feed it 🍗, give it water 💦, give it a bath 🛁, or play with it 🧸 !`,
   // `${BUTTON_INSTRUCTIONS}`,
   // `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
   // `${NOT_OMINOUS}`,
   // `${getRandom(REASSURING_PHRASES)}`,
   // `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   // `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
-  () => getRandomEvent(),
-  // () => delay(8000),
-  () => getRandomEvent(),
-  () => delayBetweenEvents(),
-  () => getRandomEvent(),
+  ...runStandardDay(),
 ];
 
-/** 3 events */
-const day2Events = runStandardDay();
-console.log(day2Events);
+const day2Events = [
+  "Good morning! Today's a brand new day! 🎉",
+  `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days. 😌`,
+  'But they usually get a bit more demanding as time goes on. 😅',
+  'So enjoy these early days while they last! ⏳',
+  `In the end, our memories are the only things we have, as the universe continues its slow, silent march towards the eternal nothingness of ${UNBECOMING}.`,
+  `Oh! I think your ${PICOBUDDY()} might be hungry! 🍇🍉🥝`,
+  CHECK_LIST,
+  ...runStandardDay(),
+];
 
-/** 5 events */
-const day3Events = runStandardDay(5, 0);
+const day3Events = [
+  'I think you got the hang of it! Today might be a little bit more intense! 🏃‍♀️💨',
+  'But you totally got this! I believe in you!',
+  CHECK_LIST,
+  ...runStandardDay(5, 0),
+];
 
-/** 10 events */
-const day4Events = runStandardDay(10, 1000);
+const day4Events = [
+  'So, actually, before we start today, I have something exciting to share!',
+  `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
+  "I can't wait to see what it will turn into! 🦋",
+  CHECK_LIST,
+  ...runStandardDay(10, 1000),
+];
 
-/** */
 const day5Events = [
   EVOLVING,
   SEE,
   () => drawEyeGuy(),
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
+  'Well, actually... I have to be totally honest with you...',
+  `I've heard that weird stuff can happen if your ${PICOBUDDY()} evolves into an ${EYEGUY()}... 😬`,
+  "But like, don't sweat it! 😓 ➡️ 🤗 You'll be totally fine!",
+  () => delay(1000),
+  () => toggleClass('flip', document.body),
+  'Huh, did something just change on your end?',
+  CHECK_LIST,
+  ...runStandardDay(5, 1000),
 ];
 
-// TODO: Make interesting
-const day6Events = runStandardDay(3);
-const day7Events = runStandardDay(10);
-const day8Events = runStandardDay(0);
+const japaneseVocab = ['食べる', '飲む', 'お風呂', '遊ぶ'];
+
+const day6Events = [
+  () => toggleClass('flip', document.body), // return to normal.
+  "Yesterday wasn't so bad, right? But glad to have things back to normal.",
+  '今日は普通の日なので、よかったですね 😅 ！',
+  'さ、🥰ピコバディ🥰 は今日は何が欲しいかな。。？',
+  'じゃ、始めようか！！',
+  () =>
+    setButtons({
+      feed: japaneseVocab[0],
+      hydrate: japaneseVocab[1],
+      clean: japaneseVocab[2],
+      play: japaneseVocab[3],
+    }),
+  ...runStandardDay(7, 3500, japaneseVocab),
+];
+
+const day7Events = [
+  () => setButtons(eventTypeVerbs),
+  `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
+  "I hate to say it, but today, something's wrong with your mouse 🖱️...",
+  `I think your ${EYEGUY()} deleted the cursor png or something...`,
+  // todo--> you need to toggle class here, right?
+  'Well, anyway, good luck!',
+  CHECK_LIST,
+  ...runStandardDay(10),
+];
+
+const day8Events = [
+  'OK, sorry about yesterday 🤕.',
+  'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
+  `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
+  'Just keep up the good work and it might evolve into something cute 😘 !',
+  () => makeManyCursors(), // TODO: You probably have to remove these cursors, right? Also, still going OOB
+  ...runStandardDay(10),
+];
 
 /**  */
 const day9Events = [
-  EVOLVING,
+  'Super sorry about all the technical issues recently!',
+  `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
+  'But, good news: today it is going to evolve!!',
+  'Think of all the possibilities of life! 🧬 🐟 🦕 🐊 🐿️ 🦍 🧍',
+  'I have a really good feeling about this!',
   SEE,
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
-  "It's got more eyes!",
+  () => delay(1000),
+  "Well, I've never seen this before.",
+  "I wouldn't say it's super cute, but... 😶",
+  "Beauty is in the eye of the beholder 👁️! Or, in the 'eyes', if you will... 👁️👁️👁️!",
+  () => {
+    labels.forEach((label) => {
+      toggleClass('invisible', label);
+    });
+  },
+  `Hmm, it looks like the labeling systems for your ${PICOBUDDY()} device's buttons suddenly stopped working.`,
+  'Sorry... Good luck with today!',
+  ...runStandardDay(8, 1000),
 ];
 
-// TODO: Make interesting
-const day10Events = runStandardDay(2);
-const day11Events = runStandardDay(1);
-const day12Events = runStandardDay(0);
+// TODO: Glitch text
+const day10Events = [
+  /* Reset back to normal */
+  () => {
+    labels.forEach((label) => {
+      toggleClass('invisible', label);
+    });
+  },
+  /* Add random move on button click */
+  () => setButtons(eventTypeVerbs, moveToRandomLocation),
+  `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
+  "I'm not totally convinced that the buttons are working perfectly, though 😖 😖 😖 😖!",
+  'As one thing is fixed 🥳, another thing breaks 🤕!',
+  `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥!`,
+  'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨!',
+  "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
+  'Together, we can do anything 💪 But also nothing 🤔',
+  "But yeah, anyway 😀! Let's keep going!",
+  CHECK_LIST,
+  ...runStandardDay(7, 1500),
+];
 
-/** 0 events */
-const day13Events = [
-  EVOLVING,
-  'This is its final form!',
+// Add better script here
+const day11Events = [
+  () => {
+    document
+      .querySelectorAll('.b')
+      .forEach((button) => (button.style.position = 'initial'));
+  },
+  () =>
+    setButtons({
+      hydrate: 'hydrate',
+      play: 'play',
+      feed: 'feed',
+      clean: 'clean',
+    }),
+  'Hey there!',
+  `Your ${PICOBUDDY()} is really causing some problems with its device's buttons ${BUTTON_EMOJI}!`,
+  'But the problem is allllmoooooossssst fixed!',
+  "Alright, let's have an awesome day 🌈 ! What do you say? 😊",
+  CHECK_LIST,
+  ...runStandardDay(7),
+];
+
+const day12Events = [
+  garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
+  garbleText('The button issue is finally resolved, I think 🙌!'),
+  garbleText(
+    `Also, I think your ${PICOBUDDY()} will evolve one last time 🥳!!!`
+  ),
+  garbleText('This is its final form!!'), // TODO: Special text?
+  garbleText(
+    "The last two evolutions weren't that cute 😒, so I have really high hopes for this last one 😍 !!!"
+  ),
+  garbleText("Alright, let's work hard 💪 play hard ⛹️ until then!"),
+  ...runStandardDay(7),
+];
+
+const day1Events = [
+  'OK, this is the 13th day!!!',
+  `Your ${PICOBUDDY()} is going to evolve into its final form!`,
   SEE,
   () => drawFinalForm(),
-  "Oh! That's a lotta eyes!",
-  // End
-  `Hmm... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
+  'Wow!!!',
+  'I recognize this 👀! This is super exciting!!!',
+  `This is the harbinger of ${UNBECOMING}!`,
+  'I think this is ⭐️literally⭐️ the last day!',
+  'Everything we worked for leads up to this!',
+  `So let's have fun with our ${PICOBUDDY()} one last time 😄!`,
+  CHECK_LIST,
+  ...runStandardDay(5, 0),
+  () => delay(3000),
+  () => makeManyCursors(),
+  ...runStandardDay(5, 0),
+  () => delay(3000),
+  () => {
+    Object.entries(eventTypeVerbs).forEach(([key, value]) => {
+      eventTypeVerbs[key] = garbleText(value);
+    });
+    setButtons(eventTypeVerbs, moveToRandomLocation);
+  },
+  ...runStandardDay(5, 0),
+  () => delay(5000),
+  () => {
+    Object.entries(eventTypeVerbs).forEach(([key, value]) => {
+      eventTypeVerbs[key] = garbleText(value);
+    });
+  },
+  () => toggleClass('flip', document.body),
+  ...runStandardDay(5, 0),
+
+  /// TODO: need to add this conclusion section differently? Like... Proceed to conclusion button or something
+  'OK! Finished!',
+  // Line based on happiness
+  `Hmm... From now on... I guess your ${PICOBUDDY()} no longer requires your servitude!`,
 
   // TODO: Determine ending based on happiness
 ];
 
-function runStandardDay(numberOfEvents = 3, overriddenDelay) {
+function runStandardDay(
+  numberOfEvents = 3,
+  overriddenDelay,
+  overriddenEventTypes
+) {
   const events = [];
 
   for (let i = 0; i < numberOfEvents; i++) {
-    events.push(() => getRandomEvent());
+    events.push(() => getRandomEvent(overriddenEventTypes));
     events.push(() => delayBetweenEvents(overriddenDelay));
   }
 
@@ -337,33 +512,42 @@ function runStandardDay(numberOfEvents = 3, overriddenDelay) {
 }
 
 const calendar = new Map([
+  // [0, { events: [], expectedEvents: 0 }],
   [1, { events: day1Events, expectedEvents: 3 }],
   [2, { events: day2Events, expectedEvents: 3 }],
   [3, { events: day3Events, expectedEvents: 5 }],
   [4, { events: day4Events, expectedEvents: 10 }],
-  [5, { events: day5Events, expectedEvents: 3 }],
-  [6, { events: day6Events, expectedEvents: 3 }],
+  [5, { events: day5Events, expectedEvents: 5 }],
+  [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
-  [8, { events: day8Events, expectedEvents: 0 }],
-  [9, { events: day9Events, expectedEvents: 3 }],
-  [10, { events: day10Events, expectedEvents: 2 }],
-  [11, { events: day11Events, expectedEvents: 1 }],
-  [12, { events: day12Events, expectedEvents: 0 }],
-  [13, { events: day13Events, expectedEvents: 0 }],
+  [8, { events: day8Events, expectedEvents: 10 }],
+  [9, { events: day9Events, expectedEvents: 8 }],
+  [10, { events: day10Events, expectedEvents: 7 }],
+  [11, { events: day11Events, expectedEvents: 7 }],
+  [12, { events: day12Events, expectedEvents: 7 }],
+  [13, { events: day13Events, expectedEvents: 20 }],
 ]);
 
-let DAY = 1;
 let PLAY_COUNTER = 0;
 let COMPLETED_EVENT_COUNT = 0;
 
-handleScriptEventsSequentially(day1Events);
+handleScriptEventsSequentially([]);
 
 /*************************************
   _____   _____ _ __ | |_ ___ 
  / _ \ \ / / _ \ '_ \| __/ __|
 |  __/\ V /  __/ | | | |_\__ \
  \___| \_/ \___|_| |_|\__|___/
+events
 *************************************/
+
+/* Start of Game */
+const modalButton = document.getElementById('mb');
+modalButton.addEventListener('click', () => {
+  document.getElementById('modal').remove();
+  handleScriptEventsSequentially(day1Events);
+});
+
 const dayButton = document.getElementById('day');
 dayButton.addEventListener('click', () => {
   advanceDay();
@@ -373,19 +557,17 @@ dayButton.addEventListener('click', () => {
 
 async function allowForAdvanceDay() {
   // End of day text
-  await delay(500);
+  await delay(1500);
   renderEachLetter(PROCEED);
   dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   dayButton.disabled = false;
 }
 
 function advanceDay() {
-  // WHERE YOU AT: Soemthing weird happening here. When you press the button, DAY is advancing by 2
-  console.log('advance day hit' + ' ' + DAY);
   DAY++;
-  console.log(DAY);
   dayButton.textContent = `Day ${DAY}`;
-  renderEachLetter(NEXT_DAY_STARTING);
+  // renderEachLetter(NEXT_DAY_STARTING);
+  delay(1500);
   COMPLETED_EVENT_COUNT = 0;
   PLAY_COUNTER = 0;
   activeEventsHolder.textContent = 'None!';
@@ -415,7 +597,7 @@ async function delayBetweenEvents(overriddenDelay) {
 
 /**
  *
- * @param {'food' | 'water' | 'diaper'} event type
+ * @param {'feed' | 'hydrate' | 'clean' | 'play'} event type
  */
 async function askForSomething(eventType, timeAllotted = 13) {
   activeEvents.push(eventType);
@@ -462,7 +644,7 @@ function createEventLi(eventType, timeAllotted) {
   }
   const listItem = document.createElement('li');
   const timer = createTimer(listItem, timeAllotted);
-  listItem.innerHTML = `${eventTypeVerbs[eventType]}! - `;
+  listItem.innerHTML = `${shouldGarble(eventType, 0.8)}! - `;
   listItem.dataset.eventType = eventType;
   listItem.append(timer);
   activeEventsHolder.prepend(listItem);
@@ -484,7 +666,7 @@ function createTimer(listItem, timeAllotted) {
     newTimer.innerHTML = sec;
     /** EVENT FAILED SCENARIO */
     if (sec <= 0) {
-      manageHappines(-1.67);
+      manageHappines(-1.67, false);
       handleEventCompletion();
       listItem.classList.add('e');
       listItem.dataset.expired = 'true';
@@ -500,50 +682,26 @@ function createTimer(listItem, timeAllotted) {
   return newTimer;
 }
 
-const buttons = document.getElementsByClassName('b');
-buttons[0].addEventListener('click', () => {
-  giveSomething('food');
-});
-buttons[1].addEventListener('click', () => {
-  giveSomething('water');
-});
-buttons[2].addEventListener('click', () => {
-  giveSomething('diaper');
-});
-buttons[3].addEventListener('click', () => {
-  giveSomething('play');
-});
-
 /**
  *
- * @param {'food' | 'water' | 'diaper' | 'play'} something
+ * @param {'feed' | 'hydrate' | 'clean' | 'play'} something
  */
 function giveSomething(something) {
-  /* Handle PLAY, which is never requested */
-  if (something === 'play') {
-    if (DAY < 4) {
-      if (PLAY_COUNTER < 5) {
-        PLAY_COUNTER++;
-        manageHappines(1);
-        toggleGivenAnimation();
-        // animation
-        // sound
-        return renderEachLetter(PLAY);
-      } else {
-        return renderEachLetter(PLAY_NOPE);
-      }
-    } else {
-      return renderEachLetter(NOPE);
-    }
-  }
   /* Look in the JS array of active events for the first instance of whatever button you clicked */
   const firstIndexOfGivenEvent = activeEvents.indexOf(something);
   const hasGivenEvent = firstIndexOfGivenEvent !== -1;
 
+  /* Account for foreign language day*/
+  const praisePhrases = DAY !== 6 ? PRAISE_PHRASES : J_PRAISE_PHRASES;
+  const slow = DAY !== 6 ? SLOW : J_SLOW;
+  const notNow = DAY !== 6 ? NOT_NOW : J_NOT_NOW;
+
+  const garbleChance = 0.75;
+
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
     // sound
-    return renderEachLetter(NOT_NOW);
+    return renderEachLetter(shouldGarble(notNow), garbleChance);
   }
 
   /* Grab all the DOM li */
@@ -561,7 +719,6 @@ function giveSomething(something) {
 
   /* It should totally exist */
   if (!oldestMatchingEvent) {
-    console.log('wtf');
     return;
   }
 
@@ -585,14 +742,21 @@ function giveSomething(something) {
   handleEventCompletion();
 
   /* Update the happiness meter, depending on how many seconds are left in the timer */
+  // TODO: This 9 is kinda arbitrary, since timers might not always be the same. Maybe get rid of this feature
   if (timerRemainder > 9) {
     manageHappines(2);
-    return renderEachLetter(getRandom(PRAISE_PHRASES));
+    return renderEachLetter(
+      shouldGarble(getRandom(praisePhrases)),
+      garbleChance
+    );
   } else if (timerRemainder > 0) {
     manageHappines(1);
-    return renderEachLetter(getRandom(PRAISE_PHRASES));
+    return renderEachLetter(
+      shouldGarble(getRandom(praisePhrases)),
+      garbleChance
+    );
   } else {
-    return renderEachLetter(SLOW);
+    return renderEachLetter(shouldGarble(slow), garbleChance);
   }
 }
 
@@ -613,13 +777,19 @@ function toggleGivenAnimation() {
   }, 1250);
 }
 
-// TODO: Could make this a util, to get any non-matching random stuff (like phrases)
-function getRandomEvent() {
+/** used in getRandomEvent */
+let lastEvent = '';
+
+/**
+ *
+ * @param {Array<string>} customEventTypes - array of events that must match the event listener of the picobuddy device buttons
+ * @returns
+ */
+function getRandomEvent(customEventTypes) {
   let newEvent;
-  let lastEvent = '';
-  const eventTypes = ['food', 'water', 'diaper'];
+  const eventTypes = customEventTypes || ['feed', 'hydrate', 'clean', 'play'];
+
   do {
-    // TODO: Every evolution, pop an event type.
     newEvent = getRandom(eventTypes);
   } while (newEvent === lastEvent);
   lastEvent = newEvent;
@@ -630,40 +800,67 @@ const happinessMeterMarker = document.querySelector('#hmm');
 let happiness = 0;
 /**
  * Add a percentage to move the happiness meter. Max is 45%, min is -45%.
- * // TODO: Smooth move with
  * @param {number} happinessAddend - amount to add / subtract to the happiness meter. 3 for super fast, 2 for normal, and 1 for playing. minus is -1.67
  */
-function manageHappines(happinessAddend) {
+function manageHappines(happinessAddend, isHappy = true) {
   happiness += happinessAddend;
   happiness = clamp(happiness, -45, 45);
   handleHappinessMeterMarker(happiness);
   happinessMeterMarker.style.bottom = `${happiness}%`;
-  toggleGivenAnimation();
-  zzfx(
-    ...[
-      5,
-      0.8,
-      422,
-      0.02,
-      0.02,
-      0.19,
-      ,
-      1.2,
-      ,
-      51,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      0.64,
-      0.03,
-      ,
-      975,
-    ]
-  ); // Jump 284
+  if (isHappy) {
+    toggleGivenAnimation();
+    zzfx(
+      ...[
+        5,
+        0.8,
+        422,
+        0.02,
+        0.02,
+        0.19,
+        ,
+        1.2,
+        ,
+        51,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        0.64,
+        0.03,
+        ,
+        975,
+      ]
+    ); // Jump 284
+  } else {
+    zzfx(
+      ...[
+        0.6,
+        0.2,
+        75,
+        0.01,
+        0.13,
+        0.06,
+        2,
+        1.6,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
+        0.96,
+        0.01,
+        0.48,
+        -1371,
+      ]
+    ); // Music 315
+  }
 }
 
 function handleHappinessMeterMarker(happiness) {
@@ -685,19 +882,141 @@ function handleHappinessMeterMarker(happiness) {
  / __| '_ \ / _` |/ _ \/ __|
 | (__| | | | (_| | (_) \__ \
  \___|_| |_|\__,_|\___/|___/
-****************************/
-const bod = document.body;
+ chaos
+ ****************************/
 
 function setCursor(showCursor) {
-  bod.classList.remove(showCursor ? 'nc' : 'c');
-  bod.classList.add(showCursor ? 'c' : 'nc');
+  document.body.classList.remove(showCursor ? 'nc' : 'c');
+  document.body.classList.add(showCursor ? 'c' : 'nc');
 }
 
+function moveToRandomLocation(element) {
+  const margin = 20;
+  const randomX = getRandomInt(
+    margin,
+    window.innerWidth - element.offsetWidth - margin
+  );
+  const randomY = getRandomInt(
+    margin,
+    window.innerHeight - element.offsetHeight - margin
+  );
+  element.style.position = 'absolute';
+  element.style.left = `${randomX}px`;
+  element.style.top = `${randomY}px`;
+}
+
+/**
+ *
+ * @param {string} text
+ * @param {number} percentage - Percent that text will NOT be garbled. Should be between 0 and 1. Default is .95 (meaning 5% chance to garble), but this value can be overridden.
+ * @returns
+ */
+function garbleText(text, percentage = 0.95) {
+  const percent = clamp(percentage, 0, 1);
+  let newText = '';
+  for (const character of text) {
+    if (character === ' ') {
+      newText += ' ';
+    } else if (Math.random() > percent) {
+      newText += '👁️';
+    } else {
+      newText += character;
+    }
+  }
+  return newText;
+}
+
+/**
+ * Checks if it's DAY 12, because on that day, we get text interspersed with eye emojis.
+ * @param {string} text to be rendered
+ * @returns text augmented with eyes if DAY 12, otherwise the original text
+ */
+function shouldGarble(text, optionalPercentOverride) {
+  return DAY === 12 ? garbleText(text, optionalPercentOverride) : text;
+}
+
+function duplicateCursors() {
+  const pic = document.createElement('img');
+  pic.src = './c.png';
+  pic.style.position = 'absolute';
+  pic.style.width = '11px';
+  bod.append(pic);
+
+  const margin = 13;
+  let directionX = 1; // 1 means right, -1 means left
+  let directionY = 1; // 1 means down, -1 means up
+  let speed = 1;
+  let pause = false;
+  let posX = 130;
+  let posY = 130;
+
+  function randomSpeed() {
+    return getRandomInt(0.5, 5);
+  }
+
+  function randomPause() {
+    return getRandomInt(250, 500);
+  }
+
+  function moveImage() {
+    if (!pause) {
+      // Update position
+      posX += directionX * speed;
+      posY += directionY * speed;
+
+      // Apply movement to the img element // TODO: This can be a util maybe
+      pic.style.left = `${posX}px`;
+      pic.style.top = `${posY}px`;
+
+      // Randomly change direction
+      if (Math.random() < 0.01) {
+        directionX = Math.random() > 0.5 ? 1 : -1; // Randomly switch left or right
+        directionY = Math.random() > 0.5 ? 1 : -1; // Randomly switch up or down
+      }
+
+      // Occasionally vary speed
+      if (Math.random() < 0.05) {
+        speed = randomSpeed();
+      }
+
+      // If it gets close to the edge of the screen, reverse direction
+      const windowWidth = window.innerWidth - pic.width - margin * 2;
+      const windowHeight = window.innerHeight - pic.height - margin * 2;
+
+      if (posX <= margin || posX >= windowWidth) {
+        directionX *= -1; // Reverse horizontal direction
+      }
+      if (posY <= margin || posY >= windowHeight) {
+        directionY *= -1; // Reverse vertical direction
+      }
+
+      // Occasionally stop to mimic human-like pauses
+      if (Math.random() < 0.01) {
+        pause = true;
+        setTimeout(() => {
+          pause = false;
+        }, randomPause()); // Pause for a random duration
+      }
+    }
+
+    requestAnimationFrame(moveImage);
+  }
+
+  // Start moving the image
+  moveImage();
+}
+
+function makeManyCursors() {
+  for (let i = 0; i < 50; i++) {
+    duplicateCursors();
+  }
+}
 /******************
  /\ /\| |_(_) |___ 
 / / \ \ __| | / __|
 \ \_/ / |_| | \__ \
  \___/ \__|_|_|___/
+ utils
 *******************/
 /**
  * Utility function to create a delay.
@@ -732,9 +1051,8 @@ async function renderEachLetter(text) {
  * @param {Array<string | function>} messages - array of messages.
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
-async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
+async function handleScriptEventsSequentially(scriptEvents) {
   console.log(scriptEvents);
-  console.log(typeof scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
@@ -742,13 +1060,11 @@ async function handleScriptEventsSequentially(scriptEvents, addDelay = true) {
       await scriptEvent();
     }
 
-    if (addDelay) {
-      /* Calculate delay based on message length */
-      const baseDelay = 500; // Base delay in ms for short messages
-      const lengthFactor = 25; // Additional ms per character in the message
-      const messageDelay = baseDelay + scriptEvent.length * lengthFactor;
-      await delay(messageDelay);
-    }
+    /* Calculate delay based on message length */
+    const baseDelay = 500; // Base delay in ms for short messages
+    const lengthFactor = 25; // Additional ms per character in the message
+    const messageDelay = baseDelay + scriptEvent.length * lengthFactor;
+    await delay(messageDelay);
   }
 }
 
@@ -762,6 +1078,12 @@ function getRandomInt(x, y) {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function toggleClass(className, element) {
+  element.classList.contains(className)
+    ? element.classList.remove(className)
+    : element.classList.add(className);
 }
 
 let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
