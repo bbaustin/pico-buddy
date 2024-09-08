@@ -253,7 +253,10 @@ const EVOLVING = "Oh! It's evolving!";
 // Script End phrases
 const TREATED = `you treated your ${PICOBUDDY()} `;
 const TREATED_RESULT = `Your ${PICOBUDDY()} sees this as a sign of`;
-const BYE = `Anyway, ${UNBECOMING} is beginning now! So, I'll see ya when I see ya... 👋!`;
+const BYE = [
+  () => document.querySelector('html').classList.add('unbecame'),
+  `Anyway, ${UNBECOMING} is beginning now! So, I'll see ya when I see ya... 👋!`,
+];
 
 const REASSURING_PHRASES = [
   "Don't worry!",
@@ -273,7 +276,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day10Events = [
+const day14Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -289,7 +292,7 @@ const day10Events = [
   ...runStandardDay(),
 ];
 
-const day9Events = [
+const day2Events = [
   "Good morning! Today's a brand new day! 🎉",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
@@ -376,7 +379,7 @@ const day8Events = [
 ];
 
 /**  */
-const day2Events = [
+const day9Events = [
   () => removeAllCursors(),
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
@@ -403,7 +406,7 @@ const day2Events = [
 ];
 
 // TODO: Glitch text
-const day1Events = [
+const day10Events = [
   /* Reset back to normal */
   () => {
     labels.forEach((label) => {
@@ -497,7 +500,7 @@ const day13Events = [
   ...runStandardDay(5, 0),
 ];
 
-const day14Events = [
+const day1Events = [
   // 'Wow!! You made it all the way to the end 🥳!',
   // `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
   // 'I hope you had fun 🦄!',
@@ -914,18 +917,18 @@ function determineHappinessConclusion() {
       `I don't really want to go into details about what's going to happen to you during ${UNBECOMING} ...`,
       'But the last guy who got this ending had to deal with, like, "eternal suffering," and "spaghettification," and some other stuff like that...',
       'It was a major bummer 🙁 ...',
-      BYE,
+      ...BYE,
     ];
   } else if (happiness < 10) {
     /* good ending */
     return [
       'You got ending 3 out of 3 (the "good" ending) 🥳.',
-      `Basically, ${TREATED} with just the right amount of attention 🧸🧸🧸.`,
-      `Your ${PICOBUDDY()} appreciated your measured ambivalence.`,
-      `You may continue to serve your ${PICOBUDDY()} throughout and beyond ${UNBECOMING}.`,
+      `Basically, ${TREATED} with just the right amount of attention 🧸🧸🧸 !`,
+      `Your ${PICOBUDDY()} appreciated your measured ambivalence !`,
+      `You may continue to serve your ${PICOBUDDY()} throughout and beyond ${UNBECOMING} !`,
       'Holy cow 🐄 ! Congrats on getting the best ending!',
       `Since you'll continue to take care of your ${PICOBUDDY()}, that means we can keep hanging out, too!`,
-      BYE,
+      ...BYE,
     ];
   } else {
     /* so-so ending */
@@ -937,7 +940,7 @@ function determineHappinessConclusion() {
       "Sounds weird 😦, but it won't be that bad 😅 !",
       "I don't totally know how it works, but I think, like... you and a bunch of other people and/or other sources of living matter will all become one single entity!",
       "So, I think you'll be able to make a lot of friends 😀 !",
-      BYE,
+      ...BYE,
     ];
   }
 }
