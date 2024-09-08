@@ -216,9 +216,7 @@ const FINAL_FORM = 'final form';
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
 
-const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
-  BUD_EMOJIS
-)} !`;
+const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now!!`;
 const J_NOT_NOW = 'ちょっと違うね。。！ 😅';
 const PRAISE_PHRASES = [
   'Good job!',
@@ -275,7 +273,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day13Events = [
+const day7Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -291,7 +289,7 @@ const day13Events = [
   ...runStandardDay(),
 ];
 
-const day2Events = [
+const day8Events = [
   "Good morning! Today's a brand new day! 🎉",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
@@ -355,23 +353,25 @@ const day6Events = [
   ...runStandardDay(7, 3500, japaneseVocab),
 ];
 
-const day7Events = [
+const day1Events = [
   () => setButtons(eventTypeVerbs),
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
   "I hate to say it, but today, something's wrong with your mouse 🖱️...",
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
-  // TODO:--> you need to toggle class here, right?
+  () => setCursor(false),
   'Well, anyway, good luck!',
   CHECK_LIST,
   ...runStandardDay(10),
 ];
 
-const day8Events = [
+const day2Events = [
+  () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
   `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
-  () => makeManyCursors(), // TODO: You probably have to remove these cursors, right?
+  // WHERE YOU AT: TODO: You probably have to remove these cursors, right?
+  () => makeManyCursors(),
   ...runStandardDay(10),
 ];
 
@@ -458,7 +458,7 @@ const day12Events = [
   ...runStandardDay(7),
 ];
 
-const day14Events = [
+const day13Events = [
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
   SEE,
@@ -492,7 +492,7 @@ const day14Events = [
   ...runStandardDay(5, 0),
 ];
 
-const day1Events = [
+const day14Events = [
   // 'Wow!! You made it all the way to the end 🥳!',
   // `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
   // 'I hope you had fun 🦄!',
@@ -686,7 +686,7 @@ function createTimer(listItem, timeAllotted) {
     newTimer.innerHTML = sec;
     /** EVENT FAILED SCENARIO */
     if (sec <= 0) {
-      manageHappines(-1.67, false);
+      manageHappiness(-1.67, false);
       handleEventCompletion();
       listItem.classList.add('e');
       listItem.dataset.expired = 'true';
@@ -721,6 +721,7 @@ function giveSomething(something) {
   /* Handle wrong thing given */
   if (!hasGivenEvent) {
     // sound
+    manageHappiness(-0.5);
     return renderEachLetter(shouldGarble(notNow), garbleChance);
   }
 
@@ -764,13 +765,13 @@ function giveSomething(something) {
   /* Update the happiness meter, depending on how many seconds are left in the timer */
   // TODO: This 9 is kinda arbitrary, since timers might not always be the same. Maybe get rid of this feature
   if (timerRemainder > 9) {
-    manageHappines(2);
+    manageHappiness(2);
     return renderEachLetter(
       shouldGarble(getRandom(praisePhrases)),
       garbleChance
     );
   } else if (timerRemainder > 0) {
-    manageHappines(1);
+    manageHappiness(1);
     return renderEachLetter(
       shouldGarble(getRandom(praisePhrases)),
       garbleChance
@@ -821,7 +822,7 @@ const happinessMeterMarker = document.querySelector('#hmm');
  * Add a percentage to move the happiness meter. Max is 45%, min is -45%.
  * @param {number} happinessAddend - amount to add / subtract to the happiness meter. 3 for super fast, 2 for normal, and 1 for playing. minus is -1.67
  */
-function manageHappines(happinessAddend, isHappy = true) {
+function manageHappiness(happinessAddend, isHappy = true) {
   happiness += happinessAddend;
   happiness = clamp(happiness, -45, 45);
   handleHappinessMeterMarker(happiness);
@@ -944,6 +945,11 @@ function determineHappinessConclusion() {
  chaos
  ****************************/
 
+/**
+ * Pass true to ensure that the cursor is visible, via the '.c'
+ * Otherwise, '.nc' class will make the cursor invisible.
+ * @param {boolean} showCursor
+ */
 function setCursor(showCursor) {
   document.body.classList.remove(showCursor ? 'nc' : 'c');
   document.body.classList.add(showCursor ? 'c' : 'nc');
