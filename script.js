@@ -219,7 +219,7 @@ const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
   BUD_EMOJIS
 )} !`;
-const J_NOT_NOW = 'ちょっと違うね。。！ 😅'; //'それは今必要ではないな。。。'
+const J_NOT_NOW = 'ちょっと違うね。。！ 😅';
 const PRAISE_PHRASES = [
   'Good job!',
   'Nicely done!',
@@ -333,14 +333,14 @@ const day5Events = [
   ...runStandardDay(5, 1000),
 ];
 
-const japaneseVocab = ['食べる', '飲む', '入浴する', '遊ぶ'];
+const japaneseVocab = ['食べる', '飲む', 'お風呂', '遊ぶ'];
 
 const day6Events = [
   () => toggleClass('flip', document.body), // return to normal.
   "Yesterday wasn't so bad, right? But glad to have things back to normal.",
   '今日は普通の日なので、よかったですね 😅 ！',
-  'さ、🥰ピコバディ🥰 は今日何がほしかな。。？',
-  'じゃ、始めましょうか！！',
+  'さ、🥰ピコバディ🥰 は今日は何が欲しいかな。。？',
+  'じゃ、始めようか！！',
   () =>
     setButtons({
       feed: japaneseVocab[0],
@@ -949,8 +949,8 @@ function duplicateCursors() {
   let directionY = 1; // 1 means down, -1 means up
   let speed = 1;
   let pause = false;
-  let posX = 13;
-  let posY = 13;
+  let posX = 130;
+  let posY = 130;
 
   function randomSpeed() {
     return getRandomInt(0.5, 5);
