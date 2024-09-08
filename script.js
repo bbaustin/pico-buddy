@@ -273,7 +273,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day8Events = [
+const day10Events = [
   // `Congratulations on your new ${PICOBUDDY()} !`,
   // SEE,
   () => drawEggBaby(),
@@ -364,7 +364,7 @@ const day7Events = [
   ...runStandardDay(10),
 ];
 
-const day1Events = [
+const day8Events = [
   () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
@@ -403,7 +403,7 @@ const day2Events = [
 ];
 
 // TODO: Glitch text
-const day10Events = [
+const day1Events = [
   /* Reset back to normal */
   () => {
     labels.forEach((label) => {
@@ -413,11 +413,11 @@ const day10Events = [
   /* Add random move on button click */
   () => setButtons(eventTypeVerbs, moveToRandomLocation),
   `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
-  "I'm not totally convinced that the buttons are working perfectly, though 😖 😖 😖 😖!",
+  "I'm not sure if the buttons are working 100%, though 😖 😖 😖 😖!",
   'As one thing is fixed 🥳, another thing breaks 🤕!',
   `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥!`,
   'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨!',
-  "Just living your life is a kind of Sisyphean endeavor, isn't it 😩🫸🪨 ?",
+  'Just living your life is a kind of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
   "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
   'Together, we can do anything 💪 But also nothing 🤔',
   "But yeah, anyway 😀! Let's keep pushing!",
@@ -968,7 +968,7 @@ function moveToRandomLocation(element) {
   );
   const randomY = getRandomInt(
     margin,
-    window.innerHeight - element.offsetHeight - margin
+    window.innerHeight - element.offsetHeight - 150 // not sure exactly high the button is when label is visible
   );
   element.style.position = 'absolute';
   element.style.left = `${randomX}px`;
