@@ -214,8 +214,6 @@ const UNBECOMING = 'The Great Unbecoming';
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
 
-// const PLAY = `Your ${PICOBUDDY()} had a great time playing!`;
-// const NOPE = 'It no longer has any use for this.';
 const NOT_NOW = `Your ${PICOBUDDY()} doesn't need this right now! Thanks, though ${getRandom(
   BUD_EMOJIS
 )} !`;
