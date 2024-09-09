@@ -178,6 +178,38 @@ function adjustGridSizeTo64(
   return newFilledInTiles;
 }
 
+function handleEvolution() {
+  return [
+    SEE,
+    () => toggleClass('evolving', buddyScreen),
+    () =>
+      zzfx(
+        ...[
+          ,
+          ,
+          166,
+          0.07,
+          0.14,
+          0.37,
+          1,
+          3.8,
+          ,
+          ,
+          -131,
+          0.05,
+          0.08,
+          ,
+          ,
+          0.1,
+          ,
+          0.58,
+          0.28,
+        ]
+      ), // Powerup 245
+    () => toggleClass('evolving', buddyScreen),
+  ];
+}
+
 /****************************
 / / /\ \ \___  _ __ __| |___ 
 \ \/  \/ / _ \| '__/ _` / __|
@@ -270,11 +302,9 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day9Events = [
+const day1Events = [
   `Congratulations on your new ${PICOBUDDY()} !`,
-  () => toggleClass('evolving', buddyScreen),
-  SEE,
-  () => toggleClass('evolving', buddyScreen),
+  ...handleEvolution(),
   () => drawEggBaby(),
   `Oh! It's an ${EGGBABY()} !`,
   "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
@@ -288,7 +318,7 @@ const day9Events = [
   ...runStandardDay(3, 1000),
 ];
 
-const day10Events = [
+const day2Events = [
   "Good morning! Today's a brand new day 🎉 !",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
@@ -316,11 +346,9 @@ const day4Events = [
 ];
 
 const day5Events = [
-  'Hello 👋 ! Today is a very important day...',
-  EVOLVING,
-  () => toggleClass('evolving', buddyScreen),
-  SEE,
-  () => toggleClass('evolving', buddyScreen),
+  'Hey again 👋 ! Today is a very important day...',
+  `Your ${PICOBUDDY()} is going to evolve 😮 !`,
+  ...handleEvolution,
   () => drawEyeGuy(),
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
@@ -379,16 +407,14 @@ const day8Events = [
 ];
 
 /**  */
-const day1Events = [
+const day9Events = [
   () => removeAllCursors(),
-  // 'Super sorry about all the technical issues recently 🙇 !',
-  // `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
-  // 'But, good news: today it is going to evolve!!',
-  // 'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
-  // 'I have a really good feeling about this!',
-  () => toggleClass('evolving', buddyScreen),
-  SEE,
-  () => toggleClass('evolving', buddyScreen),
+  'Super sorry about all the technical issues recently 🙇 !',
+  `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
+  'But, good news: today it is going to evolve!!',
+  'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
+  'I have a really good feeling about this!',
+  ...handleEvolution(),
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
@@ -407,7 +433,7 @@ const day1Events = [
   ...runStandardDay(8, 1000),
 ];
 
-const day2Events = [
+const day10Events = [
   /* Reset back to normal */
   () => {
     document.querySelectorAll('.b p').forEach((label) => {
@@ -470,9 +496,7 @@ const day12Events = [
 const day13Events = [
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
-  () => toggleClass('evolving', buddyScreen),
-  SEE,
-  () => toggleClass('evolving', buddyScreen),
+  ...handleEvolution(),
   () => drawFinalForm(),
   'Wow!!!',
   'I recognize this 👀! This is super exciting 😮!!!',
