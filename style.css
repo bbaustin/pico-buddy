@@ -211,6 +211,7 @@ button {
 #cd {
   max-height: 150px;
   padding: 20px 30px 10px 20px;
+  scrollbar-gutter: stable;
 }
 
 #cd h2 {

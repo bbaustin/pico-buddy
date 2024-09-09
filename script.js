@@ -241,7 +241,7 @@ const EYEGUY = () => {
   return `${emoji}EyeGuy${emoji}`;
 };
 const UNBECOMING = '🌑The Great Unbecoming🌑';
-const FINAL_FORM = 'final form';
+const FINAL_FORM = '🌀final form🌀';
 
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
@@ -303,6 +303,7 @@ const REASSURING_PHRASES = [
 /* Script */
 
 const day1Events = [
+  'Hi 👋 !',
   `Congratulations on your new ${PICOBUDDY()} !`,
   ...handleEvolution(),
   () => drawEggBaby(),
@@ -321,10 +322,10 @@ const day2Events = [
   "Good morning! Today's a brand new day 🎉 !",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
-  'So enjoy these early days while they last ⏳!',
+  'So enjoy these early days while they last ⏳ !',
   `In the end, our memories 📝 are the most precious things we have 🥰 !`,
   `Everything else just slips away like grains of sand ⌛️, as the universe continues its slow, silent drift towards the eternal nothingness of ${UNBECOMING}.`,
-  `Oh! I think your ${PICOBUDDY()} might be hungry! 🍇🍉🥝`,
+  `Oh! I think your ${PICOBUDDY()} might be hungry 🍇🍉🥝 !`,
   CHECK_LIST,
   ...runStandardDay(4, 500),
 ];
@@ -384,8 +385,8 @@ const day6Events = [
 
 const day7Events = [
   () => setButtons(eventTypeVerbs),
-  `Seems like your ${EYEGUY()} messed up the language settings 🌐 yesterday! Sorry about that 🙇!`,
-  "I hate to say it, but today, something's wrong with your mouse 🖱️...",
+  `Seems like your ${EYEGUY()} messed up the language settings 🌐 yesterday! Sorry about that 🙇 !`,
+  "I hate to say it, but today, something's wrong with your mouse 🖱️ ...",
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
   "Hint: if you find this totally difficult and un-fun 😣, you should be able to use your 'tab' key 🧠 !",
   () => setCursor(false),
@@ -444,8 +445,8 @@ const day10Events = [
   `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
   "I'm still not sure if the buttons are working 100% perfectly, though 😖 😖 😖 😖 !",
   'As one thing is fixed 🥳, another thing breaks 🤕 !',
-  `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥!`,
-  'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨!',
+  `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥! `,
+  'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨 !',
   'Just living your life is a sort of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
   () => delay(500),
   "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
@@ -486,7 +487,7 @@ const day12Events = [
   garbleText(
     `Also, I think your ${PICOBUDDY()} will evolve one last time 🥳 !!!`
   ),
-  garbleText(`This is its ${FINAL_FORM}!!`), // TODO: Special text?
+  garbleText(`This is its ${FINAL_FORM} !!`),
   garbleText(
     "The last two evolutions weren't that cute 😒, so I have really high hopes for it this time 😍 !!!"
   ),
@@ -496,7 +497,7 @@ const day12Events = [
 
 const day13Events = [
   'OK, this is the 13th day!!!',
-  `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
+  `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM} !`,
   ...handleEvolution(),
   () => drawFinalForm(),
   'Wow!!!',
@@ -563,12 +564,11 @@ function runStandardDay(
 }
 
 const calendar = new Map([
-  // [0, { events: [], expectedEvents: 0 }],
   [1, { events: day1Events, expectedEvents: 3 }],
   [2, { events: day2Events, expectedEvents: 4 }],
   [3, { events: day3Events, expectedEvents: 5 }],
   [4, { events: day4Events, expectedEvents: 10 }],
-  [5, { events: day5Events, expectedEvents: 5 }],
+  [5, { events: day5Events, expectedEvents: 7 }],
   [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
   [8, { events: day8Events, expectedEvents: 10 }],
@@ -969,7 +969,7 @@ function determineHappinessConclusion(finalPercent) {
       'Jeez... well...',
       `I don't really want to go into details about what's going to happen to you during ${UNBECOMING} ...`,
       'But the last guy who got this ending had to deal with, like, "eternal suffering," and "spaghettification," and some other stuff like that...',
-      'It was a major bummer 🙁 ...',
+      'It was a major bummer 😓 ...',
     ];
   } else if (finalPercent < 61.1) {
     /* good ending */
@@ -1020,7 +1020,7 @@ function moveToRandomLocation(element) {
   const margin = 20;
   const randomX = getRandomInt(
     margin,
-    window.innerWidth - element.offsetWidth - margin
+    window.innerWidth - element.offsetWidth - 150 // try not to avoid going too far to the right
   );
   const randomY = getRandomInt(
     margin,
