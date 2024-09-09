@@ -272,7 +272,9 @@ const REASSURING_PHRASES = [
 
 const day9Events = [
   `Congratulations on your new ${PICOBUDDY()} !`,
+  () => toggleClass('evolving', buddyScreen),
   SEE,
+  () => toggleClass('evolving', buddyScreen),
   () => drawEggBaby(),
   `Oh! It's an ${EGGBABY()} !`,
   "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
@@ -316,7 +318,9 @@ const day4Events = [
 const day5Events = [
   'Hello 👋 ! Today is a very important day...',
   EVOLVING,
+  () => toggleClass('evolving', buddyScreen),
   SEE,
+  () => toggleClass('evolving', buddyScreen),
   () => drawEyeGuy(),
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
@@ -377,12 +381,14 @@ const day8Events = [
 /**  */
 const day1Events = [
   () => removeAllCursors(),
-  'Super sorry about all the technical issues recently!',
-  `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
-  'But, good news: today it is going to evolve!!',
-  'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
-  'I have a really good feeling about this!',
+  // 'Super sorry about all the technical issues recently 🙇 !',
+  // `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
+  // 'But, good news: today it is going to evolve!!',
+  // 'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
+  // 'I have a really good feeling about this!',
+  () => toggleClass('evolving', buddyScreen),
   SEE,
+  () => toggleClass('evolving', buddyScreen),
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
@@ -464,7 +470,9 @@ const day12Events = [
 const day13Events = [
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
+  () => toggleClass('evolving', buddyScreen),
   SEE,
+  () => toggleClass('evolving', buddyScreen),
   () => drawFinalForm(),
   'Wow!!!',
   'I recognize this 👀! This is super exciting 😮!!!',
@@ -759,7 +767,7 @@ function giveSomething(something) {
   /* Add some stylin' */
   oldestMatchingEvent.style.textDecoration = 'line-through';
 
-  /* Add 'completed' for further button clicks */
+  /* Add 'completed' so subsequent button clicks don't try to trigger this event */
   oldestMatchingEvent.dataset.completed = true;
 
   /* Remove from JS array */

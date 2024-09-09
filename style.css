@@ -147,6 +147,22 @@ section {
   background: var(--b);
 }
 
+.evolving {
+  animation: evolution 1.25s steps(4) infinite;
+}
+
+@keyframes evolution {
+  0% {
+    background: var(--w);
+  }
+  50% {
+    background: var(--b);
+  }
+  100% {
+    background: var(--w);
+  }
+}
+
 #bh {
   display: flex;
   justify-content: space-around;
@@ -245,7 +261,6 @@ button {
   50% {
     background: var(--mi);
   }
-
   100% {
     background: var(--w);
   }
