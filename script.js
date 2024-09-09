@@ -810,7 +810,6 @@ function giveSomething(something) {
   handleEventCompletion();
 
   /* Update the happiness meter, depending on how many seconds are left in the timer */
-  // TODO: This 9 is kinda arbitrary, since timers might not always be the same. Maybe get rid of this feature
   if (timerRemainder > 9) {
     manageHappiness(2);
     return renderEachLetter(
