@@ -324,7 +324,7 @@ const day2Events = [
   'But they usually get a bit more demanding as time goes on 😅 !',
   'So enjoy these early days while they last ⏳ !',
   `In the end, our memories 📝 are the most precious things we have 🥰 !`,
-  `Everything else just slips away like grains of sand ⌛️, as the universe continues its slow, silent drift towards the eternal nothingness of ${UNBECOMING}.`,
+  `Everything else just slips away like grains of sand ⌛️, as the universe continues its slow, silent drift towards the eternal nothingness of ${UNBECOMING} .`,
   `Oh! I think your ${PICOBUDDY()} might be hungry 🍇🍉🥝 !`,
   CHECK_LIST,
   ...runStandardDay(4, 500),
@@ -422,7 +422,7 @@ const day9Events = [
   'Well...',
   "I wouldn't say it's super cute, but... 😶",
   'Beauty is in the eye of the beholder 👁️ !',
-  "Or, in the 'eyes', if you will... 👁️👁️👁️ !",
+  "Or, in the 'eyes,' if you will... 👁️👁️👁️ !",
   () => {
     document.querySelectorAll('.b p').forEach((label) => {
       toggleClass('invisible', label);
@@ -501,8 +501,8 @@ const day13Events = [
   ...handleEvolution(),
   () => drawFinalForm(),
   'Wow!!!',
-  'I recognize this 👀! This is super exciting 😮 !!!',
-  `This is the harbinger of ${UNBECOMING}!`,
+  'I recognize this 👀 ! This is super exciting 😮 !!!',
+  `This is the harbinger of ${UNBECOMING} !`,
   'I think this is ⭐️literally⭐️ the last day!',
   'Everything we worked for leads up to this!',
   `So let's have fun with our ${PICOBUDDY()} one last time 😄 !`,
@@ -520,9 +520,9 @@ const day13Events = [
 const day14Events = [
   () => setButtons(eventTypeVerbs, null, true),
   () => removeAllCursors(),
-  'Wow!! You made it all the way to the end 🥳!',
+  'Wow!! You made it all the way to the end 🥳 !',
   `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
-  'I hope you had fun 🦄!',
+  'I hope you had fun 🦄 !',
   `Well, anyway, I guess your ${PICOBUDDY()} no longer requires your servitude!`,
   `It's all grown-up and totally ready to help bring about ${UNBECOMING} !!`,
   "So, let's calculate 🧮 how well you did!",
@@ -610,13 +610,14 @@ dayButton.addEventListener('click', () => {
 async function allowForAdvanceDay() {
   /* Delay for end of day text */
   await delay(1500);
-  if (DAY < 14) {
+  if (DAY < 13) {
     renderEachLetter(PROCEED);
     dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   } else {
     renderEachLetter(
       "Whew 😮‍💨! What a day 🤗! OK, let's wrap things up and see how you did!!"
     );
+    dayButton.textContent = 'Conclusion';
   }
   dayButton.classList.add('loud-button');
   dayButton.disabled = false;
