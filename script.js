@@ -178,6 +178,38 @@ function adjustGridSizeTo64(
   return newFilledInTiles;
 }
 
+function handleEvolution() {
+  return [
+    SEE,
+    () => toggleClass('evolving', buddyScreen),
+    () =>
+      zzfx(
+        ...[
+          ,
+          ,
+          166,
+          0.07,
+          0.14,
+          0.37,
+          1,
+          3.8,
+          ,
+          ,
+          -131,
+          0.05,
+          0.08,
+          ,
+          ,
+          0.1,
+          ,
+          0.58,
+          0.28,
+        ]
+      ), // Powerup 245
+    () => toggleClass('evolving', buddyScreen),
+  ];
+}
+
 /****************************
 / / /\ \ \___  _ __ __| |___ 
 \ \/  \/ / _ \| '__/ _` / __|
@@ -209,7 +241,7 @@ const EYEGUY = () => {
   return `${emoji}EyeGuy${emoji}`;
 };
 const UNBECOMING = '🌑The Great Unbecoming🌑';
-const FINAL_FORM = 'final form';
+const FINAL_FORM = '🌀final form🌀';
 
 // Game Phrases
 const BUTTON_INSTRUCTIONS = `Use the buttons below the screen ${BUTTON_EMOJI} !`;
@@ -270,9 +302,10 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day9Events = [
+const day1Events = [
+  'Hi 👋 !',
   `Congratulations on your new ${PICOBUDDY()} !`,
-  SEE,
+  ...handleEvolution(),
   () => drawEggBaby(),
   `Oh! It's an ${EGGBABY()} !`,
   "It's an egg with a diaper 🥚🧷 ! That's pretty cute 😍 !",
@@ -280,20 +313,19 @@ const day9Events = [
   `${BUTTON_INSTRUCTIONS}`,
   `Your ${PICOBUDDY()} will reach full maturity in 13 days!`,
   `${NOT_OMINOUS}`,
-  `${getRandom(REASSURING_PHRASES)}`,
   `Oh! Looks like your ${PICOBUDDY()} needs something!`,
   `Check out the "Current Demands" list below your ${PICOBUDDY()} device!`,
   ...runStandardDay(3, 1000),
 ];
 
-const day10Events = [
+const day2Events = [
   "Good morning! Today's a brand new day 🎉 !",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
-  'So enjoy these early days while they last ⏳!',
+  'So enjoy these early days while they last ⏳ !',
   `In the end, our memories 📝 are the most precious things we have 🥰 !`,
-  `Everything else just slips away like grains of sand ⌛️, as the universe continues its slow, silent drift towards the eternal nothingness of ${UNBECOMING}.`,
-  `Oh! I think your ${PICOBUDDY()} might be hungry! 🍇🍉🥝`,
+  `Everything else just slips away like grains of sand ⌛️, as the universe continues its slow, silent drift towards the eternal nothingness of ${UNBECOMING} .`,
+  `Oh! I think your ${PICOBUDDY()} might be hungry 🍇🍉🥝 !`,
   CHECK_LIST,
   ...runStandardDay(4, 500),
 ];
@@ -306,7 +338,7 @@ const day3Events = [
 ];
 
 const day4Events = [
-  'So, actually, before we start today, I have something exciting to share!',
+  'So, actually, before we start today, I have something exciting to share 😁 !',
   `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
   "I can't wait to see what it will turn into 🦋 !",
   CHECK_LIST,
@@ -314,9 +346,9 @@ const day4Events = [
 ];
 
 const day5Events = [
-  'Hello 👋 ! Today is a very important day...',
-  EVOLVING,
-  SEE,
+  'Hey again 👋 ! Today is a very important day...',
+  `Your ${PICOBUDDY()} is going to evolve 😮 !`,
+  ...handleEvolution(),
   () => drawEyeGuy(),
   `Oh! It's an ${EYEGUY()} !`,
   `He's like a... a floating eye! ${NOT_OMINOUS}`,
@@ -353,8 +385,8 @@ const day6Events = [
 
 const day7Events = [
   () => setButtons(eventTypeVerbs),
-  `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
-  "I hate to say it, but today, something's wrong with your mouse 🖱️...",
+  `Seems like your ${EYEGUY()} messed up the language settings 🌐 yesterday! Sorry about that 🙇 !`,
+  "I hate to say it, but today, something's wrong with your mouse 🖱️ ...",
   `I think your ${EYEGUY()} deleted the cursor png or something...`,
   "Hint: if you find this totally difficult and un-fun 😣, you should be able to use your 'tab' key 🧠 !",
   () => setCursor(false),
@@ -366,7 +398,7 @@ const day7Events = [
 const day8Events = [
   () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
-  'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
+  'We totally fixed the cursor problem 🖱️, so you should be able to see your cursor again today.',
   `Oh, one more thing: it looks like your ${PICOBUDDY()} might evolve again soon!`,
   'Just keep up the good work and it might evolve into something cute 😘 !',
   'Anyway, since the cursor problem is figured out, today should be a bit easier 😁 !',
@@ -375,22 +407,22 @@ const day8Events = [
 ];
 
 /**  */
-const day1Events = [
+const day9Events = [
   () => removeAllCursors(),
-  'Super sorry about all the technical issues recently!',
+  'Super sorry about all the technical issues recently 🙇 !',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
   'But, good news: today it is going to evolve!!',
   'Think of all the possibilities of life 🧬 🐟 🦕 🦤 🐊 🐐 🦍 🧍 !',
   'I have a really good feeling about this!',
-  SEE,
+  ...handleEvolution(),
   () => drawTriEye(),
   "Oh! It's an...",
   'Um...',
   () => delay(1000),
   'Well...',
   "I wouldn't say it's super cute, but... 😶",
-  'Beauty is in the eye of the beholder 👁️!',
-  "Or, in the 'eyes', if you will... 👁️👁️👁️!",
+  'Beauty is in the eye of the beholder 👁️ !',
+  "Or, in the 'eyes,' if you will... 👁️👁️👁️ !",
   () => {
     document.querySelectorAll('.b p').forEach((label) => {
       toggleClass('invisible', label);
@@ -401,7 +433,7 @@ const day1Events = [
   ...runStandardDay(8, 1000),
 ];
 
-const day2Events = [
+const day10Events = [
   /* Reset back to normal */
   () => {
     document.querySelectorAll('.b p').forEach((label) => {
@@ -411,14 +443,16 @@ const day2Events = [
   /* Add random move on button click */
   () => setButtons(eventTypeVerbs, moveToRandomLocation),
   `Hey! We got the labels working again on the buttons ${BUTTON_EMOJI}!`,
-  "I'm not sure if the buttons are working 100%, though 😖 😖 😖 😖!",
-  'As one thing is fixed 🥳, another thing breaks 🤕!',
-  `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥!`,
-  'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨!',
-  'Just living your life is a kind of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
+  "I'm still not sure if the buttons are working 100% perfectly, though 😖 😖 😖 😖 !",
+  'As one thing is fixed 🥳, another thing breaks 🤕 !',
+  `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥! `,
+  'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨 !',
+  'Just living your life is a sort of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
+  () => delay(500),
   "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
+  () => delay(250),
   'Together, we can do anything 💪 But also nothing 🤔',
-  "But yeah, anyway 😀! Let's keep pushing 😉!",
+  "But yeah, anyway 😀 ! Let's keep pushing 😉 !",
   CHECK_LIST,
   ...runStandardDay(10, 1250),
 ];
@@ -446,14 +480,14 @@ const day11Events = [
 
 const day12Events = [
   () => setButtons(eventTypeVerbs),
-  garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
+  garbleText("Hey! I've got good news 😊 and... more good news 😇 !"),
   garbleText(
-    'All the problems with the buttons are finally resolved, I think 🙌!'
+    'All the problems with the buttons are finally resolved, I think 🙌 !'
   ),
   garbleText(
-    `Also, I think your ${PICOBUDDY()} will evolve one last time 🥳!!!`
+    `Also, I think your ${PICOBUDDY()} will evolve one last time 🥳 !!!`
   ),
-  garbleText(`This is its ${FINAL_FORM}!!`), // TODO: Special text?
+  garbleText(`This is its ${FINAL_FORM} !!`),
   garbleText(
     "The last two evolutions weren't that cute 😒, so I have really high hopes for it this time 😍 !!!"
   ),
@@ -463,15 +497,15 @@ const day12Events = [
 
 const day13Events = [
   'OK, this is the 13th day!!!',
-  `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
-  SEE,
+  `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM} !`,
+  ...handleEvolution(),
   () => drawFinalForm(),
   'Wow!!!',
-  'I recognize this 👀! This is super exciting 😮!!!',
-  `This is the harbinger of ${UNBECOMING}!`,
+  'I recognize this 👀 ! This is super exciting 😮 !!!',
+  `This is the harbinger of ${UNBECOMING} !`,
   'I think this is ⭐️literally⭐️ the last day!',
   'Everything we worked for leads up to this!',
-  `So let's have fun with our ${PICOBUDDY()} one last time 😄!`,
+  `So let's have fun with our ${PICOBUDDY()} one last time 😄 !`,
   CHECK_LIST,
   ...runStandardDay(3, 0),
   () => delay(3000),
@@ -484,11 +518,11 @@ const day13Events = [
 ];
 
 const day14Events = [
-  () => removeAllCursors(),
   () => setButtons(eventTypeVerbs, null, true),
-  'Wow!! You made it all the way to the end 🥳!',
+  () => removeAllCursors(),
+  'Wow!! You made it all the way to the end 🥳 !',
   `Thank you so much for spending so much time with your ${PICOBUDDY()} 🤩 !!!`,
-  'I hope you had fun 🦄!',
+  'I hope you had fun 🦄 !',
   `Well, anyway, I guess your ${PICOBUDDY()} no longer requires your servitude!`,
   `It's all grown-up and totally ready to help bring about ${UNBECOMING} !!`,
   "So, let's calculate 🧮 how well you did!",
@@ -530,12 +564,11 @@ function runStandardDay(
 }
 
 const calendar = new Map([
-  // [0, { events: [], expectedEvents: 0 }],
   [1, { events: day1Events, expectedEvents: 3 }],
   [2, { events: day2Events, expectedEvents: 4 }],
   [3, { events: day3Events, expectedEvents: 5 }],
   [4, { events: day4Events, expectedEvents: 10 }],
-  [5, { events: day5Events, expectedEvents: 5 }],
+  [5, { events: day5Events, expectedEvents: 7 }],
   [6, { events: day6Events, expectedEvents: 7 }],
   [7, { events: day7Events, expectedEvents: 10 }],
   [8, { events: day8Events, expectedEvents: 10 }],
@@ -577,13 +610,14 @@ dayButton.addEventListener('click', () => {
 async function allowForAdvanceDay() {
   /* Delay for end of day text */
   await delay(1500);
-  if (DAY < 14) {
+  if (DAY < 13) {
     renderEachLetter(PROCEED);
     dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   } else {
     renderEachLetter(
       "Whew 😮‍💨! What a day 🤗! OK, let's wrap things up and see how you did!!"
     );
+    dayButton.textContent = 'Conclusion';
   }
   dayButton.classList.add('loud-button');
   dayButton.disabled = false;
@@ -695,6 +729,14 @@ function createTimer(listItem, timeAllotted) {
     if (sec <= 0) {
       manageHappiness(-1.67, false);
       handleEventCompletion();
+      /* Remove from JS array. Getting the oldest one should be correct, because it would be the first to expire, an completed events are already moved */
+      const firstIndexOfGivenEvent = activeEvents.indexOf(
+        listItem.dataset.eventType
+      );
+      if (firstIndexOfGivenEvent !== -1) {
+        // IDK if this would ever happen, but I'll add a check here just to be safe
+        activeEvents.splice(firstIndexOfGivenEvent, 1);
+      }
       listItem.classList.add('e');
       listItem.dataset.expired = 'true';
       clearInterval(timing);
@@ -759,7 +801,7 @@ function giveSomething(something) {
   /* Add some stylin' */
   oldestMatchingEvent.style.textDecoration = 'line-through';
 
-  /* Add 'completed' for further button clicks */
+  /* Add 'completed' so subsequent button clicks don't try to trigger this event */
   oldestMatchingEvent.dataset.completed = true;
 
   /* Remove from JS array */
@@ -769,7 +811,6 @@ function giveSomething(something) {
   handleEventCompletion();
 
   /* Update the happiness meter, depending on how many seconds are left in the timer */
-  // TODO: This 9 is kinda arbitrary, since timers might not always be the same. Maybe get rid of this feature
   if (timerRemainder > 9) {
     manageHappiness(2);
     return renderEachLetter(
@@ -928,7 +969,7 @@ function determineHappinessConclusion(finalPercent) {
       'Jeez... well...',
       `I don't really want to go into details about what's going to happen to you during ${UNBECOMING} ...`,
       'But the last guy who got this ending had to deal with, like, "eternal suffering," and "spaghettification," and some other stuff like that...',
-      'It was a major bummer 🙁 ...',
+      'It was a major bummer 😓 ...',
     ];
   } else if (finalPercent < 61.1) {
     /* good ending */
@@ -979,7 +1020,7 @@ function moveToRandomLocation(element) {
   const margin = 20;
   const randomX = getRandomInt(
     margin,
-    window.innerWidth - element.offsetWidth - margin
+    window.innerWidth - element.offsetWidth - 150 // try not to avoid going too far to the right
   );
   const randomY = getRandomInt(
     margin,
