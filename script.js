@@ -53,9 +53,6 @@ function setButtons(verbs, optionalClickEvent, isDisabled) {
   });
 }
 setButtons(eventTypeVerbs);
-
-const labels = document.querySelectorAll('.b p');
-
 /*************************************
 | |__  _   _  __| | __| (_) ___  ___ 
 | '_ \| | | |/ _` |/ _` | |/ _ \/ __|
@@ -254,10 +251,6 @@ const EVOLVING = "Oh! It's evolving!";
 // Script End phrases
 const TREATED = `you treated your ${PICOBUDDY()} `;
 const TREATED_RESULT = `Your ${PICOBUDDY()} sees this as a sign of`;
-const BYE = [
-  () => document.querySelector('html').classList.add('unbecame'),
-  `Anyway, ${UNBECOMING} is beginning now! So, I'll see ya when I see ya... 👋!`,
-];
 
 const REASSURING_PHRASES = [
   "Don't worry!",
@@ -277,7 +270,7 @@ const REASSURING_PHRASES = [
 **************************/
 /* Script */
 
-const day1Events = [
+const day9Events = [
   `Congratulations on your new ${PICOBUDDY()} !`,
   SEE,
   () => drawEggBaby(),
@@ -293,8 +286,7 @@ const day1Events = [
   ...runStandardDay(3, 1000),
 ];
 
-const day2Events = [
-  () => console.log(happiness),
+const day10Events = [
   "Good morning! Today's a brand new day 🎉 !",
   `Just to let you know, your ${PICOBUDDY()} should be pretty easy to handle for the first few days 😌 !`,
   'But they usually get a bit more demanding as time goes on 😅 !',
@@ -307,7 +299,6 @@ const day2Events = [
 ];
 
 const day3Events = [
-  () => console.log(happiness),
   'I think you are getting the hang of this! Today might be a little bit more intense! 🏃‍♀️💨',
   'But you totally got this! I believe in you!',
   CHECK_LIST,
@@ -315,7 +306,6 @@ const day3Events = [
 ];
 
 const day4Events = [
-  () => console.log(happiness),
   'So, actually, before we start today, I have something exciting to share!',
   `Your ${PICOBUDDY()} is going to 🐒evolve🚶‍♂️‍➡️ soon!`,
   "I can't wait to see what it will turn into 🦋 !",
@@ -324,7 +314,6 @@ const day4Events = [
 ];
 
 const day5Events = [
-  () => console.log(happiness),
   'Hello 👋 ! Today is a very important day...',
   EVOLVING,
   SEE,
@@ -346,8 +335,6 @@ const day5Events = [
 const japaneseVocab = ['食べる', '飲む', 'お風呂', '遊ぶ'];
 
 const day6Events = [
-  () => console.log(happiness),
-
   () => toggleClass('flip', document.body), // return to normal.
   'Woah! Yesterday was super weird 😱!',
   "I'm glad things are back to normal!",
@@ -365,8 +352,6 @@ const day6Events = [
 ];
 
 const day7Events = [
-  () => console.log(happiness),
-
   () => setButtons(eventTypeVerbs),
   `Seems like your ${EYEGUY()} messed up the language settings yesterday! Sorry about that 🙇!`,
   "I hate to say it, but today, something's wrong with your mouse 🖱️...",
@@ -379,8 +364,6 @@ const day7Events = [
 ];
 
 const day8Events = [
-  () => console.log(happiness),
-
   () => setCursor(true),
   'OK, sorry about yesterday 🤕.',
   'We totally fixed the cursor problem 🖱️, and you should be able to see your cursor again today.',
@@ -392,9 +375,7 @@ const day8Events = [
 ];
 
 /**  */
-const day9Events = [
-  () => console.log(happiness),
-
+const day1Events = [
   () => removeAllCursors(),
   'Super sorry about all the technical issues recently!',
   `As I said, your ${EYEGUY()} can cause some weird stuff to happen...`,
@@ -410,9 +391,8 @@ const day9Events = [
   "I wouldn't say it's super cute, but... 😶",
   'Beauty is in the eye of the beholder 👁️!',
   "Or, in the 'eyes', if you will... 👁️👁️👁️!",
-  // TODO: This does not work!!! and also was a little boring?
   () => {
-    labels.forEach((label) => {
+    document.querySelectorAll('.b p').forEach((label) => {
       toggleClass('invisible', label);
     });
   },
@@ -421,12 +401,10 @@ const day9Events = [
   ...runStandardDay(8, 1000),
 ];
 
-const day10Events = [
-  () => console.log(happiness),
-
+const day2Events = [
   /* Reset back to normal */
   () => {
-    labels.forEach((label) => {
+    document.querySelectorAll('.b p').forEach((label) => {
       toggleClass('invisible', label);
     });
   },
@@ -446,8 +424,6 @@ const day10Events = [
 ];
 
 const day11Events = [
-  () => console.log(happiness),
-
   () => {
     document
       .querySelectorAll('.b')
@@ -469,8 +445,6 @@ const day11Events = [
 ];
 
 const day12Events = [
-  () => console.log(happiness),
-
   () => setButtons(eventTypeVerbs),
   garbleText("Hey! I've got good news 😊 and... more good news 😇!"),
   garbleText(
@@ -488,8 +462,6 @@ const day12Events = [
 ];
 
 const day13Events = [
-  () => console.log(happiness),
-
   'OK, this is the 13th day!!!',
   `Your ${PICOBUDDY()} is going to evolve into its ${FINAL_FORM}!`,
   SEE,
@@ -501,33 +473,17 @@ const day13Events = [
   'Everything we worked for leads up to this!',
   `So let's have fun with our ${PICOBUDDY()} one last time 😄!`,
   CHECK_LIST,
-  ...runStandardDay(5, 0),
+  ...runStandardDay(3, 0),
   () => delay(3000),
   () => makeManyCursors(),
   ...runStandardDay(5, 0),
   () => delay(3000),
   /* Warping buttons */
-  () => {
-    Object.entries(eventTypeVerbs).forEach(([key, value]) => {
-      eventTypeVerbs[key] = garbleText(value);
-    });
-    setButtons(eventTypeVerbs, moveToRandomLocation);
-  },
-  ...runStandardDay(5, 0),
-  () => delay(5000),
-  /* Garble text */
-  () => {
-    Object.entries(eventTypeVerbs).forEach(([key, value]) => {
-      eventTypeVerbs[key] = garbleText(value);
-    });
-  },
-  /* Flip */
-  () => toggleClass('flip', document.body),
+  () => setButtons(eventTypeVerbs, moveToRandomLocation),
   ...runStandardDay(5, 0),
 ];
 
 const day14Events = [
-  () => toggleClass('flip', document.body),
   () => removeAllCursors(),
   () => setButtons(eventTypeVerbs, null, true),
   'Wow!! You made it all the way to the end 🥳!',
@@ -536,11 +492,23 @@ const day14Events = [
   `Well, anyway, I guess your ${PICOBUDDY()} no longer requires your servitude!`,
   `It's all grown-up and totally ready to help bring about ${UNBECOMING} !!`,
   "So, let's calculate 🧮 how well you did!",
-  `In the end, your ${PICOBUDDY()} had a happiness level of ${
-    ((happiness + 45) / 90) * 100
-  }% !`,
-  'That means... 🤔🤨🧐',
-  ...determineHappinessConclusion(),
+  /* Last day conclusion has to be handled a bit differently, due to stale closure. Probably could be improved upon, but whatever! */
+  async () => {
+    const happinessStrings = determineHappinessConclusion(doHappinessMath());
+
+    // Iterate over each string and render them sequentially
+    for (const str of happinessStrings) {
+      await renderEachLetter(str);
+
+      /* Calculate delay based on message length */
+      const baseDelay = 500; // Base delay in ms for short messages
+      const lengthFactor = 25; // Additional ms per character in the message
+      const messageDelay = baseDelay + str.length * lengthFactor;
+      await delay(messageDelay);
+    }
+  },
+  () => document.querySelector('html').classList.add('unbecame'),
+  `Anyway, ${UNBECOMING} is beginning now! So, I'll see ya when I see ya... 👋!`,
 ];
 
 function runStandardDay(
@@ -575,7 +543,7 @@ const calendar = new Map([
   [10, { events: day10Events, expectedEvents: 10 }],
   [11, { events: day11Events, expectedEvents: 7 }],
   [12, { events: day12Events, expectedEvents: 7 }],
-  [13, { events: day13Events, expectedEvents: 20 }],
+  [13, { events: day13Events, expectedEvents: 13 }],
   [14, { events: day14Events, expectedEvents: 0 }],
 ]);
 
@@ -935,42 +903,56 @@ function handleHappinessMeterMarker(happiness) {
   }
 }
 
-// Could simplify some of these phrases. But no worries probably
-function determineHappinessConclusion() {
-  if (happiness < -10) {
+function getHappinessValue() {
+  return happiness;
+}
+
+function doHappinessMath() {
+  const finalPercent = (((getHappinessValue() + 45) / 90) * 100).toFixed(1);
+  return finalPercent;
+}
+
+function determineHappinessConclusion(finalPercent) {
+  const intro = [
+    `In the end, your ${PICOBUDDY()} had a happiness level of ${finalPercent}% !`,
+    'That means... 🤔🤨🧐',
+  ];
+
+  if (finalPercent < 38.9) {
     /* bad ending */
     return [
-      'You got ending 1 out of 3 (the "bad" ending) 😵.',
+      ...intro,
+      'You got ending 1 out of 3 (the "bad" ending) 😵 .',
       `Basically, ${TREATED} poorly 😢 .`,
       `${TREATED_RESULT} disrespect 🤬 .`,
       'Jeez... well...',
       `I don't really want to go into details about what's going to happen to you during ${UNBECOMING} ...`,
       'But the last guy who got this ending had to deal with, like, "eternal suffering," and "spaghettification," and some other stuff like that...',
       'It was a major bummer 🙁 ...',
-      ...BYE,
     ];
-  } else if (happiness < 10) {
+  } else if (finalPercent < 61.1) {
     /* good ending */
     return [
-      'You got ending 3 out of 3 (the "good" ending) 🥳.',
+      ...intro,
+      'You got ending 3 out of 3 (the "good" ending) 🥳 !!!',
       `Basically, ${TREATED} with just the right amount of attention 🧸🧸🧸 !`,
       `Your ${PICOBUDDY()} appreciated your measured ambivalence !`,
       `You may continue to serve your ${PICOBUDDY()} throughout and beyond ${UNBECOMING} !`,
       'Holy cow 🐄 ! Congrats on getting the best ending!',
       `Since you'll continue to take care of your ${PICOBUDDY()}, that means we can keep hanging out, too!`,
-      ...BYE,
     ];
   } else {
     /* so-so ending */
     return [
+      ...intro,
       'You got ending 2 out of 3 (the "decent" ending) 🙂 .',
       `Basically, ${TREATED} kindly 😌 .`,
       `${TREATED_RESULT} weakness 😮 .`,
       `You will be absorbed into a greater whole when ${UNBECOMING} begins.`,
       "Sounds weird 😦, but it won't be that bad 😅 !",
-      "I don't totally know how it works, but I think, like... you and a bunch of other people and/or other sources of living matter will all become one single entity!",
+      "I don't totally know how it works, but I think, like...",
+      'You and a bunch of other people and/or other sources of living matter will all become one single entity!',
       "So, I think you'll be able to make a lot of friends 😀 !",
-      ...BYE,
     ];
   }
 }
@@ -1173,7 +1155,6 @@ async function renderEachLetter(text) {
  * @param {boolean} delayBetweenMessages - if you want a delay between each separate message, add it here
  */
 async function handleScriptEventsSequentially(scriptEvents) {
-  console.log(scriptEvents);
   for (const scriptEvent of scriptEvents) {
     if (typeof scriptEvent === 'string') {
       await renderEachLetter(scriptEvent);
