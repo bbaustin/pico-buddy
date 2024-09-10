@@ -448,7 +448,7 @@ const day10Events = [
   `It's like a microcosm of the entropic descent of ${UNBECOMING} 🫥! `,
   'Sometimes trying to keep everything from falling apart feels kind of futile 😮‍💨 !',
   'Just living your life is a sort of Sisyphean endeavor... do you know what I mean 😩🫸🪨 ?',
-  () => delay(500),
+  () => delay(300),
   "But on the other hand, it's fun to witness and participate in the absurdity of human effort!",
   () => delay(250),
   'Together, we can do anything 💪 But also nothing 🤔',
@@ -470,7 +470,7 @@ const day11Events = [
       feed: 'feed',
       clean: 'clean',
     }),
-  'Hey there!',
+  'Hey again 👋 !',
   `Your ${PICOBUDDY()} is really causing some problems with the device's buttons ${BUTTON_EMOJI}!`,
   "They're still a little jumbled... But the problem is allllmoooooossssst fixed!",
   "Alright, let's have an awesome day 🌈 !",
@@ -615,7 +615,7 @@ async function allowForAdvanceDay() {
     dayButton.textContent = `Proceed to Day ${DAY + 1}`;
   } else {
     renderEachLetter(
-      "Whew 😮‍💨! What a day 🤗! OK, let's wrap things up and see how you did!!"
+      "Whew! What a day 🤗 ! OK, let's wrap things up and see how you did!!"
     );
     dayButton.textContent = 'Conclusion';
   }
@@ -1065,7 +1065,6 @@ function duplicateCursors() {
   const pic = document.createElement('img');
   pic.src = './c.png';
   pic.style.position = 'absolute';
-  pic.style.width = '11px';
   pic.classList.add(
     'duplicate'
   ); /* Might not be needed; only used for removing element later */
