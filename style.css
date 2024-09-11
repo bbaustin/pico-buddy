@@ -6,7 +6,7 @@
   --hi: #00b9d5;
   --mi: #f6d91c;
   --lo: #fa078d;
-  --1psb: 1px solid #0f0f0f;
+  --1psb: 1.5px solid #0f0f0f;
   --c: url(c.png), auto;
 }
 
@@ -21,10 +21,9 @@ html {
 
 body {
   background-color: var(--w);
-  /* opacity: 0.8; */
-  background-image: linear-gradient(var(--hi) 1px, transparent 1px),
-    linear-gradient(to right, var(--hi) 1px, var(--w) 1px);
-  background-size: 30px 30px;
+  background-image: linear-gradient(var(--hi) 1.5px, transparent 1.5px),
+    linear-gradient(to right, var(--hi) 1.5px, var(--w) 1.5px);
+  background-size: 45px 45px;
   margin: 0;
 }
 
@@ -39,7 +38,7 @@ body {
 main {
   display: flex;
   height: 90vh;
-  padding: 10px 0;
+  padding: 35px 0 15px 0;
   font-family: var(--f);
   justify-content: space-around;
 }
@@ -49,7 +48,7 @@ section {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  min-width: 150px;
+  min-width: 225px;
 }
 
 #modal {
@@ -60,21 +59,26 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(25px);
+  backdrop-filter: blur(37.5px);
+  -webkit-backdrop-filter: blur(37.5px);
 }
 
 #modal div {
   text-align: center;
   border: var(--1psb);
   background: var(--w);
-  padding: 30px 70px;
-  margin-bottom: 25px;
+  padding: 45px 105px;
+  margin-bottom: 37.5px;
   font-family: var(--f);
 }
 
+h1 {
+  font-size: 36px;
+}
+
 #out {
-  height: 250px;
-  width: 200px;
+  height: 375px;
+  width: 300px;
   background: skyblue;
   border-radius: 48%;
   position: relative;
@@ -83,27 +87,27 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   border: var(--1psb);
 }
 
 #out::before {
   content: '';
   position: absolute;
-  height: 250px;
-  width: 200px;
+  height: 375px;
+  width: 300px;
   background: var(--g);
   border-radius: 48%;
-  left: -10px;
+  left: -15px;
   z-index: -1;
   border: var(--1psb);
 }
 
 #in {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 180px;
   background: var(--w);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   border: var(--1psb);
 }
 
@@ -126,7 +130,7 @@ section {
     top: 0;
   }
   100% {
-    top: -3px;
+    top: -4.5px;
   }
 }
 
@@ -139,7 +143,7 @@ section {
     top: 0;
   }
   100% {
-    top: -6px;
+    top: -9px;
   }
 }
 
@@ -170,8 +174,8 @@ section {
 }
 
 .b {
-  width: 15px;
-  height: 15px;
+  width: 22.5px;
+  height: 22.5px;
   background: magenta;
   border-radius: 100%;
   border: 0;
@@ -184,9 +188,9 @@ section {
 
 .b p {
   background: pink;
-  padding: 10px;
-  font-size: 24px;
-  transform: translate(-40%, -5px);
+  padding: 15px;
+  font-size: 36px;
+  transform: translate(-40%, -7.5px);
   display: none;
   width: fit-content;
   border: var(--1psb);
@@ -209,14 +213,18 @@ button {
 }
 
 #cd {
-  max-height: 150px;
-  padding: 20px 30px 10px 20px;
+  max-height: 225px;
+  padding: 30px 45px 15px 30px;
   scrollbar-gutter: stable;
 }
 
 #cd h2 {
-  margin: 0 0 10px;
-  font-size: 20px;
+  margin: 0 0 15px;
+  font-size: 30px;
+}
+
+#cd ol {
+  font-size: 18px;
 }
 
 .e {
@@ -224,31 +232,37 @@ button {
 }
 
 #t {
-  width: 300px;
-  height: 200px;
+  width: 450px;
+  height: 300px;
   line-height: 2;
-  font-size: 18px;
+  font-size: 26px;
   flex-grow: 1;
 }
 
 #t div {
-  padding: 25px 20px;
+  padding: 37.5px 30px;
   border-bottom: var(--1psb);
 }
 
 button {
   font-family: var(--f);
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-#day {
-  padding: 8px;
+#day,
+#mb {
+  font-size: 18px;
+  padding: 12px;
   background: var(--w);
   border: var(--1psb);
 }
 
+#mb {
+  padding: 12px 24px;
+}
+
 #day:disabled {
-  border: 1px solid darkgrey;
+  border: 1.5px solid darkgrey;
 }
 
 .loud-button {
@@ -268,7 +282,7 @@ button {
 }
 
 #hm {
-  width: 30px;
+  width: 45px;
   flex-grow: 1;
   background: linear-gradient(var(--lo), var(--mi), var(--hi));
   display: flex;
@@ -278,10 +292,12 @@ button {
 }
 
 #hmm {
+  font-size: 28px;
   position: relative;
   bottom: 0;
   display: inline;
-  user-select: none; /* Standard */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .c {
